@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "Dhikr App",
+    "slug": "dhikr-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "dhikrapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "tsconfigPaths": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "a7ae34fc-4fb6-4e5b-9492-4504fed4c529"
+      }
+    },
+    "owner": "maiestro23"
+  }
+}

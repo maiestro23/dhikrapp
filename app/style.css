@@ -1,0 +1,31 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Gradient background styles for web */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.gradient-background {
+  background: linear-gradient(
+    160.68deg,
+    rgb(240,244,234) 15.8%,
+    rgb(251,248,244) 51.12%,
+    rgb(251,240,238) 86.44%
+  );
+  background-size: 200% 200%;
+  background-position: 80% 0%;
+}
+
+/* Add blur effect support for web */
+@supports (backdrop-filter: blur(2.5px)) {
+  .blur-backdrop {
+    backdrop-filter: blur(2.5px);
+  }
+}
