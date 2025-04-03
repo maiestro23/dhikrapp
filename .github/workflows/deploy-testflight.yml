@@ -21,7 +21,7 @@ jobs:
           BUNDLE_ID: ${{ secrets.BUNDLE_ID }}
           APP_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}
         run: |
-          fastlane deliver --ipa "chemin-vers-ton-fichier.ipa" \
+          fastlane deliver --ipa "../../dhikrapp.ipa" \
             --username "$APPLE_ID" \
             --app_identifier "$BUNDLE_ID" \
             --team_id "$APPLE_TEAM_ID" \
