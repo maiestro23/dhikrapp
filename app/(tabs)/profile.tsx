@@ -4,19 +4,20 @@ import { Flag, Bookmark, Moon, ChevronRight } from 'lucide-react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { useProgress } from '../../hooks/useProgress';
 import { ScreenBackground } from '../../components/ScreenBackground';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function ProfileScreen() {
   const { theme, toggleDarkMode } = useTheme();
-  const { 
-    totalCount, 
-    totalMinutes, 
+  const {
+    totalCount,
+    totalMinutes,
     currentStreak,
     goalProgress,
     remainingToGoal,
   } = useProgress();
 
   const handleNavigation = (route: string) => {
-    router.push(route);
+    router.replace(route);
   };
 
   return (
@@ -31,7 +32,7 @@ export default function ProfileScreen() {
             <Text style={[styles.statValue, { color: theme.colors.text.secondary }]}>
               {totalCount.toLocaleString()}
             </Text>
-            <Text style={[styles.statLabel, { color: theme.colors.text.primary}]}>
+            <Text style={[styles.statLabel, { color: theme.colors.text.primary }]}>
               total dhikr
             </Text>
           </View>
@@ -54,30 +55,40 @@ export default function ProfileScreen() {
         </View>
 
         <View style={styles.progressContainer}>
-          <View style={[styles.progressBar, { backgroundColor: theme.colors.progressBackground }]}>
-            <View style={[styles.progressFill, { 
+          <View style={[styles.progressBar, { backgroundColor: 'white' }]}>
+            <View style={[styles.progressFill, {
               width: `${goalProgress}%`,
               backgroundColor: theme.colors.progressBar
             }]} />
           </View>
           <Text style={[styles.progressText, { color: theme.colors.text.primary }]}>
-            {remainingToGoal > 0 
+            {remainingToGoal > 0
               ? `You are ${Math.ceil(100 - goalProgress)}% away from your daily goal!`
               : 'You have completed your daily goal!'}
           </Text>
         </View>
 
-        <View style={[styles.quoteCard, { backgroundColor: `${theme.colors.accent}15` }]}>
-          <Text style={[styles.quoteText, { color: theme.colors.accent }]}>
-            "The most beloved deed to Allah is the most regular and constant even if it were little."
-          </Text>
-          <Text style={[styles.quoteAuthor, { color: theme.colors.accent }]}>
-            Sahih Al-Bukhari
-          </Text>
-        </View>
+
+        <LinearGradient
+          colors={['rgb(246,245,227)', 'rgb(255,215,223)']}
+          locations={[0, 1]}
+          start={[0, 1]} end={[1, 0]}
+          style={styles.gradientStyle}
+
+        >
+          <View style={[styles.quoteCard]}>
+            <Text style={[styles.quoteText, { color: theme.colors.accent }]}>
+              "The most beloved deed to Allah is the most regular and constant even if it were little."
+            </Text>
+            <Text style={[styles.quoteAuthor, { color: theme.colors.accent }]}>
+              Sahih Al-Bukhari
+            </Text>
+          </View>
+        </LinearGradient>
+
 
         <View style={styles.menuContainer}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.menuItem, { backgroundColor: theme.colors.card }]}
             onPress={() => handleNavigation('/profile/goal')}
           >
@@ -88,7 +99,7 @@ export default function ProfileScreen() {
             <ChevronRight size={20} color={theme.colors.text.secondary} />
           </TouchableOpacity>
 
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.menuItem, { backgroundColor: theme.colors.card }]}
             onPress={() => handleNavigation('/profile/favorites')}
           >
@@ -99,7 +110,7 @@ export default function ProfileScreen() {
             <ChevronRight size={20} color={theme.colors.text.secondary} />
           </TouchableOpacity>
 
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.menuItem, { backgroundColor: theme.colors.card }]}
             onPress={toggleDarkMode}
           >
@@ -108,7 +119,7 @@ export default function ProfileScreen() {
             </View>
             <Text style={[styles.menuText, { color: theme.colors.text.primary }]}>Dark Mode</Text>
             <View style={[styles.toggle, { backgroundColor: theme.isDark ? theme.colors.accent : theme.colors.border }]}>
-              <View style={[styles.toggleKnob, { 
+              <View style={[styles.toggleKnob, {
                 backgroundColor: theme.colors.card,
                 transform: [{ translateX: theme.isDark ? 20 : 0 }]
               }]} />
@@ -117,7 +128,7 @@ export default function ProfileScreen() {
         </View>
 
         <View style={[styles.footerMenu, { backgroundColor: theme.colors.card }]}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.footerMenuItem, { borderBottomColor: theme.colors.border, borderBottomWidth: 1 }]}
             onPress={() => handleNavigation('/terms')}
           >
@@ -127,7 +138,7 @@ export default function ProfileScreen() {
             <ChevronRight size={20} color={theme.colors.text.secondary} />
           </TouchableOpacity>
 
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.footerMenuItem}
             onPress={() => handleNavigation('/privacy')}
           >
@@ -149,7 +160,7 @@ const styles = StyleSheet.create({
   },
   greetingContainer: {
     alignItems: 'center',
-    marginTop: 40,
+    marginTop: 20,
     marginBottom: 32,
   },
   greeting: {
@@ -196,25 +207,35 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
   },
+
+  gradientStyle: {
+    borderRadius: 16,
+    marginBottom: 12,
+  },
   quoteCard: {
     borderRadius: 16,
-    padding: 24,
-    marginBottom: 32,
+    padding: 14,
+    //marginBottom: 32,
+    borderWidth: 1,
+    borderBottomColor: '#fff',
+    borderTopColor: '#fff',
+    borderLeftColor: '#fff',
+    borderRightColor: '#fff',
   },
   quoteText: {
     fontFamily: 'Sofia-Pro-ExtraLight',
-    fontSize: 16,
+    fontSize: 15,
     textAlign: 'center',
     marginBottom: 8,
-    lineHeight: 24,
+    //lineHeight: 24,
   },
   quoteAuthor: {
-    fontFamily: 'Sofia-Pro-ExtraLight',
+    fontFamily: 'Sofia-Pro',
     fontSize: 14,
     textAlign: 'center',
   },
   menuContainer: {
-    gap: 1 ,
+    gap: 1,
     marginBottom: 24,
   },
   menuItem: {
@@ -252,14 +273,14 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     overflow: 'hidden',
     //marginBottom: 24,
-    
+
   },
   footerMenuItem: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 16,
-    
+
   },
   footerMenuText: {
     fontFamily: 'Sofia-Pro-Light',

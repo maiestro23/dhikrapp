@@ -13,9 +13,9 @@ export const ScreenBackground: React.FC<ScreenBackgroundProps> = ({
   withSafeArea = true 
 }) => {
   const colors = [
-    'rgb(240,244,234)',
-    'rgb(251,248,244)', 
-    'rgb(251,240,238)'
+    'rgb(232,238,224)',
+    'rgb(251,244,238)', 
+    'rgb(251,235,232)'
   ];
 
   const Content = withSafeArea ? SafeAreaView : View;
@@ -32,8 +32,8 @@ export const ScreenBackground: React.FC<ScreenBackgroundProps> = ({
     <LinearGradient
       colors={colors}
       locations={[0.158, 0.5112, 0.8644]}
-      start={{ x: 0.8, y: 0 }}
-      end={{ x: 1, y: 0.6 }}
+      start={{ x: 0., y: 0.2 }}
+      end={{ x: 1, y: 0.7 }}
       style={styles.container}
     >
       <Content style={styles.container}>

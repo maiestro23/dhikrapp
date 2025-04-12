@@ -19,7 +19,7 @@ export default function TabLayout() {
           styles.tabBar,
           {
             height: 71,
-            paddingBottom: Platform.OS === 'ios' ? insets.bottom : 0,
+            paddingBottom: 0,
             backgroundColor: 'rgba(255, 255, 255, 0.8)',
           }
         ],
@@ -80,16 +80,7 @@ export default function TabLayout() {
       />
 
 
-      <Tabs.Screen
-        name="premium"
-        options={{
-        tabBarItemStyle:  {display: 'none'},
-          title: 'Profile',
-          tabBarIcon: ({ color, size }) => (
-            <User color={color} size={24} />
-          ),
-        }}
-      />
+      
     </Tabs>
   );
 }
@@ -115,9 +106,10 @@ const styles = StyleSheet.create({
     elevation: 8,
     borderTopWidth: 0,
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    paddingTop: 6,
   },
   tabBarLabel: {
-    fontFamily: 'Sofia-Pro',
+    fontFamily: 'Sofia-Pro-Light',
     color: '#5A5D4D',
     fontSize: 12,
     marginTop: 4,

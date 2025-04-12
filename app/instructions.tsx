@@ -10,7 +10,7 @@ const CONTENT_WIDTH = Math.min(402, width - (CONTENT_PADDING * 2));
 
 export default function InstructionsScreen() {
   const handleNext = () => {
-    router.push('/goal-selection');
+    router.replace('/goal-selection');
   };
 
   return (

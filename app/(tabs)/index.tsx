@@ -24,6 +24,7 @@ export default function DhikrScreen() {
     }
   };
 
+  /*
   if (!dailyGoal) {
     return (
       <ScreenBackground>
@@ -44,6 +45,7 @@ export default function DhikrScreen() {
       </ScreenBackground>
     );
   }
+    */
 
   return (
     <ScreenBackground>
@@ -53,6 +55,7 @@ export default function DhikrScreen() {
         currentIndex={currentIndex}
         totalCount={dailyGoal}
         theme={theme}
+        options={{ unmountOnBlur: true }}
       />
     </ScreenBackground>
   );

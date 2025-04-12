@@ -22,7 +22,7 @@ export default function GoalSelectionScreen() {
   const { theme } = useTheme();
 
   const handleBack = () => {
-    router.push('/profile');
+    router.replace('/profile');
   };
 
   const handleGoalSelect = (count: number) => {
@@ -59,7 +59,7 @@ export default function GoalSelectionScreen() {
     }
 
     setDailyGoal(goal);
-    router.push('/profile');
+    router.replace('/profile');
   };
 
   return (
@@ -85,7 +85,7 @@ export default function GoalSelectionScreen() {
         </TouchableOpacity>
           <View style={styles.header}>
             <Text style={styles.title}>How much adhkar do you want to read per day?</Text>
-            <Text style={styles.subtitle}>You can change your goal later</Text>
+            <Text style={styles.subtitle}>Your current goal is: XXX</Text>
           </View>
 
           <View style={styles.goalsGrid}>
@@ -130,7 +130,7 @@ export default function GoalSelectionScreen() {
                 ]}
                 value={customGoal}
                 onChangeText={handleCustomGoalChange}
-                placeholder="15000"
+                placeholder="|5000"
                 placeholderTextColor="rgba(142, 26, 59, 0.3)"
                 keyboardType="number-pad"
                 maxLength={5}
@@ -175,15 +175,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: 'center',
     paddingHorizontal: 24,
-    paddingTop: '14%',
-//    paddingBottom: 34,
+    paddingTop: 68,
+    paddingBottom: 34,
   },
   header: {
     alignItems: 'center',
     marginBottom: 10,
   },
   title: {
-    fontFamily: 'Taviraj-ExtraLight',
+    fontFamily: 'Classico',
     fontSize: 24,
     color: '#1A1A1A',
     textAlign: 'center',
@@ -191,10 +191,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   subtitle: {
-    fontFamily: 'Taviraj-ExtraLight',
+    fontFamily: 'Sofia-Pro-ExtraLight',
     fontSize: 16,
     color: '#666666',
     textAlign: 'center',
+    paddingBottom: 10,
   },
   goalsGrid: {
     flexDirection: 'row',
@@ -223,21 +224,21 @@ const styles = StyleSheet.create({
   },
 
   goalCount: {
-    fontFamily: 'Serif-Bold',
+    fontFamily: 'Sofia-Pro-Regular',
     fontSize: 36,
     color: '#8E1A3B',
     marginBottom: 4,
   },
 
   goalLabel: {
-    fontFamily: 'Sans',
+    fontFamily: 'Sofia-Pro-ExtraLight',
     fontSize: 14,
     color: '#666666',
     marginBottom: 2,
   },
 
   goalTime: {
-    fontFamily: 'Sans',
+    fontFamily: 'Sofia-Pro-ExtraLight',
     fontSize: 12,
     color: '#999999',
   },
@@ -251,8 +252,8 @@ const styles = StyleSheet.create({
   },
 
   customInputLabel: {
-    fontFamily: 'Sans',
-    fontSize: 14,
+    fontFamily: 'Sofia-Pro-ExtraLight',
+    fontSize: 18,
     color: '#666666',
     marginBottom: 8,
     textAlign: 'center',
@@ -265,14 +266,14 @@ const styles = StyleSheet.create({
   },
   customInput: {
     flex: 1,
-    height: 112,
+    height: 70,
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     borderWidth: 1,
     borderColor: 'rgba(142, 26, 59, 0.1)',
     paddingHorizontal: 20,
-    fontFamily: 'Serif',
-    fontSize: 24,
+    fontFamily: 'Sofia-Pro-Regular',
+    fontSize: 32,
     color: '#8E1A3B',
     textAlign: 'center',
   },
@@ -309,7 +310,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 'auto'
   },
   buttonText: {
-    fontFamily: 'Sofia-Pro',
+    fontFamily: 'Sofia-Pro-Regular',
     fontSize: 18,
     lineHeight: 26,
     color: '#FFFFFF',

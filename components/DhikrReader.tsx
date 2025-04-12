@@ -19,26 +19,14 @@ import Animated, {
 } from 'react-native-reanimated';
 
 const { width, height } = Dimensions.get('window');
-const SWIPE_THRESHOLD = Platform.select({
-  ios: 5000,
-  android: 120,
-  default: 120,
-});
+const SWIPE_THRESHOLD = 120;
 
 const TRANSITION_DISTANCE = height * 0.4;
 
 const SPRING_CONFIG = {
-  damping: Platform.select({
-    ios: 20,
-    android: 16,
-    default: 18,
-  }),
-  stiffness: 180,
-  mass: Platform.select({
-    ios: 0.6,
-    android: 0.5,
-    default: 0.6,
-  }),
+  damping: 20,
+  stiffness: 280,
+  mass: 1,
   overshootClamping: true,
   restDisplacementThreshold: 0.01,
   restSpeedThreshold: 0.01,
@@ -49,11 +37,11 @@ const TIMING_CONFIG = {
   easing: Easing.bezier(0.33, 1, 0.68, 1),
 };
 
-const DhikrContent = ({ 
-  dhikr, 
-  isFavorite, 
-  onToggleFavorite, 
-  theme, 
+const DhikrContent = ({
+  dhikr,
+  isFavorite,
+  onToggleFavorite,
+  theme,
   style,
   pointerEvents = 'auto',
 }: any) => (
@@ -62,12 +50,12 @@ const DhikrContent = ({
       <Text style={styles.arabicText} adjustsFontSizeToFit numberOfLines={3}>
         {dhikr.arabicText}
       </Text>
-      
-      <Text style={styles.transliteration}>
+
+      <Text style={styles.transliteration} adjustsFontSizeToFit numberOfLines={3}>
         {dhikr.transliteration}
       </Text>
-      
-      <Text style={styles.translation}>
+
+      <Text style={styles.translation} >
         {dhikr.translation}
       </Text>
 
@@ -77,9 +65,8 @@ const DhikrContent = ({
           isFavorite && styles.favoriteButtonActive
         ]}
         onPress={() => {
-            onToggleFavorite(dhikr, isFavorite)
-            console.log(dhikr.isCurrentFavorite, isFavorite)
-          }
+          onToggleFavorite(dhikr, isFavorite)
+        }
         }
       >
         <Heart
@@ -96,24 +83,31 @@ export function DhikrReader({
   onNext,
   onPrevious,
   currentIndex,
-  totalCount,
+  dailyGoal,
   theme,
-}: DhikrReaderProps) {
-  const { incrementCount } = useProgress();
+}: any) {
+
+
   const { start, stop } = useTimeTracking();
   const { isFavorite, addFavorite, removeFavorite } = useFavoritesStore();
   const { dhikrs } = useDhikrStore();
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  
+
+  //const currentIndex = useState();
+  const [isTransitioning, setIsTransitioning] = useState();
+  //const isFocused = useIsFocused();
+
   const currentDhikr = dhikrs[currentIndex % dhikrs.length];
   const nextDhikr = dhikrs[(currentIndex + 1) % dhikrs.length];
   const prevDhikr = dhikrs[(currentIndex - 1 + dhikrs.length) % dhikrs.length];
-  
+
+
   const isCurrentFavorite = currentDhikr ? isFavorite(currentDhikr.id) : false;
   const isNextFavorite = nextDhikr ? isFavorite(nextDhikr.id) : false;
   const isPrevFavorite = prevDhikr ? isFavorite(prevDhikr.id) : false;
-  
-  const progressPercentage = Math.ceil(((currentIndex + 1) / totalCount) * 100);
+
+
+  const { incrementCount, goalProgress } = useProgress();
+  const progressPercentage = goalProgress
 
   const translateY = useSharedValue(0);
   const scale = useSharedValue(1);
@@ -167,6 +161,16 @@ export function DhikrReader({
     }
     requestAnimationFrame(() => {
       resetAnimationValues(direction);
+
+      // Simplified reset (maybe instantaneous is better here?)
+      translateY.value = 0;
+      scale.value = 1;
+      currentOpacity.value = 1;
+      nextOpacity.value = 0;
+      prevOpacity.value = 0;
+      nextOffset.value = height;
+      prevOffset.value = -height;
+      runOnJS(setIsTransitioning)(false);
     });
   }, [incrementCount, onNext, onPrevious, resetAnimationValues]);
 
@@ -184,16 +188,16 @@ export function DhikrReader({
       }
 
       translateY.value = event.translationY;
-      
+
       const progress = Math.abs(event.translationY) / TRANSITION_DISTANCE;
       const clampedProgress = Math.min(Math.max(progress, 0), 1);
-      
+
       if (event.translationY < 0) {
         const nextTranslation = interpolate(
           event.translationY,
           [-TRANSITION_DISTANCE, 0],
           [0, height],
-          Extrapolate.CLAMP
+          'clamp'
         );
         nextOffset.value = nextTranslation;
         nextOpacity.value = clampedProgress;
@@ -201,7 +205,7 @@ export function DhikrReader({
           clampedProgress,
           [0, 1],
           [1, 0.7],
-          Extrapolate.CLAMP
+          'clamp'
         );
         prevOpacity.value = 0;
       } else if (currentIndex > 0) {
@@ -209,7 +213,7 @@ export function DhikrReader({
           event.translationY,
           [0, TRANSITION_DISTANCE],
           [-height, 0],
-          Extrapolate.CLAMP
+          'clamp'
         );
         prevOffset.value = prevTranslation;
         prevOpacity.value = clampedProgress;
@@ -217,15 +221,15 @@ export function DhikrReader({
           clampedProgress,
           [0, 1],
           [1, 0.7],
-          Extrapolate.CLAMP
+          'clamp'
         );
         nextOpacity.value = 0;
       }
     })
     .onEnd((event) => {
       const velocity = event.velocityY;
-      const shouldComplete = 
-        Math.abs(event.translationY) > SWIPE_THRESHOLD || 
+      const shouldComplete =
+        Math.abs(event.translationY) > SWIPE_THRESHOLD ||
         Math.abs(velocity) > 500;
 
       if (shouldComplete) {
@@ -270,12 +274,13 @@ export function DhikrReader({
   const nextStyle = useAnimatedStyle(() => ({
     transform: [
       { translateY: nextOffset.value },
-      { scale: interpolate(
+      {
+        scale: interpolate(
           nextOpacity.value,
           [0, 1],
           [0.95, 1],
-          Extrapolate.CLAMP
-        ) 
+          'clamp'
+        )
       }
     ],
     opacity: nextOpacity.value,
@@ -288,11 +293,12 @@ export function DhikrReader({
   const prevStyle = useAnimatedStyle(() => ({
     transform: [
       { translateY: prevOffset.value },
-      { scale: interpolate(
+      {
+        scale: interpolate(
           prevOpacity.value,
           [0, 1],
           [0.95, 1],
-          Extrapolate.CLAMP
+          'clamp'
         )
       }
     ],
@@ -309,10 +315,10 @@ export function DhikrReader({
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.greeting}>Assalamu Alaikum</Text>
-        <Text style={styles.date}>{new Date().toLocaleDateString('en-US', { 
-          weekday: 'long', 
-          month: 'long', 
-          day: 'numeric' 
+        <Text style={styles.date}>{new Date().toLocaleDateString('en-US', {
+          weekday: 'long',
+          month: 'long',
+          day: 'numeric'
         })}</Text>
       </View>
 
@@ -323,7 +329,7 @@ export function DhikrReader({
             { height: `${progressPercentage}%` }
           ]} />
         </View>
-        <Text style={styles.progressText}>{progressPercentage}%</Text>
+        <Text style={styles.progressText}>{progressPercentage < 100 ? progressPercentage : 100}%</Text>
       </View>
 
       <GestureDetector gesture={gesture}>
@@ -338,7 +344,7 @@ export function DhikrReader({
               pointerEvents={isTransitioning ? 'auto' : 'auto'}
             />
           )}
-          
+
           <DhikrContent
             dhikr={currentDhikr}
             isFavorite={isCurrentFavorite}
@@ -347,7 +353,7 @@ export function DhikrReader({
             style={currentStyle}
             pointerEvents={isTransitioning ? 'auto' : 'auto'}
           />
-          
+
           <DhikrContent
             dhikr={nextDhikr}
             isFavorite={isNextFavorite}
@@ -365,8 +371,7 @@ export function DhikrReader({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 15,
-    paddingLeft: 18,
+
   },
   header: {
 
@@ -433,12 +438,14 @@ const styles = StyleSheet.create({
     //paddingHorizontal: 20,
   },
   textWrapper: {
+    paddingTop: 15,
+    paddingLeft: 18,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 24,
     maxWidth: 350,
     width: '100%',
-    paddingHorizontal: 20,
+    paddingHorizontal: 0,
   },
   arabicText: {
     fontFamily: 'NotoNaskhArabic',
@@ -451,6 +458,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     textAlign: 'center',
     color: '#181818',
+    lineHeight: 30
   },
   translation: {
     fontFamily: 'Sofia-Pro-ExtraLight',

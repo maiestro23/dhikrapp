@@ -43,10 +43,10 @@ export default function SearchScreen() {
         <Text style={[styles.arabicText, { color: theme.colors.text.primary }]}>
           {item.item.arabicText}
         </Text>
-        <Text style={[styles.transliteration, { color: theme.colors.text.primary }]}>
+        <Text style={[styles.transliteration]}>
           {item.item.transliteration}
         </Text>
-        <Text style={[styles.translation, { color: theme.colors.text.secondary }]}>
+        <Text style={[styles.translation]}>
           {item.item.translation}
         </Text>
       </View>
@@ -163,16 +163,18 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   arabicText: {
-    fontFamily: 'Serif',
-    fontSize: 24,
+    fontFamily: 'NotoNaskhArabic',
+    fontSize: 18,
   },
   transliteration: {
-    fontFamily: 'Sans-Medium',
-    fontSize: 16,
+    fontFamily: 'Classico',
+    fontSize: 18,
+    color: 'black'
   },
   translation: {
-    fontFamily: 'Sans',
+    fontFamily: 'Sofia-Pro-Light',
     fontSize: 14,
+    color: 'grey'
   },
   favoriteButton: {
     width: 40,

@@ -3,16 +3,18 @@ import { useRouter } from 'expo-router';
 import { ArrowLeft } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../context/ThemeContext';
+import { ScreenBackground } from '@/components/ScreenBackground';
 
 export default function PrivacyScreen() {
   const router = useRouter();
   const { theme } = useTheme();
 
   const handleBack = () => {
-    router.back();
+    router.replace('/profile');
   };
 
   return (
+        <ScreenBackground>
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={styles.header}>
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
@@ -94,6 +96,7 @@ export default function PrivacyScreen() {
         </View>
       </ScrollView>
     </SafeAreaView>
+    </ScreenBackground>
   );
 }
 

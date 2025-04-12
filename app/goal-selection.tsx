@@ -2,7 +2,6 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput, Platform, Keyboard
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { useProgressStore } from '../stores/progressStore';
-import { Check } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 
@@ -53,14 +52,14 @@ export default function GoalSelectionScreen() {
     }
 
     setDailyGoal(goal);
-    router.push('/(tabs)');
+    router.replace('/(tabs)');
   };
 
   return (
 
     <KeyboardAvoidingView 
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
     >
       <ScrollView 
         style={styles.scrollView}
@@ -112,7 +111,7 @@ export default function GoalSelectionScreen() {
           </View>
 
           <View style={styles.customInputContainer}>
-            <Text style={styles.customInputLabel}>Enter Custom Adhkar</Text>
+            <Text style={styles.customInputLabel}>Enter Custom Goal</Text>
             <View style={styles.inputWrapper}>
               <TextInput
                 style={[
@@ -121,7 +120,7 @@ export default function GoalSelectionScreen() {
                 ]}
                 value={customGoal}
                 onChangeText={handleCustomGoalChange}
-                placeholder="15000"
+                placeholder="|5000"
                 placeholderTextColor="rgba(142, 26, 59, 0.3)"
                 keyboardType="number-pad"
                 maxLength={5}
@@ -244,7 +243,7 @@ const styles = StyleSheet.create({
 
   customInputLabel: {
     fontFamily: 'Sofia-Pro-ExtraLight',
-    fontSize: 14,
+    fontSize: 18,
     color: '#666666',
     marginBottom: 8,
     textAlign: 'center',
@@ -257,14 +256,14 @@ const styles = StyleSheet.create({
   },
   customInput: {
     flex: 1,
-    height: 112,
+    height: 70,
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     borderWidth: 1,
     borderColor: 'rgba(142, 26, 59, 0.1)',
     paddingHorizontal: 20,
     fontFamily: 'Sofia-Pro-Regular',
-    fontSize: 24,
+    fontSize: 32,
     color: '#8E1A3B',
     textAlign: 'center',
   },

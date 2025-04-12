@@ -10,13 +10,14 @@ const CONTENT_WIDTH = Math.min(402, width - (CONTENT_PADDING * 2));
 
 export default function SplashScreen() {
   const handleGetStarted = () => {
-    router.push('/instructions');
+    router.replace('/instructions');
   };
 
   return (
     <LinearGradient
       colors={['rgb(240,244,234)', 'rgb(251,248,244)', 'rgb(251,240,238)']}
       locations={[0.158, 0.5112, 0.8644]}
+      start={[0, 1]} end={[1, 0]}
       style={styles.container}
     >
       <SafeAreaView style={styles.safeArea}>

@@ -9,8 +9,8 @@ export default function TermsScreen() {
   const { theme } = useTheme();
 
   const handleBack = () => {
-    router.back();
-  };
+    router.replace('/profile');
+  };  
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>

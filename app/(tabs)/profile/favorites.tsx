@@ -11,7 +11,7 @@ export default function FavoritesScreen() {
   const { favorites, removeFavorite } = useFavoritesStore();
 
   const handleBack = () => {
-    router.push('/profile');
+    router.replace('/profile');
   };
 
   const handleRemoveFavorite = (id: string) => {
@@ -36,7 +36,7 @@ export default function FavoritesScreen() {
               No favorites yet
             </Text>
             <Text style={[styles.emptyText, { color: theme.colors.text.secondary }]}>
-              Add dhikrs to your favorites by tapping the heart icon
+              Add to your favorites by tapping the heart icon
             </Text>
           </View>
         ) : (
@@ -103,11 +103,11 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   emptyTitle: {
-    fontFamily: 'Serif',
+    fontFamily: 'Sofia-Pro-Light',
     fontSize: 20,
   },
   emptyText: {
-    fontFamily: 'Sans',
+    fontFamily: 'Sofia-Pro-ExtraLight',
     fontSize: 16,
     textAlign: 'center',
   },
