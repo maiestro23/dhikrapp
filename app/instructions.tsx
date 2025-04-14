@@ -22,9 +22,9 @@ export default function InstructionsScreen() {
       <SafeAreaView style={styles.safeArea}>
         <View style={[styles.content, { width: CONTENT_WIDTH }]}>
           <View style={styles.header}>
-            <Text style={styles.title}>Swipe up or tap</Text>
+            <Text style={styles.title}>Swipe up</Text>
             <Text style={styles.subtitle}>
-              Swipe up or tap through to read your daily adhkar
+              Swipe up through to read your daily adhkar
             </Text>
           </View>
 
