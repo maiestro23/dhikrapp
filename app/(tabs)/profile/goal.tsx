@@ -7,6 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '@/context/ThemeContext';
 
 
+
 const goalOptions = [
   { count: 100, time: '2 mins a day' },
   { count: 500, time: '10 mins a day' },
@@ -20,6 +21,7 @@ export default function GoalSelectionScreen() {
   const [error, setError] = useState<string | null>(null);
   const { setDailyGoal } = useProgressStore();
   const { theme } = useTheme();
+  const { dailyGoal } = useProgressStore();
 
   const handleBack = () => {
     router.replace('/profile');
@@ -85,7 +87,7 @@ export default function GoalSelectionScreen() {
         </TouchableOpacity>
           <View style={styles.header}>
             <Text style={styles.title}>How much adhkar do you want to read per day?</Text>
-            <Text style={styles.subtitle}>Your current goal is: XXX</Text>
+            <Text style={styles.subtitle}>Your current goal is: {dailyGoal}</Text>
           </View>
 
           <View style={styles.goalsGrid}>

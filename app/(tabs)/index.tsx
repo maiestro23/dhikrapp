@@ -1,93 +1,228 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { ScreenBackground } from '../../components/ScreenBackground';
-import { DhikrReader } from '../../components/DhikrReader';
+import React, { useCallback } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import PagerView from 'react-native-pager-view';
+import { Heart } from 'lucide-react-native';
 import { useTheme } from '../../context/ThemeContext';
-import { useProgressStore } from '../../stores/progressStore';
+import { useProgress } from '../../hooks/useProgress';
+import { useTimeTracking } from '../../hooks/useTimeTracking';
+import { useFavoritesStore } from '../../stores/favoritesStore';
 import { useDhikrStore } from '../../stores/dhikrStore';
-import { useState } from 'react';
+import { useProgressStore } from '../../stores/progressStore';
+import { ScreenBackground } from '../../components/ScreenBackground';
+
+const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme }: any) => (
+  <View style={styles.dhikrCard}>
+    <View style={styles.textWrapper}>
+      <Text style={styles.arabicText}>{dhikr.arabicText}</Text>
+      <Text style={styles.transliteration}>{dhikr.transliteration}</Text>
+      <Text style={styles.translation}>{dhikr.translation}</Text>
+      <TouchableOpacity
+        style={[styles.favoriteButton, isFavorite && styles.favoriteButtonActive]}
+        onPress={() => onToggleFavorite(dhikr, isFavorite)}
+      >
+        <Heart
+          size={24}
+          color={theme.colors.accent}
+          fill={!isFavorite ? 'transparent' : theme.colors.accent}
+        />
+      </TouchableOpacity>
+    </View>
+  </View>
+);
 
 export default function DhikrScreen() {
   const { theme } = useTheme();
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const { dailyGoal } = useProgressStore();
+  const { start, stop } = useTimeTracking();
+  const { incrementCount, goalProgress } = useProgress();
   const { dhikrs } = useDhikrStore();
-  
-  const handleNext = () => {
-    if (currentIndex < (dailyGoal || 0) - 1) {
-      setCurrentIndex(prev => prev + 1);
+  const { isFavorite, addFavorite, removeFavorite } = useFavoritesStore();
+
+  const pagerRef = React.useRef<PagerView>(null);
+  const [currentIndex, setCurrentIndex] = React.useState(1); // Start at first real item
+
+  React.useEffect(() => {
+    start();
+    return () => stop();
+  }, []);
+
+  const toggleFavorite = useCallback((dhikr: any, isFav: boolean) => {
+    if (isFav) removeFavorite(dhikr.id);
+    else addFavorite(dhikr);
+  }, [addFavorite, removeFavorite]);
+
+  const handlePageSelected = (e: any) => {
+    let index = e.nativeEvent.position;
+    const lastIndex = dhikrs.length;
+
+    if (index === 0) {
+      // Swiped to fake last → jump to real last
+      pagerRef.current?.setPageWithoutAnimation(lastIndex);
+      index = lastIndex;
+    } else if (index === lastIndex + 1) {
+      // Swiped to fake first → jump to real first
+      pagerRef.current?.setPageWithoutAnimation(1);
+      index = 1;
+    } else {
+      incrementCount();
     }
+
+    setCurrentIndex(index);
   };
 
-  const handlePrevious = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(prev => prev - 1);
-    }
-  };
-
-  /*
-  if (!dailyGoal) {
-    return (
-      <ScreenBackground>
-        <View style={styles.content}>
-          <Text style={[styles.noGoalTitle, { color: theme.colors.text.primary }]}>
-            Set Your Daily Goal
-          </Text>
-          <Text style={[styles.noGoalText, { color: theme.colors.text.secondary }]}>
-            Please set your daily dhikr goal to begin
-          </Text>
-          <TouchableOpacity
-            style={[styles.setGoalButton, { backgroundColor: theme.colors.accent }]}
-            onPress={() => router.push('/profile/goal')}
-          >
-            <Text style={styles.setGoalButtonText}>Set Goal</Text>
-          </TouchableOpacity>
-        </View>
-      </ScreenBackground>
-    );
-  }
-    */
+  // Create pages with extra fake first and last
+  const circularPages = [
+    dhikrs[dhikrs.length - 1], // fake last
+    ...dhikrs,                 // real items
+    dhikrs[0],                 // fake first
+  ];
 
   return (
     <ScreenBackground>
-      <DhikrReader
-        onNext={handleNext}
-        onPrevious={handlePrevious}
-        currentIndex={currentIndex}
-        totalCount={dailyGoal}
-        theme={theme}
-        options={{ unmountOnBlur: true }}
-      />
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.greeting}>Assalamu Alaikum</Text>
+          <Text style={styles.date}>
+            {new Date().toLocaleDateString('en-US', {
+              weekday: 'long',
+              month: 'long',
+              day: 'numeric'
+            })}
+          </Text>
+        </View>
+
+        <View style={styles.progressContainer}>
+          <View style={styles.progressBarContainer}>
+            <View style={[styles.progressBar, { height: `${goalProgress}%` }]} />
+          </View>
+          <Text style={styles.progressText}>
+            {goalProgress < 100 ? goalProgress : 100}%
+          </Text>
+        </View>
+
+        <PagerView
+          ref={pagerRef}
+          initialPage={1} // first real item
+          style={{ flex: 1 }}
+          orientation="vertical"
+          onPageSelected={handlePageSelected}
+        >
+          {circularPages.map((dhikr: any, index: number) => (
+            <View key={`dhikr-${index}`}>
+              <DhikrContent
+                dhikr={dhikr}
+                isFavorite={isFavorite(dhikr.id)}
+                onToggleFavorite={toggleFavorite}
+                theme={theme}
+              />
+            </View>
+          ))}
+        </PagerView>
+      </View>
     </ScreenBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  content: {
+  container: {
+    flex: 1,
+  },
+  header: {},
+  greeting: {
+    fontFamily: 'Sofia-Pro-Light',
+    fontSize: 17,
+    lineHeight: 20,
+    color: '#8C8F7B',
+    marginBottom: 4,
+    marginLeft: 20
+  },
+  date: {
+    fontFamily: 'Sofia-Pro-Light',
+    fontSize: 13,
+    lineHeight: 14,
+    color: '#6F7C50',
+    opacity: 0.5,
+    marginLeft: 20
+  },
+  progressContainer: {
+    position: 'absolute',
+    left: 17,
+    top: '50%',
+    transform: [{ translateY: -270.5 }],
+    alignItems: 'center',
+    height: 500,
+  },
+  progressBarContainer: {
+    width: 5,
+    height: '100%',
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    borderRadius: 2.5,
+    overflow: 'hidden',
+  },
+  progressBar: {
+    width: '100%',
+    backgroundColor: '#7E0F3B',
+    borderRadius: 2.5,
+    position: 'absolute',
+    bottom: 0,
+  },
+  progressText: {
+    fontFamily: 'Sofia-Pro',
+    color: '#8C8F7B',
+    marginTop: 8,
+  },
+  contentContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 24,
+    overflow: 'hidden',
+    position: 'relative',
+    paddingBottom: 15,
   },
-  noGoalTitle: {
-    fontFamily: 'Serif',
-    fontSize: 24,
-    marginBottom: 8,
+  dhikrCard: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingRight: 20,
+  },
+  textWrapper: {
+    paddingTop: 15,
+    paddingLeft: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 24,
+    maxWidth: 350,
+    width: '100%',
+    paddingHorizontal: 0,
+  },
+  arabicText: {
+    fontFamily: 'NotoNaskhArabic',
+    fontSize: 25,
     textAlign: 'center',
+    color: '#8C8F7B',
   },
-  noGoalText: {
-    fontFamily: 'Sans',
-    fontSize: 16,
-    marginBottom: 24,
+  transliteration: {
+    fontFamily: 'Classico',
+    fontSize: 28,
     textAlign: 'center',
+    color: '#181818',
+    lineHeight: 30,
   },
-  setGoalButton: {
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 24,
-  },
-  setGoalButtonText: {
-    fontFamily: 'Sans-Medium',
+  translation: {
+    fontFamily: 'Sofia-Pro-ExtraLight',
     fontSize: 16,
-    color: '#FFFFFF',
+    textAlign: 'center',
+    color: '#8C8F7B',
   },
+  favoriteButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  favoriteButtonActive: {},
 });
