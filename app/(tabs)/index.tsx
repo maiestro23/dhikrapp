@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import PagerView from 'react-native-pager-view';
 import { Heart } from 'lucide-react-native';
 import { useTheme } from '../../context/ThemeContext';
@@ -37,10 +37,11 @@ export default function DhikrScreen() {
   const { dhikrs } = useDhikrStore();
   const { isFavorite, addFavorite, removeFavorite } = useFavoritesStore();
 
-  const pagerRef = React.useRef<PagerView>(null);
-  const [currentIndex, setCurrentIndex] = React.useState(1); // Start at first real item
+  const pagerRef = useRef<PagerView>(null);
+  const [currentIndex, setCurrentIndex] = useState(1); // Start at first real item
+  const [scrollState, setScrollState] = useState<'idle' | 'dragging' | 'settling'>('idle');
 
-  React.useEffect(() => {
+  useEffect(() => {
     start();
     return () => stop();
   }, []);
@@ -51,23 +52,31 @@ export default function DhikrScreen() {
   }, [addFavorite, removeFavorite]);
 
   const handlePageSelected = (e: any) => {
-    let index = e.nativeEvent.position;
-    const lastIndex = dhikrs.length;
-
-    if (index === 0) {
-      // Swiped to fake last → jump to real last
-      pagerRef.current?.setPageWithoutAnimation(lastIndex);
-      index = lastIndex;
-    } else if (index === lastIndex + 1) {
-      // Swiped to fake first → jump to real first
-      pagerRef.current?.setPageWithoutAnimation(1);
-      index = 1;
-    } else {
-      incrementCount();
+    const index = e.nativeEvent.position;
+    setCurrentIndex(index); // Store the index even for fake pages
+    if (index !== 0 && index !== dhikrs.length + 1) {
+      incrementCount(); // Increment only if not on fake page
     }
-
-    setCurrentIndex(index);
   };
+
+  const handleScrollStateChanged = (e: any) => {
+    const state = e.nativeEvent.pageScrollState;
+    setScrollState(state);
+  };
+
+  // Correct position after swipe finishes
+  useEffect(() => {
+    if (scrollState === 'idle') {
+      const lastIndex = dhikrs.length;
+      if (currentIndex === 0) {
+        pagerRef.current?.setPageWithoutAnimation(lastIndex);
+        setCurrentIndex(lastIndex);
+      } else if (currentIndex === lastIndex + 1) {
+        pagerRef.current?.setPageWithoutAnimation(1);
+        setCurrentIndex(1);
+      }
+    }
+  }, [scrollState]);
 
   // Create pages with extra fake first and last
   const circularPages = [
@@ -101,10 +110,11 @@ export default function DhikrScreen() {
 
         <PagerView
           ref={pagerRef}
-          initialPage={1} // first real item
+          initialPage={1}
           style={{ flex: 1 }}
           orientation="vertical"
           onPageSelected={handlePageSelected}
+          onPageScrollStateChanged={handleScrollStateChanged}
         >
           {circularPages.map((dhikr: any, index: number) => (
             <View key={`dhikr-${index}`}>
