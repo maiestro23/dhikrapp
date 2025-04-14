@@ -4,6 +4,9 @@ import { Quote as QuoteIcon, Search, User } from 'lucide-react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Route } from 'expo-router/build/Route';
+import CustomQuotesIcon from '@/assets/icons/customQuotesIcon';
+import CustomDiscoverIcon from '@/assets/icons/customDiscoverIcon';
+import CustomProfileIcon from '@/assets/icons/customProfileIcon';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -32,7 +35,7 @@ export default function TabLayout() {
         options={{
           title: 'Dhikr',
           tabBarIcon: ({ color, size, focused }) => ( 
-            <QuoteIcon color={'#5A5D4D'} size={24} fill={focused ? '#5A5D4D' : '#fff'}/>
+            <CustomQuotesIcon color={'#5A5D4D'} size={24} fill={focused ? '#5A5D4D' : '#fff'}/>
           ),
         }}
       />
@@ -41,7 +44,7 @@ export default function TabLayout() {
         options={{
           title: 'Search',
           tabBarIcon: ({ color, size, focused }) => (
-            <Search color={'#5A5D4D'} size={24} fill={focused ? '#5A5D4D' : '#fff'}/>
+            <CustomDiscoverIcon color={'#5A5D4D'} size={24} fill={focused ? '#5A5D4D' : '#fff'}/>
           ),
         }}
       />
@@ -50,7 +53,7 @@ export default function TabLayout() {
         options={{
           title: 'Profile',
           tabBarIcon: ({ color, size, focused }) => (
-            <User color={'#5A5D4D'} size={24} fill={focused ? '#5A5D4D' : '#fff'}/>
+            <CustomProfileIcon color={'#5A5D4D'} size={24} fill={focused ? '#5A5D4D' : '#fff'}/>
           ),
         }}
       />
