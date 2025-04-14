@@ -4,6 +4,7 @@ import { Redirect, router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BookLine } from '../components/BookLine';
 import { useProgressStore } from '@/stores/progressStore';
+import CustomBookImage from '@/assets/images/customBookImage';
 
 const { width } = Dimensions.get('window');
 const CONTENT_PADDING = 24;
@@ -15,11 +16,12 @@ export default function SplashScreen() {
   };
 
   const { dailyGoal } = useProgressStore();
-
+/*
   if (dailyGoal) {
     Redirect({ href: '/(tabs)' });
     return null;
   }
+*/
 
   return (
     <LinearGradient
@@ -40,7 +42,7 @@ export default function SplashScreen() {
           </View>
 
           <View style={styles.imageContainer}>
-            <BookLine />
+            <CustomBookImage/>
           </View>
 
           <TouchableOpacity
