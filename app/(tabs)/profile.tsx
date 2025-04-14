@@ -110,21 +110,7 @@ export default function ProfileScreen() {
             <ChevronRight size={20} color={theme.colors.text.secondary} />
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[styles.menuItem, { backgroundColor: theme.colors.card }]}
-            onPress={toggleDarkMode}
-          >
-            <View style={[styles.menuIconContainer, { backgroundColor: theme.colors.background }]}>
-              <Moon size={20} color={theme.colors.accent} />
-            </View>
-            <Text style={[styles.menuText, { color: theme.colors.text.primary }]}>Dark Mode</Text>
-            <View style={[styles.toggle, { backgroundColor: theme.isDark ? theme.colors.accent : theme.colors.border }]}>
-              <View style={[styles.toggleKnob, {
-                backgroundColor: theme.colors.card,
-                transform: [{ translateX: theme.isDark ? 20 : 0 }]
-              }]} />
-            </View>
-          </TouchableOpacity>
+
         </View>
 
         <View style={[styles.footerMenu, { backgroundColor: theme.colors.card }]}>
