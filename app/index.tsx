@@ -1,8 +1,9 @@
 import { View, Text, StyleSheet, TouchableOpacity, Platform, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { Redirect, router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BookLine } from '../components/BookLine';
+import { useProgressStore } from '@/stores/progressStore';
 
 const { width } = Dimensions.get('window');
 const CONTENT_PADDING = 24;
@@ -12,6 +13,13 @@ export default function SplashScreen() {
   const handleGetStarted = () => {
     router.replace('/instructions');
   };
+
+  const { dailyGoal } = useProgressStore();
+
+  if (dailyGoal) {
+    Redirect({ href: '/(tabs)' });
+    return null;
+  }
 
   return (
     <LinearGradient
