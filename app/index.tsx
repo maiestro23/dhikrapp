@@ -16,7 +16,8 @@ export default function SplashScreen() {
   };
 
   const { dailyGoal } = useProgressStore();
-/*
+
+  /*
   if (dailyGoal) {
     Redirect({ href: '/(tabs)' });
     return null;
@@ -42,7 +43,7 @@ export default function SplashScreen() {
           </View>
 
           <View style={styles.imageContainer}>
-            <CustomBookImage/>
+            <CustomBookImage />
           </View>
 
           <TouchableOpacity
@@ -100,6 +101,7 @@ const styles = StyleSheet.create({
     height: 200,
     justifyContent: 'center',
     alignItems: 'center',
+    marginLeft: 50
   },
   button: {
     width: '100%',

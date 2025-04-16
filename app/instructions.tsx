@@ -3,6 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ArrowUp } from 'lucide-react-native';
+import CustomSwipeIcon from '@/assets/icons/customSwipeIcon';
 
 const { width } = Dimensions.get('window');
 const CONTENT_PADDING = 24;
@@ -35,10 +36,11 @@ export default function InstructionsScreen() {
                 <Text style={styles.transliteration}>Alhamdulillah</Text>
                 <Text style={styles.translation}>(All praise is due to Allah)</Text>
               </View>
+              
             </View>
             <View style={styles.gestureContainer}>
-              <ArrowUp color="#7E0F3B" size={24} />
-            </View>
+              <CustomSwipeIcon/>
+              </View>
           </View>
 
           <TouchableOpacity
@@ -131,12 +133,11 @@ const styles = StyleSheet.create({
     color: '#8C8F7B',
   },
   gestureContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: 'rgba(126, 15, 59, 0.1)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    top: -70,
+    marginLeft: 20,
+    width: '100%',
+    alignItems: 'flex-end',
+    justifyContent:'flex-start'
   },
   button: {
     //width: '100%',
