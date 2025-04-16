@@ -7,6 +7,7 @@ import { Route } from 'expo-router/build/Route';
 import CustomQuotesIcon from '@/assets/icons/customQuotesIcon';
 import CustomDiscoverIcon from '@/assets/icons/customDiscoverIcon';
 import CustomProfileIcon from '@/assets/icons/customProfileIcon';
+import CustomProfileFilledIcon from '@/assets/icons/customProfileFilledIcon';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -53,7 +54,9 @@ export default function TabLayout() {
         options={{
           title: 'Profile',
           tabBarIcon: ({ color, size, focused }) => (
-            <CustomProfileIcon color={'#5A5D4D'} size={24} fill={focused ? '#5A5D4D' : '#fff'}/>
+
+            focused ?  <CustomProfileFilledIcon /> : <CustomProfileIcon /> 
+            //<CustomProfileIcon color={'#5A5D4D'} size={24} fill={focused ? '#5A5D4D' : '#fff'}/>
           ),
         }}
       />
