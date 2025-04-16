@@ -85,6 +85,8 @@ export default function DhikrScreen() {
     dhikrs[0],                 // fake first
   ];
 
+  const barHeightPx = (goalProgress / 100) * 500;
+
   return (
     <ScreenBackground>
       <View style={styles.container}>
@@ -101,7 +103,7 @@ export default function DhikrScreen() {
 
         <View style={styles.progressContainer}>
           <View style={styles.progressBarContainer}>
-            <View style={[styles.progressBar, { height: `${goalProgress}%` }]} />
+            <View style={[styles.progressBar, { height: Math.round(barHeightPx) }]} />
           </View>
           <Text style={styles.progressText}>
             {goalProgress < 100 ? goalProgress : 100}%
@@ -155,23 +157,23 @@ const styles = StyleSheet.create({
   },
   progressContainer: {
     position: 'absolute',
-    left: 17,
+    left: 16,
     top: '50%',
-    transform: [{ translateY: -270.5 }],
+    transform: [{ translateY: -270 }],
     alignItems: 'center',
     height: 500,
   },
   progressBarContainer: {
-    width: 5,
+    width: 4,
     height: '100%',
     backgroundColor: 'rgba(255, 255, 255, 0.85)',
-    borderRadius: 2.5,
+    borderRadius: 2,
     overflow: 'hidden',
   },
   progressBar: {
     width: '100%',
     backgroundColor: '#7E0F3B',
-    borderRadius: 2.5,
+    borderRadius: 2,
     position: 'absolute',
     bottom: 0,
   },
@@ -179,6 +181,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Sofia-Pro',
     color: '#8C8F7B',
     marginTop: 8,
+    width: 40,
+    textAlign: 'center',
+    fontVariant: ['tabular-nums'],
+    left: 2
   },
   contentContainer: {
     flex: 1,
@@ -199,7 +205,7 @@ const styles = StyleSheet.create({
   },
   textWrapper: {
     paddingTop: 15,
-    paddingLeft: 18,
+    paddingLeft: 30,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 24,
