@@ -57,4 +57,32 @@ export const dhikrs: Dhikr[] = [
         "arabicText": "سُبْحَانَ اللّٰهِ العَظِيم",
         "translation": "Glory be to Allah, the great"
     },
+    {
+        "id": "8",
+        "category": "general",
+        "transliteration": "La hawla wa la quwwata illa billah",
+        "arabicText": "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",
+        "translation": "There is no might nor power except with Allah"
+    },
+    {
+        "id": "9",
+        "category": "general",
+        "transliteration": "Hasbiyallahu wa ni'mal wakeel",
+        "arabicText": "حَسْبِيَ اللَّهُ وَنِعْمَ الْوَكِيلُ",
+        "translation": "Allah is sufficient for me, and He is the Best Guardian"
+    },
+    {
+        "id": "10",
+        "category": "general",
+        "transliteration": "Rabbi-ghfir li",
+        "arabicText": "رَبِّ اغْفِرْ لِي",
+        "translation": "My Lord, forgive me"
+    },
+    {
+        "id": "11",
+        "category": "general",
+        "transliteration": "Allahumma salli 'ala Muhammad",
+        "arabicText": "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ",
+        "translation": "O Allah, send blessings upon Muhammad"
+    }
 ]
