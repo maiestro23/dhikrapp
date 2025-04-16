@@ -7,7 +7,7 @@ import { ScreenBackground } from '../../components/ScreenBackground';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function ProfileScreen() {
-  const { theme, toggleDarkMode } = useTheme();
+  const { theme } = useTheme();
   const {
     totalCount,
     totalMinutes,
