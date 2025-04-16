@@ -23,9 +23,13 @@ export default function SearchScreen() {
   const searchResults = query ? fuse.search(query) : [];
 
   const handleSearch = useCallback((text: string) => {
-    setQuery(text);
-    if (text.trim()) {
-      addRecentSearch(text.trim());
+      setQuery(text);
+      if (text.length > 2){
+
+      if (text.trim()) {
+        addRecentSearch(text.trim());
+      }
+  
     }
   }, [addRecentSearch]);
 
@@ -52,15 +56,14 @@ export default function SearchScreen() {
       </View>
       <TouchableOpacity
         style={[
-          styles.favoriteButton,
-          { backgroundColor: isFavorite(item.item.id) ? `${theme.colors.accent}15` : 'transparent' }
+          styles.favoriteButton
         ]}
         onPress={() => handleFavoritePress(item.item)}
       >
         <Heart
           size={24}
           color={theme.colors.accent}
-          fill={isFavorite(item.item.id) ? theme.colors.accent : 'none'}
+          fill={isFavorite(item.item.id) ? theme.colors.accent : '#fff'}
         />
       </TouchableOpacity>
     </View>
@@ -87,7 +90,7 @@ export default function SearchScreen() {
             value={query}
             onChangeText={handleSearch}
           />
-          {query.length > 0 && (
+          {query.length > 2 && (
             <TouchableOpacity onPress={() => setQuery('')}>
               <X color={theme.colors.text.secondary} size={20} />
             </TouchableOpacity>

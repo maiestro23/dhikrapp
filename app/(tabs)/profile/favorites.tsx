@@ -47,13 +47,13 @@ export default function FavoritesScreen() {
                 style={[styles.favoriteCard, { backgroundColor: theme.colors.card }]}
               >
                 <View style={styles.favoriteContent}>
-                  <Text style={[styles.arabicText, { color: theme.colors.text.primary }]}>
+                  <Text style={[styles.arabicText]}>
                     {dhikr.arabicText}
                   </Text>
-                  <Text style={[styles.transliteration, { color: theme.colors.text.primary }]}>
+                  <Text style={[styles.transliteration]}>
                     {dhikr.transliteration}
                   </Text>
-                  <Text style={[styles.translation, { color: theme.colors.text.secondary }]}>
+                  <Text style={[styles.translation]}>
                     {dhikr.translation}
                   </Text>
                 </View>
@@ -127,17 +127,19 @@ const styles = StyleSheet.create({
   },
   arabicText: {
     fontFamily: 'NotoNaskhArabic',
-    fontSize: 24,
-    marginBottom: 8,
+    fontSize: 18,
+    marginBottom: 4,
   },
   transliteration: {
     fontFamily: 'Classico',
-    fontSize: 16,
+    fontSize: 18,
     marginBottom: 4,
+    color: 'black'
   },
   translation: {
-    fontFamily: 'Sofia-Pro-ExtraLight',
+    fontFamily: 'Sofia-Pro-Light',
     fontSize: 14,
+    color: 'grey'
   },
   removeButton: {
     width: 40,
