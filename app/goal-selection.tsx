@@ -59,7 +59,7 @@ export default function GoalSelectionScreen() {
 
     <KeyboardAvoidingView 
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
+      behavior='padding'
     >
       <ScrollView 
         style={styles.scrollView}
@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 0,
-    marginBottom: 34,
+    marginBottom: 64,
     marginLeft: 'auto',
     marginRight: 'auto',
     marginHorizontal: 'auto'
