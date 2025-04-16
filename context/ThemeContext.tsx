@@ -37,18 +37,18 @@ const lightTheme: Theme = {
 
 const darkTheme: Theme = {
   colors: {
-    background: '#F0F4EA', // Using the same gradient start color for consistency
-    card: '#1E1E1E',
+    background: '#F0F4EA', // Using the start color of the gradient
+    card: '#FFFFFF',
     text: {
-      primary: '#FFFFFF',
-      secondary: '#AAAAAA',
+      primary: '#8C8F7B',
+      secondary: '#181818',
     },
-    accent: '#D4A0AB',
-    border: '#333333',
-    progressBar: '#D4A0AB',
-    progressBackground: '#333333',
+    accent: '#8E1A3B',
+    border: '#EEEEEE',
+    progressBar: '#8E1A3B',
+    progressBackground: '#EEEEEE',
   },
-  isDark: true,
+  isDark: false,
 };
 
 interface ThemeContextType {
@@ -60,18 +60,18 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const colorScheme = useColorScheme();
-  const [isDarkMode, setIsDarkMode] = useState(colorScheme === 'dark');
+  const [isDarkMode] = useState(colorScheme === 'dark');
 
   useEffect(() => {
-    setIsDarkMode(colorScheme === 'dark');
+    //setIsDarkMode(colorScheme === 'dark');
   }, [colorScheme]);
 
   const toggleDarkMode = () => {
-    setIsDarkMode(prev => !prev);
+    //setIsDarkMode(prev => !prev);
   };
 
   const value = {
-    theme: isDarkMode ? darkTheme : lightTheme,
+    theme: isDarkMode ? lightTheme : lightTheme,
     toggleDarkMode,
   };
 
