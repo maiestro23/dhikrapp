@@ -7,7 +7,9 @@
     "clean": "rm -rf node_modules/.cache",
     "dev": "npm run clean && EXPO_NO_TELEMETRY=1 expo start --clear",
     "build:web": "npm run clean && expo export --platform web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "ios-build": "npx eas build --platform ios",
+    "ios-deploy": "npx eas submit --platform ios"
   },
   "dependencies": {
     "@expo-google-fonts/noto-naskh-arabic": "^0.2.3",
