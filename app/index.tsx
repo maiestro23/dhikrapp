@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { BookLine } from '../components/BookLine';
 import { useProgressStore } from '@/stores/progressStore';
 import CustomBookImage from '@/assets/images/customBookImage';
+import { useEffect } from 'react';
 
 const { width } = Dimensions.get('window');
 const CONTENT_PADDING = 24;
@@ -17,14 +18,39 @@ export default function SplashScreen() {
 
   const { dailyGoal } = useProgressStore();
 
-  /*
-  if (dailyGoal) {
-    Redirect({ href: '/(tabs)' });
-    return null;
-  }
-*/
 
+    // Move the navigation logic to useEffect
+  useEffect(() => {
+    if (dailyGoal) {
+      // Small delay to ensure navigation is ready
+      const timer = setTimeout(() => {
+        router.replace('/(tabs)');
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [dailyGoal, router]);
+
+   // Only render the splash screen if there's no dailyGoal
+  // If there is a dailyGoal, show a loading state briefly
+  if (dailyGoal) {
+    return (
+      <LinearGradient
+        colors={['rgb(240,244,234)', 'rgb(251,248,244)', 'rgb(251,240,238)']}
+        locations={[0.158, 0.5112, 0.8644]}
+        start={[0, 1]} end={[1, 0]}
+        style={styles.container}
+      >
+        <SafeAreaView style={styles.safeArea}>
+          <View style={[styles.content, { width: CONTENT_WIDTH }]}>
+            <Text style={styles.quote}>Your daily dose of Khair...</Text>
+          </View>
+        </SafeAreaView>
+      </LinearGradient>
+    );
+  }
   return (
+    
     <LinearGradient
       colors={['rgb(240,244,234)', 'rgb(251,248,244)', 'rgb(251,240,238)']}
       locations={[0.158, 0.5112, 0.8644]}
