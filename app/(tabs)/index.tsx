@@ -7,7 +7,6 @@ import { useProgress } from '../../hooks/useProgress';
 import { useTimeTracking } from '../../hooks/useTimeTracking';
 import { useFavoritesStore } from '../../stores/favoritesStore';
 import { useDhikrStore } from '../../stores/dhikrStore';
-import { useProgressStore } from '../../stores/progressStore';
 import { ScreenBackground } from '../../components/ScreenBackground';
 
 const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme }: any) => (

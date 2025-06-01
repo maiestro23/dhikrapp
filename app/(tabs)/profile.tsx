@@ -1,13 +1,23 @@
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions, Platform } from 'react-native';
 import { router } from 'expo-router';
-import { Flag, Bookmark, Moon, ChevronRight } from 'lucide-react-native';
+import { Flag, Bookmark, ChevronRight } from 'lucide-react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { useProgress } from '../../hooks/useProgress';
 import { ScreenBackground } from '../../components/ScreenBackground';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+const TAB_BAR_HEIGHT = 80;
+
+const isTablet = () => {
+  const { height, width } = Dimensions.get('window');
+  const aspectRatio = height / width;
+  return Platform.OS === 'ios' && aspectRatio < 1.6; // simple heuristic for tablets
+};
 
 export default function ProfileScreen() {
   const { theme } = useTheme();
+  const insets = useSafeAreaInsets();
   const {
     totalCount,
     totalMinutes,
@@ -20,9 +30,17 @@ export default function ProfileScreen() {
     router.replace(route);
   };
 
+  const bottomPadding = isTablet()
+    ? TAB_BAR_HEIGHT + insets.bottom + 120
+    : 40 + insets.bottom;
+
   return (
     <ScreenBackground>
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={{ paddingBottom: bottomPadding }}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.greetingContainer}>
           <Text style={[styles.greeting, { color: theme.colors.text.secondary }]}>Salaam!</Text>
         </View>
@@ -56,10 +74,15 @@ export default function ProfileScreen() {
 
         <View style={styles.progressContainer}>
           <View style={[styles.progressBar, { backgroundColor: 'white' }]}>
-            <View style={[styles.progressFill, {
-              width: `${goalProgress}%`,
-              backgroundColor: theme.colors.progressBar
-            }]} />
+            <View
+              style={[
+                styles.progressFill,
+                {
+                  width: `${goalProgress}%`,
+                  backgroundColor: theme.colors.progressBar,
+                },
+              ]}
+            />
           </View>
           <Text style={[styles.progressText, { color: theme.colors.text.primary }]}>
             {remainingToGoal > 0
@@ -68,24 +91,20 @@ export default function ProfileScreen() {
           </Text>
         </View>
 
-
         <LinearGradient
           colors={['rgb(246,245,227)', 'rgb(255,215,223)']}
           locations={[0, 1]}
-          start={[0, 1]} end={[1, 0]}
+          start={[0, 1]}
+          end={[1, 0]}
           style={styles.gradientStyle}
-
         >
           <View style={[styles.quoteCard]}>
             <Text style={[styles.quoteText, { color: theme.colors.accent }]}>
               "The most beloved deed to Allah is the most regular and constant even if it were little."
             </Text>
-            <Text style={[styles.quoteAuthor, { color: theme.colors.accent }]}>
-              Sahih Al-Bukhari
-            </Text>
+            <Text style={[styles.quoteAuthor, { color: theme.colors.accent }]}>Sahih Al-Bukhari</Text>
           </View>
         </LinearGradient>
-
 
         <View style={styles.menuContainer}>
           <TouchableOpacity
@@ -109,8 +128,6 @@ export default function ProfileScreen() {
             <Text style={[styles.menuText, { color: theme.colors.text.primary }]}>Favourites</Text>
             <ChevronRight size={20} color={theme.colors.text.secondary} />
           </TouchableOpacity>
-
-
         </View>
 
         <View style={[styles.footerMenu, { backgroundColor: theme.colors.card }]}>
@@ -118,21 +135,16 @@ export default function ProfileScreen() {
             style={[styles.footerMenuItem, { borderBottomColor: theme.colors.border, borderBottomWidth: 1 }]}
             onPress={() => handleNavigation('/terms')}
           >
-            <Text style={[styles.footerMenuText, { color: theme.colors.text.primary }]}>
-              Terms of service
-            </Text>
+            <Text style={[styles.footerMenuText, { color: theme.colors.text.primary }]}>Terms of service</Text>
             <ChevronRight size={20} color={theme.colors.text.secondary} />
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.footerMenuItem}
-            onPress={() => handleNavigation('/privacy')}
-          >
-            <Text style={[styles.footerMenuText, { color: theme.colors.text.primary }]}>
-              Privacy policy
-            </Text>
+          {/* You can repeat other footer menu items as needed */}
+          <TouchableOpacity style={styles.footerMenuItem} onPress={() => handleNavigation('/privacy')}>
+            <Text style={[styles.footerMenuText, { color: theme.colors.text.primary }]}>Privacy policy</Text>
             <ChevronRight size={20} color={theme.colors.text.secondary} />
           </TouchableOpacity>
+
         </View>
       </ScrollView>
     </ScreenBackground>
@@ -193,7 +205,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
   },
-
   gradientStyle: {
     borderRadius: 16,
     marginBottom: 12,
@@ -201,19 +212,14 @@ const styles = StyleSheet.create({
   quoteCard: {
     borderRadius: 16,
     padding: 14,
-    //marginBottom: 32,
     borderWidth: 1,
-    borderBottomColor: '#fff',
-    borderTopColor: '#fff',
-    borderLeftColor: '#fff',
-    borderRightColor: '#fff',
+    borderColor: '#fff',
   },
   quoteText: {
     fontFamily: 'Sofia-Pro-ExtraLight',
     fontSize: 15,
     textAlign: 'center',
     marginBottom: 8,
-    //lineHeight: 24,
   },
   quoteAuthor: {
     fontFamily: 'Sofia-Pro',
@@ -242,35 +248,21 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: 'Sofia-Pro-Light',
     fontSize: 16,
-    color: '#8C8F7B'
-  },
-  toggle: {
-    width: 44,
-    height: 24,
-    borderRadius: 12,
-    padding: 2,
-  },
-  toggleKnob: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
+    color: '#8C8F7B',
   },
   footerMenu: {
     borderRadius: 16,
     overflow: 'hidden',
-    //marginBottom: 24,
-
   },
   footerMenuItem: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 16,
-
   },
   footerMenuText: {
     fontFamily: 'Sofia-Pro-Light',
     fontSize: 16,
-    color: '#8C8F7B'
+    color: '#8C8F7B',
   },
 });
