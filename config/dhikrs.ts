@@ -1,10 +1,10 @@
 export interface Dhikr {
-  id: string;
-  arabicText: string;
-  transliteration: string;
-  translation: string;
-  category: 'general' | 'morning' | 'evening';
-  count?: number;
+    id: string;
+    arabicText: string;
+    transliteration: string;
+    translation: string;
+    category: 'general' | 'morning' | 'evening';
+    count?: number;
 }
 
 export const dhikrs: Dhikr[] = [
@@ -84,5 +84,33 @@ export const dhikrs: Dhikr[] = [
         "transliteration": "Allahumma salli 'ala Muhammad",
         "arabicText": "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ",
         "translation": "O Allah, send blessings upon Muhammad"
+    },
+    {
+        "id": "12",
+        "category": "general",
+        "transliteration": "Hasbiyallahu la ilaha illa Huwa",
+        "arabicText": "حَسْبِيَ اللَّهُ لَا إِلٰهَ إِلَّا هُوَ",
+        "translation": "Allah is sufficient for me; there is no deity except Him"
+    },
+    {
+        "id": "13",
+        "category": "general",
+        "transliteration": "La ilaha illa Allah, wahdahu la sharika lah",
+        "arabicText": "لَا إِلٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ",
+        "translation": "There is no deity but Allah, alone without partner"
+    },
+    {
+        "id": "14",
+        "category": "general",
+        "transliteration": "Allahumma inni as'aluka al-'afwa wal-'afiyah",
+        "arabicText": "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ",
+        "translation": "O Allah, I ask You for forgiveness and well-being"
+    },
+    {
+        "id": "15",
+        "category": "general",
+        "transliteration": "Allahumma anta Rabbi la ilaha illa anta",
+        "arabicText": "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلٰهَ إِلَّا أَنْتَ",
+        "translation": "O Allah, You are my Lord, there is no deity except You"
     }
 ]
