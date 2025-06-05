@@ -7,9 +7,10 @@ import { useProgressStore } from '@/stores/progressStore';
 import CustomBookImage from '@/assets/images/customBookImage';
 import { useEffect } from 'react';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const CONTENT_PADDING = 24;
 const CONTENT_WIDTH = Math.min(402, width - (CONTENT_PADDING * 2));
+const isSmallDevice = height <= 667;
 
 export default function SplashScreen() {
   const handleGetStarted = () => {
@@ -18,11 +19,8 @@ export default function SplashScreen() {
 
   const { dailyGoal } = useProgressStore();
 
-
-    // Move the navigation logic to useEffect
   useEffect(() => {
     if (dailyGoal) {
-      // Small delay to ensure navigation is ready
       const timer = setTimeout(() => {
         router.replace('/(tabs)');
       }, 1000);
@@ -31,8 +29,6 @@ export default function SplashScreen() {
     }
   }, [dailyGoal, router]);
 
-   // Only render the splash screen if there's no dailyGoal
-  // If there is a dailyGoal, show a loading state briefly
   if (dailyGoal) {
     return (
       <LinearGradient
@@ -42,15 +38,19 @@ export default function SplashScreen() {
         style={styles.container}
       >
         <SafeAreaView style={styles.safeArea}>
-          <View style={[styles.content, { width: CONTENT_WIDTH }]}>
+          <View style={[
+            styles.content,
+            isSmallDevice && styles.noPadding,
+            { width: CONTENT_WIDTH }
+          ]}>
             <Text style={styles.quote}>Your daily dose of Khair...</Text>
           </View>
         </SafeAreaView>
       </LinearGradient>
     );
   }
+
   return (
-    
     <LinearGradient
       colors={['rgb(240,244,234)', 'rgb(251,248,244)', 'rgb(251,240,238)']}
       locations={[0.158, 0.5112, 0.8644]}
@@ -58,7 +58,11 @@ export default function SplashScreen() {
       style={styles.container}
     >
       <SafeAreaView style={styles.safeArea}>
-        <View style={[styles.content, { width: CONTENT_WIDTH }]}>
+        <View style={[
+          styles.content,
+          isSmallDevice && styles.noPadding,
+          { width: CONTENT_WIDTH }
+        ]}>
           <View style={styles.quoteContainer}>
             <Text style={styles.quote}>"Verily, in the</Text>
             <Text style={styles.quote}>remembrance of Allah</Text>
@@ -100,6 +104,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  noPadding: {
+    paddingHorizontal: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
   quoteContainer: {
     alignItems: 'center',
     marginTop: Platform.OS === 'ios' ? 40 : 20,
@@ -127,7 +136,7 @@ const styles = StyleSheet.create({
     height: 200,
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 50
+    marginLeft: 50,
   },
   button: {
     width: '100%',

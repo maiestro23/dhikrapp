@@ -32,7 +32,7 @@ export default function ProfileScreen() {
 
   const bottomPadding = isTablet()
     ? TAB_BAR_HEIGHT + insets.bottom + 120
-    : 40 + insets.bottom;
+    : 180 + insets.bottom;
 
   return (
     <ScreenBackground>
