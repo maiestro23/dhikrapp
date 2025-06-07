@@ -1,139 +1,273 @@
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
-import { ArrowLeft, Heart } from 'lucide-react-native';
+import { useState, useCallback } from 'react';
+import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity } from 'react-native';
 import { useTheme } from '../../../context/ThemeContext';
+import { Search as SearchIcon, X, Heart } from 'lucide-react-native';
+import Fuse from 'fuse.js';
+import { useSearchStore } from '../../../stores/searchStore';
+import { useDhikrStore } from '../../../stores/dhikrStore';
 import { useFavoritesStore } from '../../../stores/favoritesStore';
+import { ScreenBackground } from '../../../components/ScreenBackground';
 
-export default function FavoritesScreen() {
-  const router = useRouter();
+export default function SearchScreen() {
   const { theme } = useTheme();
-  const { favorites, removeFavorite } = useFavoritesStore();
+  const [query, setQuery] = useState('');
+  const { recentSearches, addRecentSearch, clearRecentSearches } = useSearchStore();
+  const { dhikrs } = useDhikrStore();
+  const { favorites, isFavorite, addFavorite, removeFavorite } = useFavoritesStore();
 
-  const handleBack = () => {
-    router.replace('/profile');
+  const fuse = new Fuse(dhikrs, {
+    keys: ['arabicText', 'transliteration', 'translation', 'category'],
+    threshold: 0.4,
+  });
+
+  const searchResults = query ? fuse.search(query) : [];
+
+  const handleSearch = useCallback((text: string) => {
+      setQuery(text);
+      if (text.length > 2){
+
+      if (text.trim()) {
+        addRecentSearch(text.trim());
+      }
+  
+    }
+  }, [addRecentSearch]);
+
+  const handleFavoritePress = (dhikr: any) => {
+    if (isFavorite(dhikr.id)) {
+      removeFavorite(dhikr.id);
+    } else {
+      addFavorite(dhikr);
+    }
   };
 
-  const handleRemoveFavorite = (id: string) => {
-    removeFavorite(id);
-  };
+  const renderSearchResult = ({ item }: { item: { item: any } }) => (
+    <View style={[styles.resultItem, { backgroundColor: theme.colors.card }]}>
+      <View style={styles.resultContent}>
+        <Text style={[styles.arabicText, { color: theme.colors.text.primary }]}>
+          {item.item.arabicText}
+        </Text>
+        <Text style={[styles.transliteration]}>
+          {item.item.transliteration}
+        </Text>
+        <Text style={[styles.translation]}>
+          {item.item.translation}
+        </Text>
+      </View>
+      <TouchableOpacity
+        style={[
+          styles.favoriteButton
+        ]}
+        onPress={() => handleFavoritePress(item.item)}
+      >
+        <Heart
+          size={24}
+          color={theme.colors.accent}
+          fill={isFavorite(item.item.id) ? theme.colors.accent : '#fff'}
+        />
+      </TouchableOpacity>
+    </View>
+  );
+
+  const renderFavoriteItem = ({ item }: { item: any }) => (
+    <View style={[styles.resultItem, { backgroundColor: theme.colors.card }]}>
+      <View style={styles.resultContent}>
+        <Text style={[styles.arabicText, { color: theme.colors.text.primary }]}>
+          {item.arabicText}
+        </Text>
+        <Text style={[styles.transliteration]}>
+          {item.transliteration}
+        </Text>
+        <Text style={[styles.translation]}>
+          {item.translation}
+        </Text>
+      </View>
+      <TouchableOpacity
+        style={[
+          styles.favoriteButton
+        ]}
+        onPress={() => handleFavoritePress(item)}
+      >
+        <Heart
+          size={24}
+          color={theme.colors.accent}
+          fill={theme.colors.accent}
+        />
+      </TouchableOpacity>
+    </View>
+  );
+
+  const renderRecentSearch = ({ item }: { item: string }) => (
+    <TouchableOpacity 
+      style={[styles.recentItem, { backgroundColor: theme.colors.card }]}
+      onPress={() => handleSearch(item)}
+    >
+      <Text style={[styles.recentText, { color: theme.colors.text.primary }]}>{item}</Text>
+    </TouchableOpacity>
+  );
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <ScreenBackground>
+      
+      
+      
+      
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-          <ArrowLeft color={theme.colors.text.primary} size={24} />
-        </TouchableOpacity>
-        <Text style={[styles.title, { color: theme.colors.text.primary }]}>Favorites</Text>
-        <View style={{ width: 24 }} />
+        <View style={[styles.searchContainer, { backgroundColor: theme.colors.card }]}>
+          <SearchIcon color={theme.colors.text.secondary} size={20} />
+          <TextInput
+            style={[styles.searchInput, { color: theme.colors.text.primary }]}
+            placeholder="Search dhikr..."
+            placeholderTextColor={theme.colors.text.secondary}
+            value={query}
+            onChangeText={handleSearch}
+          />
+          {query.length > 2 && (
+            <TouchableOpacity onPress={() => setQuery('')}>
+              <X color={theme.colors.text.secondary} size={20} />
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {favorites.length === 0 ? (
-          <View style={styles.emptyState}>
-            <Heart color={theme.colors.text.secondary} size={48} />
-            <Text style={[styles.emptyTitle, { color: theme.colors.text.primary }]}>
-              No favorites yet
-            </Text>
-            <Text style={[styles.emptyText, { color: theme.colors.text.secondary }]}>
-              Add to your favorites by tapping the heart icon
-            </Text>
-          </View>
-        ) : (
-          <View style={styles.favoritesList}>
-            {favorites.map((dhikr) => (
-              <View
-                key={dhikr.id}
-                style={[styles.favoriteCard, { backgroundColor: theme.colors.card }]}
-              >
-                <View style={styles.favoriteContent}>
-                  <Text style={[styles.arabicText]}>
-                    {dhikr.arabicText}
-                  </Text>
-                  <Text style={[styles.transliteration]}>
-                    {dhikr.transliteration}
-                  </Text>
-                  <Text style={[styles.translation]}>
-                    {dhikr.translation}
+
+
+
+
+
+
+
+
+
+      
+
+      {query.length > 0 ? (
+        <FlatList
+          data={searchResults}
+          renderItem={renderSearchResult}
+          keyExtractor={(item, index) => `search-${index}`}
+          contentContainerStyle={styles.resultsList}
+          showsVerticalScrollIndicator={false}
+        />
+      ) : (
+        <FlatList
+          data={[]}
+          renderItem={() => null}
+          ListHeaderComponent={() => (
+            <View>
+              {/* Section des recherches récentes */}
+          
+
+              {/* Section des favoris */}
+              <View style={styles.sectionContainer}>
+                <View style={styles.sectionHeader}>
+                  <Text style={[styles.sectionTitle, { color: theme.colors.text.primary }]}>
+                    Favorites
                   </Text>
                 </View>
-                <TouchableOpacity
-                  style={[styles.removeButton]}
-                  onPress={() => handleRemoveFavorite(dhikr.id)}
-                >
-                  <Heart fill={theme.colors.accent} color={theme.colors.accent} size={20} />
-                </TouchableOpacity>
+                {favorites.length > 0 ? (
+                  <View style={styles.favoritesList}>
+                    {favorites.map((item, index) => (
+                      <View key={`favorite-${index}`} style={[styles.resultItem, { backgroundColor: theme.colors.card }]}>
+                        <View style={styles.resultContent}>
+                          <Text style={[styles.arabicText, { color: theme.colors.text.primary }]}>
+                            {item.arabicText}
+                          </Text>
+                          <Text style={[styles.transliteration]}>
+                            {item.transliteration}
+                          </Text>
+                          <Text style={[styles.translation]}>
+                            {item.translation}
+                          </Text>
+                        </View>
+                        <TouchableOpacity
+                          style={[styles.favoriteButton]}
+                          onPress={() => handleFavoritePress(item)}
+                        >
+                          <Heart
+                            size={24}
+                            color={theme.colors.accent}
+                            fill={theme.colors.accent}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    ))}
+                  </View>
+                ) : (
+                  <Text style={[styles.emptyText, { color: theme.colors.text.secondary }]}>
+                    No favorites yet
+                  </Text>
+                )}
               </View>
-            ))}
-          </View>
-        )}
-      </ScrollView>
-    </SafeAreaView>
+            </View>
+          )}
+          contentContainerStyle={styles.mainContainer}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
+    </ScreenBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 24,
-    paddingVertical: 16,
-  },
-  backButton: {
-    padding: 4,
-  },
-  title: {
-    fontFamily: 'Classico',
-    fontSize: 22,
-    textAlign: 'center',
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 24,
-  },
-  emptyState: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 40,
-    gap: 16,
-  },
-  emptyTitle: {
-    fontFamily: 'Sofia-Pro-Light',
-    fontSize: 20,
-  },
-  emptyText: {
-    fontFamily: 'Sofia-Pro-ExtraLight',
-    fontSize: 16,
-    textAlign: 'center',
-  },
-  favoritesList: {
-    paddingVertical: 8,
-    gap: 16,
-  },
-  favoriteCard: {
-    borderRadius: 16,
     padding: 16,
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 12,
+    gap: 12,
+  },
+  searchInput: {
+    flex: 1,
+    fontFamily: 'Sans',
+    fontSize: 16,
+  },
+  mainContainer: {
+    padding: 16,
+  },
+  sectionContainer: {
+    marginBottom: 32,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    fontFamily: 'Sans-Medium',
+    fontSize: 18,
+  },
+  clearText: {
+    fontFamily: 'Sans',
+    fontSize: 14,
+  },
+  resultsList: {
+    padding: 16,
+    gap: 12,
+  },
+  resultItem: {
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
   },
-  favoriteContent: {
+  resultContent: {
     flex: 1,
+    gap: 4,
   },
   arabicText: {
     fontFamily: 'NotoNaskhArabic',
     fontSize: 18,
-    marginBottom: 4,
   },
   transliteration: {
     fontFamily: 'Classico',
     fontSize: 18,
-    marginBottom: 4,
     color: 'black'
   },
   translation: {
@@ -141,11 +275,33 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'grey'
   },
-  removeButton: {
+  favoriteButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  recentList: {
+    gap: 8,
+  },
+  favoritesList: {
+    gap: 12,
+  },
+  recentItem: {
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  recentText: {
+    fontFamily: 'Sans',
+    fontSize: 14,
+  },
+  emptyText: {
+    fontFamily: 'Sans',
+    fontSize: 14,
+    fontStyle: 'italic',
+    textAlign: 'center',
+    paddingVertical: 20,
   },
 });
