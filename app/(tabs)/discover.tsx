@@ -6,7 +6,8 @@ import {
   TouchableOpacity, 
   TextInput, 
   ScrollView, 
-  Dimensions 
+  Dimensions,
+  ImageBackground 
 } from 'react-native';
 import { Search } from 'lucide-react-native';
 import { useTheme } from '../../context/ThemeContext';
@@ -15,34 +16,38 @@ import { router } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
-// Données des catégories avec leurs informations visuelles EXACTES du design
+// Données des catégories avec leurs images DISTINCTES
 const categories = [
   {
     id: 'morning',
     title: 'Morning\nAdhkar',
     subtitle: 'Start your day with remembrance',
-    gradient: ['#F4A460', '#CD853F'], // Sandy brown gradient - EXACT du design
+    // Image de lever de soleil/matin
+    backgroundImage: require('../../assets/images/Morning_bg.png'), // Remplacez par votre chemin d'image
     icon: '🌅'
   },
   {
     id: 'evening',
     title: 'Evening\nAdhkar', 
     subtitle: 'End your day in gratitude',
-    gradient: ['#8B4513', '#A0522D'], // Brown/rust gradient - EXACT du design
+    // Image de coucher de soleil/soir
+    backgroundImage: require('../../assets/images/Evening_bg.png'), // Remplacez par votre chemin d'image
     icon: '🌆'
   },
   {
     id: 'istighfar',
     title: 'Istighfar',
     subtitle: 'Seek forgiveness and purification',
-    gradient: ['#9370DB', '#8A2BE2'], // Purple gradient - EXACT du design
+    // Image spirituelle/mosque ou montagne
+    backgroundImage: require('../../assets/images/Istighfar_bg.png'), // Remplacez par votre chemin d'image
     icon: '🤲'
   },
   {
     id: 'night',
     title: 'Night\nAdhkar',
     subtitle: 'Protection through the night', 
-    gradient: ['#2C3E50', '#34495E'], // Dark blue gradient - EXACT du design
+    // Image de nuit étoilée
+    backgroundImage: require('../../assets/images/Night_bg.png'), // Remplacez par votre chemin d'image
     icon: '🌙'
   }
 ];
@@ -66,31 +71,28 @@ const TabButton = ({ title, isActive, onPress }: any) => (
   </TouchableOpacity>
 );
 
-// Composant pour une carte de catégorie - EXACT du design
+// Composant pour une carte de catégorie - MODIFIÉ avec ImageBackground
 const CategoryCard = ({ category, onPress }: any) => (
   <TouchableOpacity
     style={styles.categoryCard}
     onPress={() => onPress(category)}
     activeOpacity={0.8}
   >
-    {/* Background avec gradient simulé - EXACT du design */}
-    <View style={[
-      styles.categoryCardBackground,
-      { backgroundColor: category.gradient[0] }
-    ]}>
-      {/* Overlay pour créer l'effet de gradient - EXACT du design */}
-      <View style={[
-        styles.categoryCardOverlay,
-        { backgroundColor: category.gradient[1], opacity: 0.3 }
-      ]} />
+    {/* ImageBackground remplace le background avec gradient */}
+    <ImageBackground
+      source={category.backgroundImage}
+      style={styles.categoryCardBackground}
+      imageStyle={styles.categoryCardImage}
+      resizeMode="cover"
+    >
+      {/* Overlay sombre pour améliorer la lisibilité du texte */}
+      <View style={styles.categoryCardOverlay} />
       
-      {/* Contenu de la carte - EXACT du design */}
+      {/* Contenu de la carte */}
       <View style={styles.categoryCardContent}>
-        <Text style={styles.categoryIcon}>{category.icon}</Text>
         <Text style={styles.categoryTitle}>{category.title}</Text>
-        <Text style={styles.categorySubtitle}>{category.subtitle}</Text>
       </View>
-    </View>
+    </ImageBackground>
   </TouchableOpacity>
 );
 
@@ -102,7 +104,8 @@ export default function DiscoverScreen() {
   // ✅ FONCTION NAVIGATION CORRIGÉE - Navigation vers DhikrScreen avec paramètres
   const handleCategoryPress = (category: any) => {
 
-    router.replace(route);
+    router.replace('/(tabs)');
+//    router.replace('/(tabs');
     // Navigation avec Expo Router vers l'écran dhikr avec les paramètres de catégorie
     /*router.push({
       pathname: '/(tabs)/dhikr', // Ajustez le pathname selon votre structure de routes
@@ -186,7 +189,7 @@ export default function DiscoverScreen() {
   );
 }
 
-// ===== STYLES EXACT DU DESIGN =====
+// ===== STYLES MODIFIÉS POUR LES IMAGES =====
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -199,7 +202,7 @@ const styles = StyleSheet.create({
     marginBottom: 24, // EXACT : Espacement sous le header
   },
   headerTitle: {
-    fontFamily: 'Sofia-Pro-Light', // EXACT : Font cohérente
+    fontFamily: 'Classico', // EXACT : Font cohérente
     fontSize: 32, // EXACT : Taille du titre
     color: '#181818', // EXACT : Noir foncé
     marginBottom: 8, // EXACT : Espacement sous le titre
@@ -236,7 +239,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     flex: 1,
-    fontFamily: 'Sofia-Pro-Light', // EXACT : Font cohérente
+    fontFamily: 'Sofia-Pro-ExtraLight', // EXACT : Font cohérente
     fontSize: 16, // EXACT : Taille du texte
     color: '#181818', // EXACT : Couleur du texte
   },
@@ -273,7 +276,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   sectionTitle: {
-    fontFamily: 'Sofia-Pro', // EXACT : Font du titre de section
+    fontFamily: 'Classico', // EXACT : Font du titre de section
     fontSize: 24, // EXACT : Taille du titre
     color: '#181818', // EXACT : Couleur du titre
     marginBottom: 20, // EXACT : Espacement sous le titre
@@ -288,7 +291,7 @@ const styles = StyleSheet.create({
     gap: 16, // EXACT : Espace entre les cartes
   },
 
-  // ===== CATEGORY CARD STYLES - EXACT du design =====
+  // ===== CATEGORY CARD STYLES - MODIFIÉS POUR LES IMAGES =====
   categoryCard: {
     width: (width - 56) / 2, // EXACT : 56 = 20*2 (padding) + 16 (gap)
     height: 160, // EXACT : Hauteur des cartes
@@ -304,16 +307,23 @@ const styles = StyleSheet.create({
     shadowRadius: 6, // EXACT : Rayon de l'ombre
     elevation: 8, // EXACT : Élévation Android
   },
+  // NOUVEAU : Style pour ImageBackground
   categoryCardBackground: {
     flex: 1,
     position: 'relative',
   },
+  // NOUVEAU : Style pour l'image elle-même
+  categoryCardImage: {
+    borderRadius: 16, // Assure que l'image respecte les coins arrondis
+  },
+  // MODIFIÉ : Overlay plus sombre pour améliorer la lisibilité
   categoryCardOverlay: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
+    //backgroundColor: 'rgba(0, 0, 0, 0.4)', // Overlay sombre pour la lisibilité
   },
   categoryCardContent: {
     flex: 1,
@@ -334,20 +344,20 @@ const styles = StyleSheet.create({
     color: '#FFFFFF', // EXACT : Couleur blanche
     textAlign: 'center',
     marginBottom: 4, // EXACT : Espacement sous le titre
-    // EXACT : Text shadow pour lisibilité
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 2,
+    // RENFORCÉ : Text shadow pour meilleure lisibilité sur images
+    textShadowColor: 'rgba(0, 0, 0, 0.8)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
   categorySubtitle: {
     fontFamily: 'Sofia-Pro-Light', // EXACT : Font des sous-titres
     fontSize: 12, // EXACT : Taille des sous-titres
-    color: 'rgba(255, 255, 255, 0.9)', // EXACT : Blanc semi-transparent
+    color: 'rgba(255, 255, 255, 0.95)', // LÉGÈREMENT MODIFIÉ : Plus opaque pour meilleure lisibilité
     textAlign: 'center',
-    // EXACT : Text shadow pour lisibilité
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 2,
+    // RENFORCÉ : Text shadow pour meilleure lisibilité sur images
+    textShadowColor: 'rgba(0, 0, 0, 0.8)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
 
   // ===== SPACING - EXACT du design =====
