@@ -37,54 +37,102 @@ export default function DhikrScreen() {
   const { isFavorite, addFavorite, removeFavorite } = useFavoritesStore();
 
   const pagerRef = useRef<PagerView>(null);
-  const [currentIndex, setCurrentIndex] = useState(1); // Start at first real item
+  const [currentIndex, setCurrentIndex] = useState(1);
   const [scrollState, setScrollState] = useState<'idle' | 'dragging' | 'settling'>('idle');
+  const [isAdjustingPosition, setIsAdjustingPosition] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     start();
-    return () => stop();
-  }, []);
+    return () => {
+      stop();
+      // Clean up timeout on unmount
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [start, stop]);
 
   const toggleFavorite = useCallback((dhikr: any, isFav: boolean) => {
     if (isFav) removeFavorite(dhikr.id);
     else addFavorite(dhikr);
   }, [addFavorite, removeFavorite]);
 
-  const handlePageSelected = (e: any) => {
+  const handlePageSelected = useCallback((e: any) => {
     const index = e.nativeEvent.position;
-    setCurrentIndex(index); // Store the index even for fake pages
-    if (index !== 0 && index !== dhikrs.length + 1) {
-      incrementCount(); // Increment only if not on fake page
+    
+    // Always update currentIndex to track where we are
+    setCurrentIndex(index);
+    
+    // Only increment count for real pages (indices 1 to dhikrs.length)
+    // Don't increment during adjustments or on fake pages
+    if (!isAdjustingPosition && index >= 1 && index <= dhikrs.length) {
+      incrementCount();
     }
-  };
+    
+    console.log('Page selected:', index, 'isAdjusting:', isAdjustingPosition, 'scrollState:', scrollState);
+    
+    // Handle circular adjustment immediately when we hit fake pages
+    const lastRealIndex = dhikrs.length;
+    const lastFakeIndex = dhikrs.length + 1;
+    
+    if (!isAdjustingPosition && (index === 0 || index === lastFakeIndex)) {
+      console.log('Triggering immediate adjustment for index:', index);
+      setIsAdjustingPosition(true);
+      
+      // Use a shorter timeout for immediate response
+      setTimeout(() => {
+        if (pagerRef.current) {
+          try {
+            if (index === 0) {
+              // Move from fake last to real last
+              pagerRef.current.setPageWithoutAnimation(lastRealIndex);
+              console.log('Adjusted from fake last (0) to real last (' + lastRealIndex + ')');
+            } else if (index === lastFakeIndex) {
+              // Move from fake first to real first
+              pagerRef.current.setPageWithoutAnimation(1);
+              console.log('Adjusted from fake first (' + lastFakeIndex + ') to real first (1)');
+            }
+          } catch (error) {
+            console.warn('PagerView position adjustment failed:', error);
+          }
+        }
+        
+        // Reset adjustment flag
+        setTimeout(() => {
+          setIsAdjustingPosition(false);
+        }, 50);
+      }, 10); // Much shorter delay for immediate response
+    }
+  }, [dhikrs.length, incrementCount, isAdjustingPosition, scrollState]);
 
-  const handleScrollStateChanged = (e: any) => {
+  const handleScrollStateChanged = useCallback((e: any) => {
     const state = e.nativeEvent.pageScrollState;
     setScrollState(state);
-  };
+  }, []);
 
-  // Correct position after swipe finishes
-  useEffect(() => {
-    if (scrollState === 'idle') {
-      const lastIndex = dhikrs.length;
-      if (currentIndex === 0) {
-        pagerRef.current?.setPageWithoutAnimation(lastIndex);
-        setCurrentIndex(lastIndex);
-      } else if (currentIndex === lastIndex + 1) {
-        pagerRef.current?.setPageWithoutAnimation(1);
-        setCurrentIndex(1);
-      }
-    }
-  }, [scrollState]);
+  // Simplified circular scrolling - removed the complex useEffect approach
+  // The adjustment now happens directly in handlePageSelected for immediate response
 
-  // Create pages with extra fake first and last
+  // Early return if no data
+  if (!dhikrs || dhikrs.length === 0) {
+    return (
+      <ScreenBackground>
+        <View style={[styles.container, styles.loadingContainer]}>
+          <Text style={styles.loadingText}>Loading dhikrs...</Text>
+        </View>
+      </ScreenBackground>
+    );
+  }
+
+  // Create circular pages with validation
   const circularPages = [
     dhikrs[dhikrs.length - 1], // fake last
     ...dhikrs,                 // real items
     dhikrs[0],                 // fake first
   ];
 
-  const barHeightPx = (goalProgress / 100) * 500;
+  const barHeightPx = Math.max(0, Math.min((goalProgress / 100) * 500, 500));
 
   return (
     <ScreenBackground>
@@ -105,7 +153,7 @@ export default function DhikrScreen() {
             <View style={[styles.progressBar, { height: Math.round(barHeightPx) }]} />
           </View>
           <Text style={styles.progressText}>
-            {goalProgress < 100 ? goalProgress : 100}%
+            {Math.min(Math.round(goalProgress), 100)}%
           </Text>
         </View>
 
@@ -116,12 +164,13 @@ export default function DhikrScreen() {
           orientation="vertical"
           onPageSelected={handlePageSelected}
           onPageScrollStateChanged={handleScrollStateChanged}
+          scrollEnabled={!isAdjustingPosition} // Disable scrolling during adjustments
         >
           {circularPages.map((dhikr: any, index: number) => (
-            <View key={`dhikr-${index}`}>
+            <View key={`dhikr-${dhikr?.id || index}-${index}`}>
               <DhikrContent
                 dhikr={dhikr}
-                isFavorite={isFavorite(dhikr.id)}
+                isFavorite={isFavorite(dhikr?.id)}
                 onToggleFavorite={toggleFavorite}
                 theme={theme}
               />
@@ -136,6 +185,15 @@ export default function DhikrScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  loadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    fontFamily: 'Sofia-Pro-Light',
+    fontSize: 16,
+    color: '#8C8F7B',
   },
   header: {},
   greeting: {
