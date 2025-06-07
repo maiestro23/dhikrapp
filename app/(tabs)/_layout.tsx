@@ -62,6 +62,18 @@ export default function TabLayout() {
       />
 
     <Tabs.Screen
+        name="discover"
+        options={{
+          title: 'Discover',
+          tabBarIcon: ({ color, size, focused }) => (
+
+            focused ?  <CustomProfileFilledIcon /> : <CustomProfileIcon /> 
+            //<CustomProfileIcon color={'#5A5D4D'} size={24} fill={focused ? '#5A5D4D' : '#fff'}/>
+          ),
+        }}
+      />
+
+    <Tabs.Screen
         name="profile/favorites"
 
         options={{
