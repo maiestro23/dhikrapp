@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity } from 'react-native';
 import { useTheme } from '../../../context/ThemeContext';
-import { Search as SearchIcon, X, Heart } from 'lucide-react-native';
+import { Search as SearchIcon, X, Heart, Search } from 'lucide-react-native';
 import Fuse from 'fuse.js';
 import { useSearchStore } from '../../../stores/searchStore';
 import { useDhikrStore } from '../../../stores/dhikrStore';
@@ -9,7 +9,10 @@ import { useFavoritesStore } from '../../../stores/favoritesStore';
 import { ScreenBackground } from '../../../components/ScreenBackground';
 
 export default function SearchScreen() {
+  const [searchQuery, setSearchQuery] = useState('');
+
   const { theme } = useTheme();
+
   const [query, setQuery] = useState('');
   const { recentSearches, addRecentSearch, clearRecentSearches } = useSearchStore();
   const { dhikrs } = useDhikrStore();
@@ -23,13 +26,13 @@ export default function SearchScreen() {
   const searchResults = query ? fuse.search(query) : [];
 
   const handleSearch = useCallback((text: string) => {
-      setQuery(text);
-      if (text.length > 2){
+    setQuery(text);
+    if (text.length > 2) {
 
       if (text.trim()) {
         addRecentSearch(text.trim());
       }
-  
+
     }
   }, [addRecentSearch]);
 
@@ -98,7 +101,7 @@ export default function SearchScreen() {
   );
 
   const renderRecentSearch = ({ item }: { item: string }) => (
-    <TouchableOpacity 
+    <TouchableOpacity
       style={[styles.recentItem, { backgroundColor: theme.colors.card }]}
       onPress={() => handleSearch(item)}
     >
@@ -108,38 +111,30 @@ export default function SearchScreen() {
 
   return (
     <ScreenBackground>
-      
-      
-      
-      
-      <View style={styles.header}>
-        <View style={[styles.searchContainer, { backgroundColor: theme.colors.card }]}>
-          <SearchIcon color={theme.colors.text.secondary} size={20} />
+
+      <View style={styles.sectionHeader}>
+        <Text style={[styles.sectionTitle, { color: theme.colors.text.primary }]}>
+          Favorites
+        </Text>
+      </View>
+
+      <View style={styles.searchContainer}>
+        <View style={styles.XsearchInputContainer}>
+          <Search size={20} color="#8C8F7B" style={styles.XsearchIcon} />
           <TextInput
-            style={[styles.searchInput, { color: theme.colors.text.primary }]}
-            placeholder="Search dhikr..."
-            placeholderTextColor={theme.colors.text.secondary}
+            style={styles.searchInput}
+            placeholder="Search"
+            placeholderTextColor="#8C8F7B"
             value={query}
             onChangeText={handleSearch}
           />
-          {query.length > 2 && (
+          {query.length > 0 && (
             <TouchableOpacity onPress={() => setQuery('')}>
               <X color={theme.colors.text.secondary} size={20} />
             </TouchableOpacity>
           )}
         </View>
       </View>
-
-
-
-
-
-
-
-
-
-
-      
 
       {query.length > 0 ? (
         <FlatList
@@ -156,15 +151,11 @@ export default function SearchScreen() {
           ListHeaderComponent={() => (
             <View>
               {/* Section des recherches récentes */}
-          
+
 
               {/* Section des favoris */}
               <View style={styles.sectionContainer}>
-                <View style={styles.sectionHeader}>
-                  <Text style={[styles.sectionTitle, { color: theme.colors.text.primary }]}>
-                    Favorites
-                  </Text>
-                </View>
+
                 {favorites.length > 0 ? (
                   <View style={styles.favoritesList}>
                     {favorites.map((item, index) => (
@@ -213,10 +204,42 @@ const styles = StyleSheet.create({
   header: {
     padding: 16,
   },
+
+  // ===== SEARCH BAR STYLES - EXACT du design =====
+  XsearchContainer: {
+    marginBottom: 24, // EXACT : Espacement sous la barre de recherche
+  },
+  XsearchInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)', // EXACT : Background blanc semi-transparent
+    borderRadius: 12, // EXACT : Coins arrondis
+    paddingHorizontal: 16, // EXACT : Padding horizontal
+    paddingVertical: 12, // EXACT : Padding vertical
+    shadowColor: '#000', // EXACT : Couleur de l'ombre
+    shadowOffset: {
+      width: 0,
+      height: 2, // EXACT : Offset de l'ombre
+    },
+    shadowOpacity: 0.1, // EXACT : Opacité de l'ombre
+    shadowRadius: 3.84, // EXACT : Rayon de l'ombre
+    elevation: 5, // EXACT : Élévation Android
+  },
+  XsearchIcon: {
+    marginRight: 12, // EXACT : Espacement après l'icône
+  },
+  XsearchInput: {
+    flex: 1,
+    fontFamily: 'Sofia-Pro-ExtraLight', // EXACT : Font cohérente
+    fontSize: 16, // EXACT : Taille du texte
+    color: '#181818', // EXACT : Couleur du texte
+  },
+
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 32,
     borderRadius: 12,
     gap: 12,
   },
@@ -238,8 +261,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   sectionTitle: {
-    fontFamily: 'Sans-Medium',
-    fontSize: 18,
+    paddingLeft: 16,
+    marginTop: 28,
+    fontFamily: 'Classico', // EXACT : Font cohérente
+    fontSize: 32, // EXACT : Taille du titre
+    color: '#181818', // EXACT : Noir foncé
   },
   clearText: {
     fontFamily: 'Sans',
