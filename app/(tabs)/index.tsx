@@ -33,7 +33,7 @@ export default function DhikrScreen() {
   const { theme } = useTheme();
   const { start, stop } = useTimeTracking();
   const { incrementCount, goalProgress } = useProgress();
-  const { dhikrs } = useDhikrStore();
+  const dhikrs= useDhikrStore().getDhikrsByUrlCategory();
   const { isFavorite, addFavorite, removeFavorite } = useFavoritesStore();
 
   const pagerRef = useRef<PagerView>(null);

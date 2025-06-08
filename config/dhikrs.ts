@@ -1,9 +1,10 @@
 export interface Dhikr {
     id: string;
+    pageId?: string;
     arabicText: string;
     transliteration: string;
     translation: string;
-    category: 'general' | 'morning' | 'evening';
+    category: 'general' | 'morning' | 'evening' | 'Morning Adhkar';
     count?: number;
 }
 

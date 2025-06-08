@@ -103,17 +103,13 @@ export default function DiscoverScreen() {
 
   // ✅ FONCTION NAVIGATION CORRIGÉE - Navigation vers DhikrScreen avec paramètres
   const handleCategoryPress = (category: any) => {
-
-    router.replace('/(tabs)');
-//    router.replace('/(tabs');
-    // Navigation avec Expo Router vers l'écran dhikr avec les paramètres de catégorie
-    /*router.push({
-      pathname: '/(tabs)/dhikr', // Ajustez le pathname selon votre structure de routes
+    router.push({
+      pathname: '/(tabs)', // Ajustez le pathname selon votre structure de routes
       params: { 
         category: category.id,
         categoryTitle: category.title.replace('\n', ' ') // Enlever le saut de ligne
       }
-    });*/
+    });
   };
 
   // Filtrer les catégories selon la recherche - FONCTIONNALITÉ EXACTE
