@@ -16,7 +16,7 @@ interface Dhikr {
 
 interface DhikrState {
   dhikrs: Dhikr[];
-  getDhikrsByUrlCategory: () => void;
+  getDhikrsByUrlCategory: () => Dhikr[];
   addDhikr: (dhikr: Dhikr) => void;
   removeDhikr: (id: string) => void;
   getDhikrsByCategory: (category: string) => Dhikr[];
