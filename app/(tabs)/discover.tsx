@@ -295,12 +295,12 @@ const styles = StyleSheet.create({
     borderRadius: 16, // EXACT : Coins arrondis des cartes
     overflow: 'hidden',
     shadowColor: '#000', // EXACT : Couleur de l'ombre
-    shadowOffset: {
-      width: 0,
-      height: 4, // EXACT : Offset de l'ombre
-    },
-    shadowOpacity: 0.15, // EXACT : Opacité de l'ombre
-    shadowRadius: 6, // EXACT : Rayon de l'ombre
+    //shadowOffset: {
+     // width: 0,
+     // height: 4, // EXACT : Offset de l'ombre
+    //},
+    //shadowOpacity: 0.15, // EXACT : Opacité de l'ombre
+    //shadowRadius: 6, // EXACT : Rayon de l'ombre
     elevation: 8, // EXACT : Élévation Android
   },
   // NOUVEAU : Style pour ImageBackground
@@ -341,8 +341,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 4, // EXACT : Espacement sous le titre
     // RENFORCÉ : Text shadow pour meilleure lisibilité sur images
-    textShadowColor: 'rgba(0, 0, 0, 0.8)',
-    textShadowOffset: { width: 0, height: 2 },
+    //textShadowColor: 'rgba(0, 0, 0, 0.8)',
+    //textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 4,
   },
   categorySubtitle: {
@@ -351,9 +351,9 @@ const styles = StyleSheet.create({
     color: 'rgba(255, 255, 255, 0.95)', // LÉGÈREMENT MODIFIÉ : Plus opaque pour meilleure lisibilité
     textAlign: 'center',
     // RENFORCÉ : Text shadow pour meilleure lisibilité sur images
-    textShadowColor: 'rgba(0, 0, 0, 0.8)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
+    //textShadowColor: 'rgba(0, 0, 0, 0.8)',
+    //textShadowOffset: { width: 0, height: 2 },
+    //textShadowRadius: 4,
   },
 
   // ===== SPACING - EXACT du design =====
