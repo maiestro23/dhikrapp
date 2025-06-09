@@ -1,7 +1,9 @@
 import { create } from 'zustand';
 import { dhikrs as initialDhikrs } from '../config/dhikrs';
 import { MorningDhikrs } from '@/config/morning_dhikrs';
+import { EveningDhikrs } from '@/config/evening_dhikrs';
 import { useLocalSearchParams } from 'expo-router';
+import { AfterSalahDhikrs } from '@/config/afterSalah_dhikrs';
 
 interface Dhikr {
   id: string;
@@ -33,7 +35,12 @@ export const useDhikrStore = create<DhikrState>()((set, get) => ({
     switch (category) {
       case 'morning':
         return MorningDhikrs;
-      case 'general':
+      case 'evening':
+        return EveningDhikrs;
+      case 'afterSalah':
+        return AfterSalahDhikrs;
+      case 'night':
+        return initialDhikrs;
       default:
         return initialDhikrs;
     }
