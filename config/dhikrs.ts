@@ -6,6 +6,7 @@ export interface Dhikr {
     translation: string;
     category: 'general' | 'After Salah' | 'Evening Adhkar' | 'Morning Adhkar';
     count?: number;
+    dhikrLength?: string;
 }
 
 export const dhikrs: Dhikr[] = [
