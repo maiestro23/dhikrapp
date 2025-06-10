@@ -8,6 +8,7 @@ import { useTimeTracking } from '../../hooks/useTimeTracking';
 import { useFavoritesStore } from '../../stores/favoritesStore';
 import { useDhikrStore } from '../../stores/dhikrStore';
 import { ScreenBackground } from '../../components/ScreenBackground';
+import { router } from 'expo-router';
 
 const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme }: any) => (
   <View style={styles.dhikrCard}>
@@ -33,7 +34,7 @@ export default function DhikrScreen() {
   const { theme } = useTheme();
   const { start, stop } = useTimeTracking();
   const { incrementCount, goalProgress } = useProgress();
-  const dhikrs= useDhikrStore().getDhikrsByUrlCategory();
+  const dhikrs = useDhikrStore().getDhikrsByUrlCategory();
   const { isFavorite, addFavorite, removeFavorite } = useFavoritesStore();
 
   const pagerRef = useRef<PagerView>(null);
@@ -58,28 +59,39 @@ export default function DhikrScreen() {
     else addFavorite(dhikr);
   }, [addFavorite, removeFavorite]);
 
+
+  // const handleCategoryPress = (route?: string) => {
+  //   router.replace('/discover');
+  // };
+
+  const handleCategoryPress = useCallback(() => {
+    console.log("clicked")
+    router.replace('/discover');
+  }, []);
+
+
   const handlePageSelected = useCallback((e: any) => {
     const index = e.nativeEvent.position;
-    
+
     // Always update currentIndex to track where we are
     setCurrentIndex(index);
-    
+
     // Only increment count for real pages (indices 1 to dhikrs.length)
     // Don't increment during adjustments or on fake pages
     if (!isAdjustingPosition && index >= 1 && index <= dhikrs.length) {
       incrementCount();
     }
-    
+
     console.log('Page selected:', index, 'isAdjusting:', isAdjustingPosition, 'scrollState:', scrollState);
-    
+
     // Handle circular adjustment immediately when we hit fake pages
     const lastRealIndex = dhikrs.length;
     const lastFakeIndex = dhikrs.length + 1;
-    
+
     if (!isAdjustingPosition && (index === 0 || index === lastFakeIndex)) {
       console.log('Triggering immediate adjustment for index:', index);
       setIsAdjustingPosition(true);
-      
+
       // Use a shorter timeout for immediate response
       setTimeout(() => {
         if (pagerRef.current) {
@@ -97,7 +109,7 @@ export default function DhikrScreen() {
             console.warn('PagerView position adjustment failed:', error);
           }
         }
-        
+
         // Reset adjustment flag
         setTimeout(() => {
           setIsAdjustingPosition(false);
@@ -134,6 +146,9 @@ export default function DhikrScreen() {
 
   const barHeightPx = Math.max(0, Math.min((goalProgress / 100) * 500, 500));
 
+  // Get current category from the first dhikr (all dhikrs in the array should have the same category)
+  const currentCategory = dhikrs[0]?.category || '';
+
   return (
     <ScreenBackground>
       <View style={styles.container}>
@@ -146,6 +161,15 @@ export default function DhikrScreen() {
               day: 'numeric'
             })}
           </Text>
+
+          {/* Category Tag */}
+          <TouchableOpacity
+            style={styles.categoryTag}
+            onPress={handleCategoryPress}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.categoryText}>{currentCategory}</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.progressContainer}>
@@ -211,6 +235,31 @@ const styles = StyleSheet.create({
     color: '#6F7C50',
     opacity: 0.5,
     marginLeft: 20
+  },
+  categoryTag: {
+    zIndex: 3,
+    position: "absolute",
+    alignSelf: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    //marginTop: 20,
+    top: 70,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  categoryText: {
+    fontFamily: 'Sofia-Pro',
+    fontSize: 14,
+    color: '#8C8F7B',
+    textAlign: 'center',
   },
   progressContainer: {
     position: 'absolute',
