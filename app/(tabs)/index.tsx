@@ -77,12 +77,9 @@ export default function DhikrScreen() {
     else addFavorite(dhikr);
   }, [addFavorite, removeFavorite]);
 
-
-
   const handleCategoryPress = useCallback(() => {
     router.replace('/discover');
   }, []);
-
 
   const handlePageSelected = useCallback((e: any) => {
     const index = e.nativeEvent.position;
@@ -196,7 +193,7 @@ export default function DhikrScreen() {
         </View>
 
         <PagerView
-          key={pagerKey} // ← Ajoutez cette ligne
+          key={pagerKey}
           ref={pagerRef}
           initialPage={1}
           style={{ flex: 1 }}

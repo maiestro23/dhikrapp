@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  TouchableOpacity, 
-  TextInput, 
-  ScrollView, 
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  ScrollView,
   Dimensions,
-  ImageBackground 
+  ImageBackground
 } from 'react-native';
 import { Search } from 'lucide-react-native';
 import { useTheme } from '../../context/ThemeContext';
@@ -28,7 +28,7 @@ const categories = [
   },
   {
     id: 'evening',
-    title: 'Evening\nAdhkar', 
+    title: 'Evening\nAdhkar',
     subtitle: 'End your day in gratitude',
     // Image de coucher de soleil/soir
     backgroundImage: require('../../assets/images/Evening_bg.png'), // Remplacez par votre chemin d'image
@@ -45,7 +45,7 @@ const categories = [
   {
     id: 'night',
     title: 'Night\nAdhkar',
-    subtitle: 'Protection through the night', 
+    subtitle: 'Protection through the night',
     // Image de nuit étoilée
     backgroundImage: require('../../assets/images/Night_bg.png'), // Remplacez par votre chemin d'image
     icon: '🌙'
@@ -53,18 +53,16 @@ const categories = [
 ];
 
 // Composant pour les onglets General/Favourites - EXACT du design
-const TabButton = ({ title, isActive, onPress }: any) => (
+const TabButton = ({ title, onPress }: any) => (
   <TouchableOpacity
     style={[
       styles.tabButton,
-      isActive && styles.tabButtonActive
     ]}
     onPress={onPress}
     activeOpacity={0.8}
   >
     <Text style={[
       styles.tabButtonText,
-      isActive && styles.tabButtonTextActive
     ]}>
       {title}
     </Text>
@@ -87,7 +85,7 @@ const CategoryCard = ({ category, onPress }: any) => (
     >
       {/* Overlay sombre pour améliorer la lisibilité du texte */}
       <View style={styles.categoryCardOverlay} />
-      
+
       {/* Contenu de la carte */}
       <View style={styles.categoryCardContent}>
         <Text style={styles.categoryTitle}>{category.title}</Text>
@@ -104,8 +102,8 @@ export default function DiscoverScreen() {
   // ✅ FONCTION NAVIGATION CORRIGÉE - Navigation vers DhikrScreen avec paramètres
   const handleCategoryPress = (category: any) => {
     router.push({
-      pathname: '/(tabs)', // Ajustez le pathname selon votre structure de routes
-      params: { 
+      pathname: '/(tabs)',
+      params: {
         category: category.id,
         categoryTitle: category.title.replace('\n', ' ') // Enlever le saut de ligne
       }
@@ -145,14 +143,13 @@ export default function DiscoverScreen() {
 
         {/* ===== ONGLETS General/Favourites - EXACT du design ===== */}
         <View style={styles.tabsContainer}>
+
           <TabButton
             title="General"
-            isActive={activeTab === 'General'}
-            onPress={() => setActiveTab('General')}
+            onPress={() => handleCategoryPress({ id: 'General', title: 'General' })}
           />
           <TabButton
             title="Favourites"
-            isActive={activeTab === 'Favourites'}
             onPress={() => setActiveTab('Favourites')}
           />
         </View>
@@ -160,8 +157,8 @@ export default function DiscoverScreen() {
         {/* ===== SECTION CATEGORIES - EXACT du design ===== */}
         <View style={styles.categoriesSection}>
           <Text style={styles.sectionTitle}>Categories</Text>
-          
-          <ScrollView 
+
+          <ScrollView
             style={styles.categoriesContainer}
             showsVerticalScrollIndicator={false}
           >
@@ -175,7 +172,7 @@ export default function DiscoverScreen() {
                 />
               ))}
             </View>
-            
+
             {/* Espacement en bas pour éviter la collision avec la navigation */}
             <View style={styles.bottomSpacing} />
           </ScrollView>
@@ -191,7 +188,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20, // EXACT : 20px de chaque côté
   },
-  
+
   // ===== HEADER STYLES - EXACT du design =====
   header: {
     marginTop: 60, // EXACT : Espace pour la status bar
@@ -240,32 +237,45 @@ const styles = StyleSheet.create({
     color: '#181818', // EXACT : Couleur du texte
   },
 
-  // ===== TABS STYLES - EXACT du design =====
+  // ===== TABS STYLES - MODIFIÉS SELON LE DESIGN =====
   tabsContainer: {
     flexDirection: 'row',
-    marginBottom: 32, // EXACT : Espacement sous les onglets
-    gap: 8, // EXACT : Espace entre les onglets
+    marginBottom: 32,
+    gap: 12, // Légèrement plus d'espace entre les boutons
   },
   tabButton: {
     flex: 1,
-    paddingVertical: 12, // EXACT : Padding vertical
-    paddingHorizontal: 24, // EXACT : Padding horizontal
-    borderRadius: 25, // EXACT : Coins très arrondis
-    backgroundColor: 'rgba(255, 255, 255, 0.7)', // EXACT : Background inactif
+    paddingVertical: 22, // Plus de padding vertical
+    paddingHorizontal: 24,
+    borderRadius: 10, // Plus arrondi
+    backgroundColor: '#7E0F3B', // Background plus opaque pour l'état inactif
+    borderWidth: 2, // Bordure de 2px
+    borderColor: '#FFFFFF', // Bordure blanche
     alignItems: 'center',
+    shadowRadius: 4,
+    elevation: 3,
   },
-  tabButtonActive: {
-    backgroundColor: '#F8BBD0', // EXACT : Rose pâle du design
-  },
+  // tabButtonActive: {
+  //   backgroundColor: '#7E0F3B', // Votre couleur exacte
+  //   shadowColor: '#7E0F3B',
+  //   shadowOffset: {
+  //     width: 0,
+  //     height: 4,
+  //   },
+  //   shadowOpacity: 0.3,
+  //   shadowRadius: 6,
+  //   elevation: 6,
+  // },
   tabButtonText: {
-    fontFamily: 'Sofia-Pro', // EXACT : Font des onglets
-    fontSize: 16, // EXACT : Taille du texte
-    color: '#8C8F7B', // EXACT : Couleur inactive
+    fontFamily: 'Sofia-Pro',
+    fontSize: 16,
+    color: '#fff', // Couleur pour l'état inactif
+    fontWeight: '500',
   },
-  tabButtonTextActive: {
-    color: '#7E0F3B', // EXACT : Couleur accent de l'app
-    fontWeight: '600', // EXACT : Font weight actif
-  },
+  // tabButtonTextActive: {
+  //   color: '#FFFFFF', // Blanc pour le texte actif sur fond #7E0F3B
+  //   fontWeight: '600',
+  // },
 
   // ===== CATEGORIES SECTION STYLES - EXACT du design =====
   categoriesSection: {
@@ -290,14 +300,14 @@ const styles = StyleSheet.create({
   // ===== CATEGORY CARD STYLES - MODIFIÉS POUR LES IMAGES =====
   categoryCard: {
     width: (width - 56) / 2, // EXACT : 56 = 20*2 (padding) + 16 (gap)
-    height: 160, // EXACT : Hauteur des cartes
+    height: (width - 56) / 2, // EXACT : Hauteur des cartes
     marginBottom: 16, // EXACT : Espacement vertical entre cartes
     borderRadius: 16, // EXACT : Coins arrondis des cartes
     overflow: 'hidden',
     shadowColor: '#000', // EXACT : Couleur de l'ombre
     //shadowOffset: {
-     // width: 0,
-     // height: 4, // EXACT : Offset de l'ombre
+    // width: 0,
+    // height: 4, // EXACT : Offset de l'ombre
     //},
     //shadowOpacity: 0.15, // EXACT : Opacité de l'ombre
     //shadowRadius: 6, // EXACT : Rayon de l'ombre
