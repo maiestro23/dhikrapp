@@ -9,6 +9,7 @@ import { useFavoritesStore } from '../../stores/favoritesStore';
 import { useDhikrStore } from '../../stores/dhikrStore';
 import { ScreenBackground } from '../../components/ScreenBackground';
 import { router } from 'expo-router';
+import { Dhikr } from '@/config/dhikrs';
 
 const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme }: any) => (
   <View style={styles.dhikrCard}>
@@ -26,6 +27,12 @@ const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme }: any) => (
           fill={!isFavorite ? 'transparent' : theme.colors.accent}
         />
       </TouchableOpacity>
+      {/* Page Indicator */}
+      {dhikr.dhikrLength && dhikr.dhikrLength > '1' && (
+        <Text style={styles.pageIndicator}>
+          {dhikr.pageId}/{dhikr.dhikrLength}
+        </Text>
+      )}
     </View>
   </View>
 );
@@ -60,12 +67,8 @@ export default function DhikrScreen() {
   }, [addFavorite, removeFavorite]);
 
 
-  // const handleCategoryPress = (route?: string) => {
-  //   router.replace('/discover');
-  // };
 
   const handleCategoryPress = useCallback(() => {
-    console.log("clicked")
     router.replace('/discover');
   }, []);
 
@@ -193,7 +196,7 @@ export default function DhikrScreen() {
           {circularPages.map((dhikr: any, index: number) => (
             <View key={`dhikr-${dhikr?.id || index}-${index}`}>
               <DhikrContent
-                dhikr={dhikr}
+                dhikr={dhikr as Dhikr}
                 isFavorite={isFavorite(dhikr?.id)}
                 onToggleFavorite={toggleFavorite}
                 theme={theme}
@@ -261,6 +264,16 @@ const styles = StyleSheet.create({
     color: '#8C8F7B',
     textAlign: 'center',
   },
+
+  pageIndicator: {
+    fontFamily: 'Sofia-Pro',
+    fontSize: 14,
+    color: '#8C8F7B',
+    marginTop: 12,
+    fontVariant: ['tabular-nums'],
+    textAlign: 'center',
+  },
+
   progressContainer: {
     position: 'absolute',
     left: 16,
