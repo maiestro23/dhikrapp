@@ -30,7 +30,7 @@ export const useDhikrStore = create<DhikrState>()((set, get) => ({
   getDhikrsByUrlCategory: () => {
     // Get URL params inside the store
     const params = useLocalSearchParams();
-    const category = params.category as string || 'general';
+    const category = params.category as string || 'General';
     
     switch (category) {
       case 'morning':
