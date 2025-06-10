@@ -61,6 +61,17 @@ export default function DhikrScreen() {
     };
   }, [start, stop]);
 
+  // Ajoutez un état pour la clé
+  const [pagerKey, setPagerKey] = useState(0);
+
+  // Dans l'useEffect qui surveille les changements de dhikrs
+  useEffect(() => {
+    if (dhikrs && dhikrs.length > 0) {
+      setPagerKey(prev => prev + 1); // Force la re-création du PagerView
+      setCurrentIndex(1);
+    }
+  }, [dhikrs]);
+
   const toggleFavorite = useCallback((dhikr: any, isFav: boolean) => {
     if (isFav) removeFavorite(dhikr.id);
     else addFavorite(dhikr);
@@ -185,6 +196,7 @@ export default function DhikrScreen() {
         </View>
 
         <PagerView
+          key={pagerKey} // ← Ajoutez cette ligne
           ref={pagerRef}
           initialPage={1}
           style={{ flex: 1 }}
