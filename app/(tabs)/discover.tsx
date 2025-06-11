@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
 
   // ===== HEADER STYLES - EXACT du design =====
   header: {
-    marginTop: 60, // EXACT : Espace pour la status bar
+    marginTop: 20, // EXACT : Espace pour la status bar
     marginBottom: 24, // EXACT : Espacement sous le header
   },
   headerTitle: {
