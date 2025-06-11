@@ -141,7 +141,15 @@ export default function DiscoverScreen() {
           </View>
         </View>
 
-        {/* ===== ONGLETS General/Favourites - EXACT du design ===== */}
+
+
+        {/* ===== SECTION CATEGORIES - EXACT du design ===== */}
+        <View style={styles.categoriesSection}>
+          <ScrollView
+            style={styles.categoriesContainer}
+            showsVerticalScrollIndicator={false}
+          >
+                    {/* ===== ONGLETS General/Favourites - EXACT du design ===== */}
         <View style={styles.tabsContainer}>
 
           <TabButton
@@ -153,15 +161,9 @@ export default function DiscoverScreen() {
             onPress={() => setActiveTab('Favourites')}
           />
         </View>
+            <Text style={styles.sectionTitle}>Categories</Text>
 
-        {/* ===== SECTION CATEGORIES - EXACT du design ===== */}
-        <View style={styles.categoriesSection}>
-          <Text style={styles.sectionTitle}>Categories</Text>
 
-          <ScrollView
-            style={styles.categoriesContainer}
-            showsVerticalScrollIndicator={false}
-          >
             {/* Grille de catégories 2x2 - EXACT du design */}
             <View style={styles.categoriesGrid}>
               {filteredCategories.map((category, index) => (
@@ -209,7 +211,7 @@ const styles = StyleSheet.create({
 
   // ===== SEARCH BAR STYLES - EXACT du design =====
   searchContainer: {
-    marginBottom: 24, // EXACT : Espacement sous la barre de recherche
+    marginBottom: 14, // EXACT : Espacement sous la barre de recherche
   },
   searchInputContainer: {
     flexDirection: 'row',
@@ -245,7 +247,8 @@ const styles = StyleSheet.create({
   },
   tabButton: {
     flex: 1,
-    paddingVertical: 22, // Plus de padding vertical
+    marginTop: 12,
+    paddingVertical: 26, // Plus de padding vertical
     paddingHorizontal: 24,
     borderRadius: 10, // Plus arrondi
     backgroundColor: '#7E0F3B', // Background plus opaque pour l'état inactif

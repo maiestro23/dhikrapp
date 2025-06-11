@@ -15,7 +15,7 @@ export default function SearchScreen() {
 
   const [query, setQuery] = useState('');
   const { recentSearches, addRecentSearch, clearRecentSearches } = useSearchStore();
-  const { dhikrs } = useDhikrStore();
+  const dhikrs = useDhikrStore().getAllDhikrs();
   const { favorites, isFavorite, addFavorite, removeFavorite } = useFavoritesStore();
 
   const fuse = new Fuse(dhikrs, {
@@ -37,8 +37,8 @@ export default function SearchScreen() {
   }, [addRecentSearch]);
 
   const handleFavoritePress = (dhikr: any) => {
-    if (isFavorite(dhikr.id)) {
-      removeFavorite(dhikr.id);
+    if (isFavorite(dhikr.uuid)) {
+      removeFavorite(dhikr.uuid);
     } else {
       addFavorite(dhikr);
     }
@@ -66,7 +66,7 @@ export default function SearchScreen() {
         <Heart
           size={24}
           color={theme.colors.accent}
-          fill={isFavorite(item.item.id) ? theme.colors.accent : '#fff'}
+          fill={isFavorite(item.item.uuid) ? theme.colors.accent : '#fff'}
         />
       </TouchableOpacity>
     </View>

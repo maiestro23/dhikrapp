@@ -8,13 +8,14 @@ export interface FavoriteDhikr {
   transliteration: string;
   translation: string;
   timestamp: number;
+  uuid: string;
 }
 
 interface FavoritesState {
   favorites: FavoriteDhikr[];
   addFavorite: (dhikr: Omit<FavoriteDhikr, 'timestamp'>) => void;
-  removeFavorite: (id: string) => void;
-  isFavorite: (id: string) => boolean;
+  removeFavorite: (uuid: string) => void;
+  isFavorite: (uuid: string) => boolean;
 }
 
 export const useFavoritesStore = create<FavoritesState>()(
@@ -31,14 +32,14 @@ export const useFavoritesStore = create<FavoritesState>()(
         }));
       },
       
-      removeFavorite: (id) => {
+      removeFavorite: (uuid) => {
         set((state) => ({
-          favorites: state.favorites.filter((d) => d.id !== id),
+          favorites: state.favorites.filter((d) => d.uuid !== uuid),
         }));
       },
       
-      isFavorite: (id) => {
-        return get().favorites.some((d) => d.id === id);
+      isFavorite: (uuid) => {
+        return get().favorites.some((d) => d.uuid === uuid);
       },
     }),
     {

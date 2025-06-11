@@ -73,7 +73,7 @@ export default function DhikrScreen() {
   }, [dhikrs]);
 
   const toggleFavorite = useCallback((dhikr: any, isFav: boolean) => {
-    if (isFav) removeFavorite(dhikr.id);
+    if (isFav) removeFavorite(dhikr.uuid);
     else addFavorite(dhikr);
   }, [addFavorite, removeFavorite]);
 
@@ -206,7 +206,7 @@ export default function DhikrScreen() {
             <View key={`dhikr-${dhikr?.id || index}-${index}`}>
               <DhikrContent
                 dhikr={dhikr as Dhikr}
-                isFavorite={isFavorite(dhikr?.id)}
+                isFavorite={isFavorite(dhikr?.uuid)}
                 onToggleFavorite={toggleFavorite}
                 theme={theme}
               />
@@ -275,7 +275,7 @@ const styles = StyleSheet.create({
   },
 
   pageIndicator: {
-    fontFamily: 'Sofia-Pro',
+    fontFamily: 'Sofia-Pro-ExtraLight',
     fontSize: 14,
     color: '#8C8F7B',
     marginTop: 12,

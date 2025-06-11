@@ -17,6 +17,7 @@ interface Dhikr {
 interface DhikrState {
   dhikrs: Dhikr[];
   getDhikrsByUrlCategory: () => Dhikr[];
+  getAllDhikrs: () => Dhikr[];
   addDhikr: (dhikr: Dhikr) => void;
   removeDhikr: (id: string) => void;
   getDhikrsByCategory: (category: string) => Dhikr[];
@@ -25,13 +26,29 @@ interface DhikrState {
 
 export const useDhikrStore = create<DhikrState>()((set, get) => ({
   dhikrs: initialDhikrs,
-  
+
+  // Nouvelle méthode pour récupérer TOUS les dhikrs concatenés
+  getAllDhikrs: () => {
+    const allDhikrs = [
+      ...initialDhikrs,
+      ...MorningDhikrs,
+      ...EveningDhikrs,
+      ...AfterSalahDhikrs
+    ];
+
+        // Optionnel : supprimer les doublons basés sur le texte de traduction
+    const uniqueDhikrs = allDhikrs.filter((dhikr, index, self) => 
+      index === self.findIndex(d => d.arabicText === dhikr.arabicText)
+    );
+    
+    return uniqueDhikrs;
+  },
 
   getDhikrsByUrlCategory: () => {
     // Get URL params inside the store
     const params = useLocalSearchParams();
     const category = params.category as string || 'General';
-    
+
     switch (category) {
       case 'morning':
         return MorningDhikrs;
@@ -50,13 +67,14 @@ export const useDhikrStore = create<DhikrState>()((set, get) => ({
     set((state) => ({
       dhikrs: [...state.dhikrs, dhikr],
     })),
-    
+
   removeDhikr: (id) =>
     set((state) => ({
       dhikrs: state.dhikrs.filter((d) => d.id !== id),
     })),
-    
+
   getDhikrsByCategory: (category) => {
     return get().dhikrs.filter((d) => d.category === category);
   },
+
 }));
