@@ -8,7 +8,7 @@ import { useTimeTracking } from '../../hooks/useTimeTracking';
 import { useFavoritesStore } from '../../stores/favoritesStore';
 import { useDhikrStore } from '../../stores/dhikrStore';
 import { ScreenBackground } from '../../components/ScreenBackground';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { Dhikr } from '@/config/dhikrs';
 
 const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme }: any) => (
@@ -158,7 +158,16 @@ export default function DhikrScreen() {
   const barHeightPx = Math.max(0, Math.min((goalProgress / 100) * 500, 500));
 
   // Get current category from the first dhikr (all dhikrs in the array should have the same category)
-  const currentCategory = dhikrs[0]?.category || '';
+
+  const params = useLocalSearchParams();
+  const categoryUrl = params.category as string || 'General';
+  let currentCategory = 'General'
+  if (categoryUrl && categoryUrl === 'favourites') {
+    currentCategory = 'Favourites';
+  } else {
+    currentCategory = dhikrs[0]?.category;
+  }
+
 
   return (
     <ScreenBackground>
@@ -183,6 +192,7 @@ export default function DhikrScreen() {
           </TouchableOpacity>
         </View>
 
+        {/* 
         <View style={styles.progressContainer}>
           <View style={styles.progressBarContainer}>
             <View style={[styles.progressBar, { height: Math.round(barHeightPx) }]} />
@@ -191,6 +201,7 @@ export default function DhikrScreen() {
             {Math.min(Math.round(goalProgress), 100)}%
           </Text>
         </View>
+        */}
 
         <PagerView
           key={pagerKey}
@@ -256,7 +267,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: 8,
-    //marginTop: 20,
+    marginTop: 20,
     top: 70,
     shadowColor: '#000',
     shadowOffset: {
@@ -333,7 +344,7 @@ const styles = StyleSheet.create({
   },
   textWrapper: {
     paddingTop: 15,
-    paddingLeft: 30,
+    //paddingLeft: 30,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 24,

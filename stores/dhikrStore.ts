@@ -5,6 +5,7 @@ import { EveningDhikrs } from '@/config/evening_dhikrs';
 import { useLocalSearchParams } from 'expo-router';
 import { AfterSalahDhikrs } from '@/config/afterSalah_dhikrs';
 import { IstighfarDhikrs } from '@/config/istighfar_dhikrs';
+import { FavoriteDhikr, useFavoritesStore } from './favoritesStore';
 
 interface Dhikr {
   id: string;
@@ -17,7 +18,7 @@ interface Dhikr {
 
 interface DhikrState {
   dhikrs: Dhikr[];
-  getDhikrsByUrlCategory: () => Dhikr[];
+  getDhikrsByUrlCategory: () => Dhikr[] | FavoriteDhikr[];
   getAllDhikrs: () => Dhikr[];
   addDhikr: (dhikr: Dhikr) => void;
   removeDhikr: (id: string) => void;
@@ -46,6 +47,23 @@ export const useDhikrStore = create<DhikrState>()((set, get) => ({
     return uniqueDhikrs;
   },
 
+    // Méthode pour récupérer uniquement les dhikrs favoris
+  // getFavoriteDhikrs: () => {
+  //   // Récupérer tous les dhikrs
+  //   const allDhikrs = get().getAllDhikrs();
+    
+  //   // Récupérer les favoris depuis le store des favoris
+  //   const favorites = useFavoritesStore.getState().favorites;
+    
+  //   // Filtrer les dhikrs qui sont dans les favoris
+  //   // On utilise l'UUID du favori qui correspond à l'ID du dhikr
+  //   const favoriteDhikrs = allDhikrs.filter(dhikr => 
+  //     favorites.some(favorite => favorite.uuid === dhikr.id)
+  //   );
+    
+  //   return favoriteDhikrs;
+  // },
+
   getDhikrsByUrlCategory: () => {
     // Get URL params inside the store
     const params = useLocalSearchParams();
@@ -60,6 +78,8 @@ export const useDhikrStore = create<DhikrState>()((set, get) => ({
         return AfterSalahDhikrs;
       case 'istighfar':
         return IstighfarDhikrs;
+      case 'favourites':
+        return useFavoritesStore.getState().favorites;    
       default:
         return initialDhikrs;
     }

@@ -158,7 +158,7 @@ export default function DiscoverScreen() {
           />
           <TabButton
             title="Favourites"
-            onPress={() => setActiveTab('Favourites')}
+            onPress={() => handleCategoryPress({ id: 'favourites', title: 'Favourites' })}
           />
         </View>
             <Text style={styles.sectionTitle}>Categories</Text>
