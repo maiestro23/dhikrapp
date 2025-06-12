@@ -36,15 +36,15 @@ const categories = [
   },
   {
     id: 'afterSalah',
-    title: 'AfterSalah\nAdhkar',
+    title: 'After Salah',
     subtitle: 'Seek forgiveness and purification',
     // Image spirituelle/mosque ou montagne
     backgroundImage: require('../../assets/images/Istighfar_bg.png'), // Remplacez par votre chemin d'image
     icon: '🤲'
   },
   {
-    id: 'night',
-    title: 'Night\nAdhkar',
+    id: 'istighfar',
+    title: 'Istighfar',
     subtitle: 'Protection through the night',
     // Image de nuit étoilée
     backgroundImage: require('../../assets/images/Night_bg.png'), // Remplacez par votre chemin d'image

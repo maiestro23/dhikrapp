@@ -4,6 +4,7 @@ import { MorningDhikrs } from '@/config/morning_dhikrs';
 import { EveningDhikrs } from '@/config/evening_dhikrs';
 import { useLocalSearchParams } from 'expo-router';
 import { AfterSalahDhikrs } from '@/config/afterSalah_dhikrs';
+import { IstighfarDhikrs } from '@/config/istighfar_dhikrs';
 
 interface Dhikr {
   id: string;
@@ -33,7 +34,8 @@ export const useDhikrStore = create<DhikrState>()((set, get) => ({
       ...initialDhikrs,
       ...MorningDhikrs,
       ...EveningDhikrs,
-      ...AfterSalahDhikrs
+      ...AfterSalahDhikrs,
+      ...IstighfarDhikrs
     ];
 
         // Optionnel : supprimer les doublons basés sur le texte de traduction
@@ -56,8 +58,8 @@ export const useDhikrStore = create<DhikrState>()((set, get) => ({
         return EveningDhikrs;
       case 'afterSalah':
         return AfterSalahDhikrs;
-      case 'night':
-        return initialDhikrs;
+      case 'istighfar':
+        return IstighfarDhikrs;
       default:
         return initialDhikrs;
     }
