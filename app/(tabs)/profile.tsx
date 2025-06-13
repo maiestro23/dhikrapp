@@ -24,6 +24,7 @@ export default function ProfileScreen() {
     currentStreak,
     goalProgress,
     remainingToGoal,
+    todayProgress
   } = useProgress();
 
   const handleNavigation = (route: string) => {
@@ -48,20 +49,21 @@ export default function ProfileScreen() {
         <View style={styles.statsContainer}>
           <View style={[styles.statCard, { backgroundColor: theme.colors.card }]}>
             <Text style={[styles.statValue, { color: theme.colors.text.secondary }]}>
-              {totalCount.toLocaleString()}
+              {todayProgress >= 1000 ? `${(todayProgress / 1000).toFixed(1)}k` : todayProgress.toLocaleString()}
             </Text>
             <Text style={[styles.statLabel, { color: theme.colors.text.primary }]}>
-              total dhikr
+              daily khairis
             </Text>
           </View>
           <View style={[styles.statCard, { backgroundColor: theme.colors.card }]}>
             <Text style={[styles.statValue, { color: theme.colors.text.secondary }]}>
-              {totalMinutes.toLocaleString()}
+              {totalCount >= 1000 ? `${(totalCount / 1000).toFixed(1)}k` : totalCount.toLocaleString()}
             </Text>
             <Text style={[styles.statLabel, { color: theme.colors.text.primary }]}>
-              total minutes
+              total khairis
             </Text>
           </View>
+
           <View style={[styles.statCard, { backgroundColor: theme.colors.card }]}>
             <Text style={[styles.statValue, { color: theme.colors.text.secondary }]}>
               {currentStreak}
@@ -168,6 +170,7 @@ const styles = StyleSheet.create({
   },
   statsContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 32,
     gap: 8,

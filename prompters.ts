@@ -74,4 +74,14 @@ Peux tu me decrire les differentes etapes a suivre
 
 
 
-A serene beach scene at sunset. The sky is painted with soft hues of orange and blue, transitioning smoothly from the horizon upwards. The sun is low in the sky, casting a warm glow. Silhouettes of two birds are flying in the upper left part of the image. The beach is bordered by calm, gently rolling waves. In the foreground, there are a few tropical plants with broad leaves, adding a touch of green to the scene. The overall mood is peaceful and tranquil.
+
+
+
+J'ai ecrit une app avec expo et react native.
+J'aimerais changer le visuel de mon ecran principal.
+J'aimerais ajouter en haut a droite deux nouvelles lignes:
+1. "Dhikr Goal" : afficher le nombre de dhikrs effectué dans la journée, tu peux utiliser ceci pour afficher le nombre {Math.min(Math.round(goalProgress), 100)}%
+2. "Khairis": afficher le nombre total de dhikrs effectué depuis la premiere utilisation :   const {totalCount} = useProgress();
+
+Je te fournis le design souhaité ainsi que mon fichier de code.
+JE NE VEUX QUE CA ET RIEN DE PLUS, MERCI DE RIEN FAIRE EN PLUS QUE CE QUE J'ai DEMANDé

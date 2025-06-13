@@ -36,6 +36,7 @@ export function useProgress() {
     totalMinutes: getTotalMinutes(),
     goalProgress: getGoalProgress(),
     remainingToGoal: getRemainingToGoal(),
+    todayProgress: getTodayProgress(),
     incrementCount,
   };
 }
