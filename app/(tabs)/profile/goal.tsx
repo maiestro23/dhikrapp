@@ -91,15 +91,19 @@ export default function GoalSelectionScreen() {
         >
 
           <View style={styles.content}>
+            {/* 
             <TouchableOpacity onPress={handleBack} style={styles.backButton}>
               <ArrowLeft color={theme.colors.text.primary} size={24} />
             </TouchableOpacity>
-
+              */}
             <View style={styles.header}>
               <Text style={styles.title}>
-                How much adhkar do you want to read per day?
+                Daily Goal
               </Text>
               <Text style={styles.subtitle}>
+                How much adhkar do you want to read per day ?
+              </Text>
+              <Text style={styles.currentDailyGoal}>
                 Your current goal is: {dailyGoal}
               </Text>
             </View>
@@ -203,6 +207,7 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     marginBottom: 10,
+    marginTop: 20,
   },
   title: {
     fontFamily: 'Classico',
@@ -216,6 +221,15 @@ const styles = StyleSheet.create({
     fontFamily: 'Sofia-Pro-ExtraLight',
     fontSize: 16,
     color: '#666666',
+    textAlign: 'center',
+    paddingBottom: 10,
+  },
+
+  currentDailyGoal: {
+    fontFamily: 'Sofia-Pro-ExtraLight',
+    fontSize: 16,
+    color: '#6F7C50',
+    opacity: 0.5,
     textAlign: 'center',
     paddingBottom: 10,
   },
