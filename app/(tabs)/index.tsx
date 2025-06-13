@@ -186,7 +186,7 @@ export default function DhikrScreen() {
 
           <View style={styles.rightHeader}>
             <Text style={styles.goalText}>Dhikr Goal: {Math.min(Math.round(goalProgress), 100)}%</Text>
-            <Text style={styles.khairisText}>Khairis: {totalCount >= 1000 ? `${(totalCount / 1000).toFixed(1)}k` : totalCount}</Text>
+            <Text style={styles.khairisText}>Khairis: {totalCount >= 1000 ? `${(totalCount / 1000).toFixed(1)}k` : totalCount}✨</Text>
           </View>
 
 
@@ -275,18 +275,20 @@ const styles = StyleSheet.create({
     color: '#6F7C50',
     opacity: 0.5,
   },
+
   goalText: {
-    fontFamily: 'Sofia-Pro-Light',
-    fontSize: 13,
-    lineHeight: 14,
+    fontFamily: 'Sofia-Pro',
+    fontSize: 15,
+    lineHeight: 20,
     color: '#6F7C50',
     opacity: 0.5,
     marginBottom: 4,
     textAlign: 'left',
   },
+
   khairisText: {
-    fontFamily: 'Sofia-Pro-Light',
-    fontSize: 13,
+    fontFamily: 'Sofia-Pro',
+    fontSize: 15,
     lineHeight: 14,
     color: '#6F7C50',
     opacity: 0.5,
@@ -373,7 +375,7 @@ const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingRight: 20,
+    //paddingRight: 20,
   },
   textWrapper: {
     paddingTop: 15,
