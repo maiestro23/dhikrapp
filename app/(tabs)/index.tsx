@@ -40,7 +40,7 @@ const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme }: any) => (
 export default function DhikrScreen() {
   const { theme } = useTheme();
   const { start, stop } = useTimeTracking();
-  const { incrementCount, goalProgress } = useProgress();
+  const { incrementCount, goalProgress, totalCount } = useProgress();
   const dhikrs = useDhikrStore().getDhikrsByUrlCategory();
   const { isFavorite, addFavorite, removeFavorite } = useFavoritesStore();
 
@@ -173,25 +173,32 @@ export default function DhikrScreen() {
     <ScreenBackground>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.greeting}>Assalamu Alaikum</Text>
-          <Text style={styles.date}>
-            {new Date().toLocaleDateString('en-US', {
-              weekday: 'long',
-              month: 'long',
-              day: 'numeric'
-            })}
-          </Text>
+          <View style={styles.leftHeader}>
+            <Text style={styles.greeting}>Assalamu Alaikum</Text>
+            <Text style={styles.date}>
+              {new Date().toLocaleDateString('en-US', {
+                weekday: 'long',
+                month: 'long',
+                day: 'numeric'
+              })}
+            </Text>
+          </View>
 
-          {/* Category Tag */}
-          <TouchableOpacity
-            style={styles.categoryTag}
-            onPress={handleCategoryPress}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.categoryText}>{currentCategory}</Text>
-          </TouchableOpacity>
+          <View style={styles.rightHeader}>
+            <Text style={styles.goalText}>Dhikr Goal: {Math.min(Math.round(goalProgress), 100)}%</Text>
+            <Text style={styles.khairisText}>Khairis: {totalCount >= 1000 ? `${(totalCount / 1000).toFixed(1)}k` : totalCount}</Text>
+          </View>
+
+
         </View>
-
+        {/* Category Tag */}
+        <TouchableOpacity
+          style={styles.categoryTag}
+          onPress={handleCategoryPress}
+          activeOpacity={0.7}
+        >
+          <Text style={styles.categoryText}>{currentCategory}</Text>
+        </TouchableOpacity>
         {/* 
         <View style={styles.progressContainer}>
           <View style={styles.progressBarContainer}>
@@ -242,14 +249,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#8C8F7B',
   },
-  header: {},
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    paddingHorizontal: 20,
+  },
+  leftHeader: {
+    flex: 1,
+  },
+  rightHeader: {
+    //alignItems: 'flex-end',
+  },
   greeting: {
     fontFamily: 'Sofia-Pro-Light',
     fontSize: 17,
     lineHeight: 20,
     color: '#8C8F7B',
     marginBottom: 4,
-    marginLeft: 20
   },
   date: {
     fontFamily: 'Sofia-Pro-Light',
@@ -257,7 +274,23 @@ const styles = StyleSheet.create({
     lineHeight: 14,
     color: '#6F7C50',
     opacity: 0.5,
-    marginLeft: 20
+  },
+  goalText: {
+    fontFamily: 'Sofia-Pro-Light',
+    fontSize: 13,
+    lineHeight: 14,
+    color: '#6F7C50',
+    opacity: 0.5,
+    marginBottom: 4,
+    textAlign: 'left',
+  },
+  khairisText: {
+    fontFamily: 'Sofia-Pro-Light',
+    fontSize: 13,
+    lineHeight: 14,
+    color: '#6F7C50',
+    opacity: 0.5,
+    textAlign: 'left',
   },
   categoryTag: {
     zIndex: 3,
