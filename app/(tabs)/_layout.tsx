@@ -94,6 +94,28 @@ export default function TabLayout() {
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="profile/privacy"
+        options={{
+          tabBarItemStyle: { display: 'none' },
+          title: 'Privacy',
+          tabBarIcon: ({ color, size }) => (
+            <User color={color} size={24} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="profile/terms"
+        options={{
+          tabBarItemStyle: { display: 'none' },
+          title: 'Terms',
+          tabBarIcon: ({ color, size }) => (
+            <User color={color} size={24} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

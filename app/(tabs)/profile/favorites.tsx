@@ -7,6 +7,9 @@ import { useSearchStore } from '../../../stores/searchStore';
 import { useDhikrStore } from '../../../stores/dhikrStore';
 import { useFavoritesStore } from '../../../stores/favoritesStore';
 import { ScreenBackground } from '../../../components/ScreenBackground';
+import { SwipeBackWrapper } from '../../../components/SwipeBackWrapper'; // Ajustez le chemin selon votre structure
+import { router } from 'expo-router';
+import { ProfileBackground } from '@/components/ProfileBackground';
 
 export default function SearchScreen() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -28,11 +31,9 @@ export default function SearchScreen() {
   const handleSearch = useCallback((text: string) => {
     setQuery(text);
     if (text.length > 2) {
-
       if (text.trim()) {
         addRecentSearch(text.trim());
       }
-
     }
   }, [addRecentSearch]);
 
@@ -42,6 +43,10 @@ export default function SearchScreen() {
     } else {
       addFavorite(dhikr);
     }
+  };
+
+  const handleSwipeBack = () => {
+    router.replace('/profile');
   };
 
   const renderSearchResult = ({ item }: { item: { item: any } }) => (
@@ -58,9 +63,7 @@ export default function SearchScreen() {
         </Text>
       </View>
       <TouchableOpacity
-        style={[
-          styles.favoriteButton
-        ]}
+        style={[styles.favoriteButton]}
         onPress={() => handleFavoritePress(item.item)}
       >
         <Heart
@@ -86,9 +89,7 @@ export default function SearchScreen() {
         </Text>
       </View>
       <TouchableOpacity
-        style={[
-          styles.favoriteButton
-        ]}
+        style={[styles.favoriteButton]}
         onPress={() => handleFavoritePress(item)}
       >
         <Heart
@@ -110,131 +111,128 @@ export default function SearchScreen() {
   );
 
   return (
-    <ScreenBackground>
-
-      <View style={styles.sectionHeader}>
-        <Text style={[styles.sectionTitle, { color: theme.colors.text.primary }]}>
-          Favourites
-        </Text>
-      </View>
-
-      <View style={styles.searchContainer}>
-        <View style={styles.XsearchInputContainer}>
-          <Search size={20} color="#8C8F7B" style={styles.XsearchIcon} />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search"
-            placeholderTextColor="#8C8F7B"
-            value={query}
-            onChangeText={handleSearch}
-          />
-          {query.length > 0 && (
-            <TouchableOpacity onPress={() => setQuery('')}>
-              <X color={theme.colors.text.secondary} size={20} />
-            </TouchableOpacity>
-          )}
+    <SwipeBackWrapper
+      onSwipeBack={handleSwipeBack}
+      backgroundComponent={<ProfileBackground />}
+    >
+      <ScreenBackground>
+        <View style={styles.sectionHeader}>
+          <Text style={[styles.sectionTitle, { color: theme.colors.text.primary }]}>
+            Favourites
+          </Text>
         </View>
-      </View>
 
-      {query.length > 0 ? (
-        <FlatList
-          data={searchResults}
-          renderItem={renderSearchResult}
-          keyExtractor={(item, index) => `search-${index}`}
-          contentContainerStyle={styles.resultsList}
-          showsVerticalScrollIndicator={false}
-        />
-      ) : (
-        <FlatList
-          data={[]}
-          renderItem={() => null}
-          ListHeaderComponent={() => (
-            <View>
-              {/* Section des recherches récentes */}
+        <View style={styles.searchContainer}>
+          <View style={styles.XsearchInputContainer}>
+            <Search size={20} color="#8C8F7B" style={styles.XsearchIcon} />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search"
+              placeholderTextColor="#8C8F7B"
+              value={query}
+              onChangeText={handleSearch}
+            />
+            {query.length > 0 && (
+              <TouchableOpacity onPress={() => setQuery('')}>
+                <X color={theme.colors.text.secondary} size={20} />
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
 
-
-              {/* Section des favoris */}
-              <View style={styles.sectionContainer}>
-
-                {favorites.length > 0 ? (
-                  <View style={styles.favoritesList}>
-                    {favorites.map((item, index) => (
-                      <View key={`favorite-${index}`} style={[styles.resultItem, { backgroundColor: theme.colors.card }]}>
-                        <View style={styles.resultContent}>
-                          <Text style={[styles.arabicText, { color: theme.colors.text.primary }]}>
-                            {item.arabicText}
-                          </Text>
-                          <Text style={[styles.transliteration]}>
-                            {item.transliteration}
-                          </Text>
-                          <Text style={[styles.translation]}>
-                            {item.translation}
-                          </Text>
+        {query.length > 0 ? (
+          <FlatList
+            data={searchResults}
+            renderItem={renderSearchResult}
+            keyExtractor={(item, index) => `search-${index}`}
+            contentContainerStyle={styles.resultsList}
+            showsVerticalScrollIndicator={false}
+          />
+        ) : (
+          <FlatList
+            data={[]}
+            renderItem={() => null}
+            ListHeaderComponent={() => (
+              <View>
+                <View style={styles.sectionContainer}>
+                  {favorites.length > 0 ? (
+                    <View style={styles.favoritesList}>
+                      {favorites.map((item, index) => (
+                        <View key={`favorite-${index}`} style={[styles.resultItem, { backgroundColor: theme.colors.card }]}>
+                          <View style={styles.resultContent}>
+                            <Text style={[styles.arabicText, { color: theme.colors.text.primary }]}>
+                              {item.arabicText}
+                            </Text>
+                            <Text style={[styles.transliteration]}>
+                              {item.transliteration}
+                            </Text>
+                            <Text style={[styles.translation]}>
+                              {item.translation}
+                            </Text>
+                          </View>
+                          <TouchableOpacity
+                            style={[styles.favoriteButton]}
+                            onPress={() => handleFavoritePress(item)}
+                          >
+                            <Heart
+                              size={24}
+                              color={theme.colors.accent}
+                              fill={theme.colors.accent}
+                            />
+                          </TouchableOpacity>
                         </View>
-                        <TouchableOpacity
-                          style={[styles.favoriteButton]}
-                          onPress={() => handleFavoritePress(item)}
-                        >
-                          <Heart
-                            size={24}
-                            color={theme.colors.accent}
-                            fill={theme.colors.accent}
-                          />
-                        </TouchableOpacity>
-                      </View>
-                    ))}
-                  </View>
-                ) : (
-                  <Text style={[styles.emptyText, { color: theme.colors.text.secondary }]}>
-                    No favorites yet
-                  </Text>
-                )}
+                      ))}
+                    </View>
+                  ) : (
+                    <Text style={[styles.emptyText, { color: theme.colors.text.secondary }]}>
+                      No favorites yet
+                    </Text>
+                  )}
+                </View>
               </View>
-            </View>
-          )}
-          contentContainerStyle={styles.mainContainer}
-          showsVerticalScrollIndicator={false}
-        />
-      )}
-    </ScreenBackground>
+            )}
+            contentContainerStyle={styles.mainContainer}
+            showsVerticalScrollIndicator={false}
+          />
+        )}
+      </ScreenBackground>
+    </SwipeBackWrapper>
   );
 }
 
+// Styles restent identiques
 const styles = StyleSheet.create({
   header: {
     padding: 16,
   },
-
-  // ===== SEARCH BAR STYLES - EXACT du design =====
   XsearchContainer: {
-    marginBottom: 24, // EXACT : Espacement sous la barre de recherche
+    marginBottom: 24,
   },
   XsearchInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.9)', // EXACT : Background blanc semi-transparent
-    borderRadius: 12, // EXACT : Coins arrondis
-    paddingHorizontal: 16, // EXACT : Padding horizontal
-    paddingVertical: 12, // EXACT : Padding vertical
-    shadowColor: '#000', // EXACT : Couleur de l'ombre
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2, // EXACT : Offset de l'ombre
+      height: 2,
     },
-    shadowOpacity: 0.1, // EXACT : Opacité de l'ombre
-    shadowRadius: 3.84, // EXACT : Rayon de l'ombre
-    elevation: 5, // EXACT : Élévation Android
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   XsearchIcon: {
-    marginRight: 12, // EXACT : Espacement après l'icône
+    marginRight: 12,
   },
   XsearchInput: {
     flex: 1,
-    fontFamily: 'Sofia-Pro-ExtraLight', // EXACT : Font cohérente
-    fontSize: 16, // EXACT : Taille du texte
-    color: '#181818', // EXACT : Couleur du texte
+    fontFamily: 'Sofia-Pro-ExtraLight',
+    fontSize: 16,
+    color: '#181818',
   },
-
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -263,9 +261,9 @@ const styles = StyleSheet.create({
   sectionTitle: {
     paddingLeft: 16,
     marginTop: 28,
-    fontFamily: 'Classico', // EXACT : Font cohérente
-    fontSize: 32, // EXACT : Taille du titre
-    color: '#181818', // EXACT : Noir foncé
+    fontFamily: 'Classico',
+    fontSize: 32,
+    color: '#181818',
   },
   clearText: {
     fontFamily: 'Sans',
