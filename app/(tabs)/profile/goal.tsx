@@ -100,9 +100,6 @@ export default function GoalSelectionScreen() {
               <Text style={styles.title}>
                 Daily Goal
               </Text>
-              <Text style={styles.subtitle}>
-                How much adhkar do you want to read per day ?
-              </Text>
               <Text style={styles.currentDailyGoal}>
                 Your current goal is: {dailyGoal}
               </Text>
@@ -215,7 +212,7 @@ const styles = StyleSheet.create({
     color: '#1A1A1A',
     textAlign: 'center',
     marginBottom: 8,
-    paddingHorizontal: 20,
+    padding: 20,
   },
   subtitle: {
     fontFamily: 'Sofia-Pro-ExtraLight',

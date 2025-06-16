@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Classico', // EXACT : Font du titre de section
     fontSize: 24, // EXACT : Taille du titre
     color: '#181818', // EXACT : Couleur du titre
-    marginBottom: 20, // EXACT : Espacement sous le titre
+    paddingBottom: 20
   },
   categoriesContainer: {
     flex: 1,
