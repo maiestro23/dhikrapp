@@ -80,7 +80,7 @@ export default function DhikrScreen() {
   const handleCategoryPress = useCallback(() => {
     router.replace('/discover');
   }, []);
-
+ 
   const handlePageSelected = useCallback((e: any) => {
     const index = e.nativeEvent.position;
 
@@ -142,7 +142,18 @@ export default function DhikrScreen() {
     return (
       <ScreenBackground>
         <View style={[styles.container, styles.loadingContainer]}>
-          <Text style={styles.loadingText}>Loading dhikrs...</Text>
+
+          <Text style={[styles.noFavouriteTitle, { color: theme.colors.text.primary }]}>
+            No favourites yet?
+          </Text>
+          <Text style={styles.loadingText}>Tap the heart 🤍 on any adhkar to start</Text>
+          <Text style={styles.loadingText}>building your own custom playlist.</Text>
+          <TouchableOpacity
+            style={styles.noFavbutton}
+            onPress={handleCategoryPress}
+          >
+            <Text style={styles.noFavButtonText}>Explore Adhkar</Text>
+          </TouchableOpacity>
         </View>
       </ScreenBackground>
     );
@@ -243,12 +254,45 @@ const styles = StyleSheet.create({
   loadingContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    //top: 50
   },
+
   loadingText: {
-    fontFamily: 'Sofia-Pro-Light',
+    fontFamily: 'Sofia-Pro-ExtraLight',
     fontSize: 16,
     color: '#8C8F7B',
+    //maxWidth: 250
   },
+
+  noFavouriteTitle: {
+    paddingLeft: 16,
+    marginTop: 28,
+    fontFamily: 'Classico', // EXACT : Font cohérente
+    fontSize: 32, // EXACT : Taille du titre
+    color: '#181818', // EXACT : Noir foncé
+    marginBottom: 22
+  },
+
+  noFavbutton: {
+    width: '100%',
+    height: 42,
+    maxWidth: 252,
+    //minWidth: 182,
+    backgroundColor: '#7E0F3B',
+    borderRadius: 52,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 80,
+  },
+
+  noFavButtonText: {
+    fontFamily: 'Sofia-Pro-Regular',
+    fontSize: 18,
+    lineHeight: 26,
+    color: '#FFFFFF',
+    textAlign: 'center',
+  },
+
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -275,7 +319,6 @@ const styles = StyleSheet.create({
     color: '#6F7C50',
     opacity: 0.5,
   },
-
   goalText: {
     fontFamily: 'Sofia-Pro',
     fontSize: 15,
@@ -284,8 +327,8 @@ const styles = StyleSheet.create({
     opacity: 0.5,
     marginBottom: 4,
     textAlign: 'left',
+    fontVariant: ['tabular-nums'], // Ajout de cette ligne pour des chiffres de largeur fixe
   },
-
   khairisText: {
     fontFamily: 'Sofia-Pro',
     fontSize: 15,
@@ -293,6 +336,7 @@ const styles = StyleSheet.create({
     color: '#6F7C50',
     opacity: 0.5,
     textAlign: 'left',
+    fontVariant: ['tabular-nums'], // Cette ligne fixe le problème
   },
   categoryTag: {
     zIndex: 3,

@@ -114,7 +114,7 @@ export default function SearchScreen() {
 
       <View style={styles.sectionHeader}>
         <Text style={[styles.sectionTitle, { color: theme.colors.text.primary }]}>
-          Favorites
+          Favourites
         </Text>
       </View>
 
