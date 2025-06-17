@@ -20,8 +20,6 @@ export default function PrivacyScreen() {
       backgroundComponent={<ProfileBackground />}
     >
       <ScreenBackground>
-
-
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
           <View style={styles.header}>
             <Text style={[styles.title, { color: theme.colors.text.primary }]}>Privacy Policy</Text>
@@ -105,7 +103,6 @@ export default function PrivacyScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20, // EXACT : 20px de chaque côté
   },
   header: {
     flexDirection: 'row',
@@ -117,6 +114,8 @@ const styles = StyleSheet.create({
     marginBottom: 8, // EXACT : Espacement sous le titre
   },
   content: {
+    paddingHorizontal: 20, // EXACT : 20px de chaque côté
+    paddingTop:20,
     flex: 1,
   },
   section: {

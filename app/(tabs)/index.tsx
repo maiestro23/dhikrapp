@@ -11,7 +11,7 @@ import { ScreenBackground } from '../../components/ScreenBackground';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Dhikr } from '@/config/dhikrs';
 
-const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme }: any) => (
+const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme, positionIndex, categoryLength }: any) => (
   <View style={styles.dhikrCard}>
     <View style={styles.textWrapper}>
       <Text style={styles.arabicText}>{dhikr.arabicText}</Text>
@@ -27,12 +27,21 @@ const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme }: any) => (
           fill={!isFavorite ? 'transparent' : theme.colors.accent}
         />
       </TouchableOpacity>
+
+      <Text style={styles.pageIndicator}>
+        {positionIndex}/{categoryLength}
+      </Text>
+
+
       {/* Page Indicator */}
+      {/*
       {dhikr.dhikrLength && dhikr.dhikrLength > '1' && (
         <Text style={styles.pageIndicator}>
           {dhikr.pageId}/{dhikr.dhikrLength}
         </Text>
+
       )}
+         */}
     </View>
   </View>
 );
@@ -42,6 +51,7 @@ export default function DhikrScreen() {
   const { start, stop } = useTimeTracking();
   const { incrementCount, goalProgress, totalCount } = useProgress();
   const dhikrs = useDhikrStore().getDhikrsByUrlCategory();
+  const categoryLength = dhikrs.length;
   const { isFavorite, addFavorite, removeFavorite } = useFavoritesStore();
 
   const pagerRef = useRef<PagerView>(null);
@@ -80,7 +90,7 @@ export default function DhikrScreen() {
   const handleCategoryPress = useCallback(() => {
     router.replace('/discover');
   }, []);
- 
+
   const handlePageSelected = useCallback((e: any) => {
     const index = e.nativeEvent.position;
 
@@ -238,6 +248,8 @@ export default function DhikrScreen() {
                 isFavorite={isFavorite(dhikr?.uuid)}
                 onToggleFavorite={toggleFavorite}
                 theme={theme}
+                positionIndex={index}
+                categoryLength={categoryLength}
               />
             </View>
           ))}
