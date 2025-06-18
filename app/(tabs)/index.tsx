@@ -5,12 +5,11 @@ import { Heart } from 'lucide-react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { useProgress } from '../../hooks/useProgress';
 import { useTimeTracking } from '../../hooks/useTimeTracking';
-import { useFavoritesStore } from '../../stores/favoritesStore'; 
+import { useFavoritesStore } from '../../stores/favoritesStore';
 import { useDhikrStore } from '../../stores/dhikrStore';
 import { ScreenBackground } from '../../components/ScreenBackground';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Dhikr } from '@/config/dhikrs';
-import { CategoryFinishedPopup } from '@/components/CategoryFinishedPopUp';
 
 const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme, positionIndex, categoryLength }: any) => (
   <View style={styles.dhikrCard}>
@@ -32,6 +31,17 @@ const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme, positionInde
       <Text style={styles.pageIndicator}>
         {positionIndex}/{categoryLength}
       </Text>
+
+
+      {/* Page Indicator */}
+      {/*
+      {dhikr.dhikrLength && dhikr.dhikrLength > '1' && (
+        <Text style={styles.pageIndicator}>
+          {dhikr.pageId}/{dhikr.dhikrLength}
+        </Text>
+
+      )}
+         */}
     </View>
   </View>
 );
@@ -50,30 +60,25 @@ export default function DhikrScreen() {
   const [isAdjustingPosition, setIsAdjustingPosition] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // États pour la pop-up de catégorie terminée
-  const [showFinishedPopup, setShowFinishedPopup] = useState(false);
-  const [completedCategory, setCompletedCategory] = useState('');
-  const [khairisEarned, setKhairisEarned] = useState(0);
-  const [visitedPages, setVisitedPages] = useState<Set<number>>(new Set());
-
   useEffect(() => {
     start();
     return () => {
       stop();
+      // Clean up timeout on unmount
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
     };
   }, [start, stop]);
 
+  // Ajoutez un état pour la clé
   const [pagerKey, setPagerKey] = useState(0);
 
+  // Dans l'useEffect qui surveille les changements de dhikrs
   useEffect(() => {
     if (dhikrs && dhikrs.length > 0) {
-      setPagerKey(prev => prev + 1);
+      setPagerKey(prev => prev + 1); // Force la re-création du PagerView
       setCurrentIndex(1);
-      // Reset visited pages when category changes
-      setVisitedPages(new Set([1])); // Start with first page visited
     }
   }, [dhikrs]);
 
@@ -86,56 +91,21 @@ export default function DhikrScreen() {
     router.replace('/discover');
   }, []);
 
-  // Get current category at the top level
-  const params = useLocalSearchParams();
-  const categoryUrl = params.category as string || 'General';
-  let currentCategory = 'General';
-  if (categoryUrl && categoryUrl === 'favourites') {
-    currentCategory = 'Favourites';
-  } else {
-    currentCategory = dhikrs[0]?.category;
-  }
-
-  const checkCategoryCompletion = useCallback((newVisitedPages: Set<number>) => {
-    // Vérifier si toutes les pages réelles ont été visitées (indices 1 à dhikrs.length)
-    const allRealPages = Array.from({ length: dhikrs.length }, (_, i) => i + 1);
-    const hasVisitedAll = allRealPages.every(page => newVisitedPages.has(page));
-    
-    if (hasVisitedAll && dhikrs.length > 0) {
-      // Catégorie terminée !
-      setCompletedCategory(currentCategory);
-      setKhairisEarned(dhikrs.length * 25); // 25 khairis par dhikr par exemple
-      setShowFinishedPopup(true);
-      
-      // Reset visited pages pour permettre une nouvelle completion
-      setVisitedPages(new Set());
-    }
-  }, [dhikrs, currentCategory]);
-
   const handlePageSelected = useCallback((e: any) => {
     const index = e.nativeEvent.position;
 
+    // Always update currentIndex to track where we are
     setCurrentIndex(index);
 
-    // Logique de comptage et suivi des pages visitées
+    // Only increment count for real pages (indices 1 to dhikrs.length)
+    // Don't increment during adjustments or on fake pages
     if (!isAdjustingPosition && index >= 1 && index <= dhikrs.length) {
       incrementCount();
-      
-      // Ajouter la page aux pages visitées
-      setVisitedPages(prev => {
-        const newVisited = new Set(prev);
-        newVisited.add(index);
-        
-        // Vérifier si la catégorie est terminée
-        checkCategoryCompletion(newVisited);
-        
-        return newVisited;
-      });
     }
 
     console.log('Page selected:', index, 'isAdjusting:', isAdjustingPosition, 'scrollState:', scrollState);
 
-    // Gestion du scroll circulaire (logique inchangée)
+    // Handle circular adjustment immediately when we hit fake pages
     const lastRealIndex = dhikrs.length;
     const lastFakeIndex = dhikrs.length + 1;
 
@@ -143,13 +113,16 @@ export default function DhikrScreen() {
       console.log('Triggering immediate adjustment for index:', index);
       setIsAdjustingPosition(true);
 
+      // Use a shorter timeout for immediate response
       setTimeout(() => {
         if (pagerRef.current) {
           try {
             if (index === 0) {
+              // Move from fake last to real last
               pagerRef.current.setPageWithoutAnimation(lastRealIndex);
               console.log('Adjusted from fake last (0) to real last (' + lastRealIndex + ')');
             } else if (index === lastFakeIndex) {
+              // Move from fake first to real first
               pagerRef.current.setPageWithoutAnimation(1);
               console.log('Adjusted from fake first (' + lastFakeIndex + ') to real first (1)');
             }
@@ -158,27 +131,28 @@ export default function DhikrScreen() {
           }
         }
 
+        // Reset adjustment flag
         setTimeout(() => {
           setIsAdjustingPosition(false);
         }, 50);
-      }, 10);
+      }, 10); // Much shorter delay for immediate response
     }
-  }, [dhikrs.length, incrementCount, isAdjustingPosition, scrollState, checkCategoryCompletion]);
+  }, [dhikrs.length, incrementCount, isAdjustingPosition, scrollState]);
 
   const handleScrollStateChanged = useCallback((e: any) => {
     const state = e.nativeEvent.pageScrollState;
     setScrollState(state);
   }, []);
 
-  const handleClosePopup = useCallback(() => {
-    setShowFinishedPopup(false);
-  }, []);
+  // Simplified circular scrolling - removed the complex useEffect approach
+  // The adjustment now happens directly in handlePageSelected for immediate response
 
   // Early return if no data
   if (!dhikrs || dhikrs.length === 0) {
     return (
       <ScreenBackground>
         <View style={[styles.container, styles.loadingContainer]}>
+
           <Text style={[styles.noFavouriteTitle, { color: theme.colors.text.primary }]}>
             No favourites yet?
           </Text>
@@ -204,7 +178,17 @@ export default function DhikrScreen() {
 
   const barHeightPx = Math.max(0, Math.min((goalProgress / 100) * 500, 500));
 
-  // currentCategory is already defined at the top
+  // Get current category from the first dhikr (all dhikrs in the array should have the same category)
+
+  const params = useLocalSearchParams();
+  const categoryUrl = params.category as string || 'General';
+  let currentCategory = 'General'
+  if (categoryUrl && categoryUrl === 'favourites') {
+    currentCategory = 'Favourites';
+  } else {
+    currentCategory = dhikrs[0]?.category;
+  }
+
 
   return (
     <ScreenBackground>
@@ -225,8 +209,9 @@ export default function DhikrScreen() {
             <Text style={styles.goalText}>Dhikr Goal: {Math.min(Math.round(goalProgress), 100)}%</Text>
             <Text style={styles.khairisText}>Khairis: {totalCount >= 1000 ? `${(totalCount / 1000).toFixed(1)}k` : totalCount}✨</Text>
           </View>
-        </View>
 
+
+        </View>
         {/* Category Tag */}
         <TouchableOpacity
           style={styles.categoryTag}
@@ -235,6 +220,16 @@ export default function DhikrScreen() {
         >
           <Text style={styles.categoryText}>{currentCategory}</Text>
         </TouchableOpacity>
+        {/* 
+        <View style={styles.progressContainer}>
+          <View style={styles.progressBarContainer}>
+            <View style={[styles.progressBar, { height: Math.round(barHeightPx) }]} />
+          </View>
+          <Text style={styles.progressText}>
+            {Math.min(Math.round(goalProgress), 100)}%
+          </Text>
+        </View>
+        */}
 
         <PagerView
           key={pagerKey}
@@ -244,7 +239,7 @@ export default function DhikrScreen() {
           orientation="vertical"
           onPageSelected={handlePageSelected}
           onPageScrollStateChanged={handleScrollStateChanged}
-          scrollEnabled={!isAdjustingPosition}
+          scrollEnabled={!isAdjustingPosition} // Disable scrolling during adjustments
         >
           {circularPages.map((dhikr: any, index: number) => (
             <View key={`dhikr-${dhikr?.id || index}-${index}`}>
@@ -259,20 +254,11 @@ export default function DhikrScreen() {
             </View>
           ))}
         </PagerView>
-
-        {/* Pop-up de catégorie terminée */}
-        <CategoryFinishedPopup
-          visible={showFinishedPopup}
-          onClose={handleClosePopup}
-          categoryName={completedCategory}
-          khairisEarned={khairisEarned}
-        />
       </View>
     </ScreenBackground>
   );
 }
 
-// Styles identiques (inchangés)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -280,30 +266,37 @@ const styles = StyleSheet.create({
   loadingContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    //top: 50
   },
+
   loadingText: {
     fontFamily: 'Sofia-Pro-ExtraLight',
     fontSize: 16,
     color: '#8C8F7B',
+    //maxWidth: 250
   },
+
   noFavouriteTitle: {
     paddingLeft: 16,
     marginTop: 28,
-    fontFamily: 'Classico',
-    fontSize: 32,
-    color: '#181818',
+    fontFamily: 'Classico', // EXACT : Font cohérente
+    fontSize: 32, // EXACT : Taille du titre
+    color: '#181818', // EXACT : Noir foncé
     marginBottom: 22
   },
+
   noFavbutton: {
     width: '100%',
     height: 42,
     maxWidth: 252,
+    //minWidth: 182,
     backgroundColor: '#7E0F3B',
     borderRadius: 52,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 80,
   },
+
   noFavButtonText: {
     fontFamily: 'Sofia-Pro-Regular',
     fontSize: 18,
@@ -311,6 +304,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     textAlign: 'center',
   },
+
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -321,6 +315,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   rightHeader: {
+    //alignItems: 'flex-end',
   },
   greeting: {
     fontFamily: 'Sofia-Pro-Light',
@@ -344,7 +339,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
     marginBottom: 4,
     textAlign: 'left',
-    fontVariant: ['tabular-nums'],
+    fontVariant: ['tabular-nums'], // Ajout de cette ligne pour des chiffres de largeur fixe
   },
   khairisText: {
     fontFamily: 'Sofia-Pro',
@@ -353,7 +348,7 @@ const styles = StyleSheet.create({
     color: '#6F7C50',
     opacity: 0.5,
     textAlign: 'left',
-    fontVariant: ['tabular-nums'],
+    fontVariant: ['tabular-nums'], // Cette ligne fixe le problème
   },
   categoryTag: {
     zIndex: 3,
@@ -380,6 +375,7 @@ const styles = StyleSheet.create({
     color: '#8C8F7B',
     textAlign: 'center',
   },
+
   pageIndicator: {
     fontFamily: 'Sofia-Pro-ExtraLight',
     fontSize: 14,
@@ -388,6 +384,7 @@ const styles = StyleSheet.create({
     fontVariant: ['tabular-nums'],
     textAlign: 'center',
   },
+
   progressContainer: {
     position: 'absolute',
     left: 16,
@@ -434,9 +431,11 @@ const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+    //paddingRight: 20,
   },
   textWrapper: {
     paddingTop: 15,
+    //paddingLeft: 30,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 24,
