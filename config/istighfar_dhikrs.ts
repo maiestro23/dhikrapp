@@ -4,17 +4,17 @@ export const IstighfarDhikrs: Dhikr[] =
 [
   {
     "category": "Istighfar",
-    "uuid": "9e1beb8c-9d7d-461c-ac43-a3282986a92a",
+    "uuid": "0042c2e5-057a-4f52-a33b-acd254db907c",
     "id": "1",
     "pageId": "1",
     "dhikrLength": "1",
     "transliteration": "Astaghfirullah",
-    "arabicText": "أَسْتَغْفِرُ الله",
+    "arabicText": "أَسْتَغْفِرُ اللَّهَ",
     "translation": "I seek forgiveness from Allah"
   },
   {
     "category": "Istighfar",
-    "uuid": "6c286a7c-2c93-41c4-a6d4-825a833ae766",
+    "uuid": "1347ecce-7c3a-4dc7-8e8b-8b52a839b6df",
     "id": "2",
     "pageId": "1",
     "dhikrLength": "2",
@@ -24,7 +24,7 @@ export const IstighfarDhikrs: Dhikr[] =
   },
   {
     "category": "Istighfar",
-    "uuid": "25f464d6-65be-4072-9c79-7d7b90bcbabf",
+    "uuid": "d5d9a36a-218d-49ca-a113-0d261d12dd40",
     "id": "2",
     "pageId": "2",
     "dhikrLength": "2",
@@ -34,17 +34,17 @@ export const IstighfarDhikrs: Dhikr[] =
   },
   {
     "category": "Istighfar",
-    "uuid": "175cccc3-2d9a-4736-b7d7-e1b0e1197eb1",
+    "uuid": "17ec300e-443b-4688-981f-5207feed89a1",
     "id": "3",
     "pageId": "1",
     "dhikrLength": "7",
     "transliteration": "Allahumma anta Rabbi la ilaha illa anta",
-    "arabicText": "اَللّٰهُمَّ أَنْتَ رَبِّيْ لَا إِلٰهَ إِلَّا أَنْتَ",
+    "arabicText": "اَللَّهُمَّ أَنْتَ رَبِّيْ لَا إِلٰهَ إِلَّا أَنْتَ",
     "translation": "O Allah, You are my Lord. There is no god worthy of worship except You."
   },
   {
     "category": "Istighfar",
-    "uuid": "e1b8ee24-b95c-4b0e-b3e1-9df47eba29c0",
+    "uuid": "15ef6b3e-af12-4c5b-8e32-ba2ebc876f5f",
     "id": "3",
     "pageId": "2",
     "dhikrLength": "7",
@@ -54,7 +54,7 @@ export const IstighfarDhikrs: Dhikr[] =
   },
   {
     "category": "Istighfar",
-    "uuid": "7684c585-c80f-4052-a305-880ebc2e1593",
+    "uuid": "4a7ad621-c09d-4114-8c10-9582ffacb9c2",
     "id": "3",
     "pageId": "3",
     "dhikrLength": "7",
@@ -64,7 +64,7 @@ export const IstighfarDhikrs: Dhikr[] =
   },
   {
     "category": "Istighfar",
-    "uuid": "00f30fcd-3eb3-4b9b-b8c9-75eac3f93bce",
+    "uuid": "22977c7e-b942-4820-a229-64c3ab5e5cdc",
     "id": "3",
     "pageId": "4",
     "dhikrLength": "7",
@@ -74,7 +74,7 @@ export const IstighfarDhikrs: Dhikr[] =
   },
   {
     "category": "Istighfar",
-    "uuid": "e301a77b-4b50-4bab-98f3-a85d9a6561bb",
+    "uuid": "2f0285e5-9918-499c-8129-aee19c0eb95d",
     "id": "3",
     "pageId": "5",
     "dhikrLength": "7",
@@ -84,7 +84,7 @@ export const IstighfarDhikrs: Dhikr[] =
   },
   {
     "category": "Istighfar",
-    "uuid": "deb5a256-1a37-4c82-9b2e-c2424fb7dbec",
+    "uuid": "8427833e-06cf-46d5-94a0-1c03b358d5ae",
     "id": "3",
     "pageId": "6",
     "dhikrLength": "7",
@@ -94,7 +94,7 @@ export const IstighfarDhikrs: Dhikr[] =
   },
   {
     "category": "Istighfar",
-    "uuid": "529ed347-fc70-43bb-85f2-88b10bb0004b",
+    "uuid": "0b8777ef-1b2f-4a24-b754-816e2f7d3fd4",
     "id": "3",
     "pageId": "7",
     "dhikrLength": "7",
@@ -104,7 +104,7 @@ export const IstighfarDhikrs: Dhikr[] =
   },
   {
     "category": "Istighfar",
-    "uuid": "6095227f-731d-41d9-81e9-d35ba36117c9",
+    "uuid": "4567bef4-6813-4598-bc9d-5d0735dd399a",
     "id": "4",
     "pageId": "1",
     "dhikrLength": "1",
@@ -114,7 +114,7 @@ export const IstighfarDhikrs: Dhikr[] =
   },
   {
     "category": "Istighfar",
-    "uuid": "e7d577cd-6691-4df9-85da-5c044eb4594d",
+    "uuid": "81fd045e-44dc-41d0-9fce-6423175c80ca",
     "id": "5",
     "pageId": "1",
     "dhikrLength": "2",
@@ -124,7 +124,7 @@ export const IstighfarDhikrs: Dhikr[] =
   },
   {
     "category": "Istighfar",
-    "uuid": "ff70991a-d94e-44b1-b942-89179ad95f54",
+    "uuid": "45d887d4-1703-4e65-b2bd-d13eed05cd28",
     "id": "5",
     "pageId": "2",
     "dhikrLength": "2",
@@ -134,7 +134,7 @@ export const IstighfarDhikrs: Dhikr[] =
   },
   {
     "category": "Istighfar",
-    "uuid": "248358fb-2a65-49c4-ad30-c61995a76c62",
+    "uuid": "be8e7727-fc6b-4063-b6bb-5798977c3dbb",
     "id": "6",
     "pageId": "1",
     "dhikrLength": "2",
@@ -144,7 +144,7 @@ export const IstighfarDhikrs: Dhikr[] =
   },
   {
     "category": "Istighfar",
-    "uuid": "d089b0b8-7c6e-42f7-ba77-c6aed20ab423",
+    "uuid": "86072d08-b90e-4c38-8820-d2552a1ccdb2",
     "id": "6",
     "pageId": "2",
     "dhikrLength": "2",
@@ -154,17 +154,17 @@ export const IstighfarDhikrs: Dhikr[] =
   },
   {
     "category": "Istighfar",
-    "uuid": "8c9088a6-7913-4be0-b325-7b6031840162",
+    "uuid": "54dabfab-dc58-4652-b2ce-a88cdacc3cf3",
     "id": "7",
     "pageId": "1",
     "dhikrLength": "6",
     "transliteration": "Allahumma-ghfir li ma qadam tu wa ma akhar tu",
-    "arabicText": "اللهُمَّ اغْفِرْ لِي مَا قَدَّمْتُ وَمَا أَخَّرْتُ",
+    "arabicText": "اللَّهُمَّ اغْفِرْ لِي مَا قَدَّمْتُ وَمَا أَخَّرْتُ",
     "translation": "O Allah, forgive me for my past and future sins,"
   },
   {
     "category": "Istighfar",
-    "uuid": "b430e309-39bb-4b75-8cf8-78a84bb1116c",
+    "uuid": "9f1eb1ed-de22-4e1b-aed1-d53df54efe9d",
     "id": "7",
     "pageId": "2",
     "dhikrLength": "6",
@@ -174,7 +174,7 @@ export const IstighfarDhikrs: Dhikr[] =
   },
   {
     "category": "Istighfar",
-    "uuid": "4fab6bb2-9a0a-46db-a53c-72860a79a595",
+    "uuid": "369e36b4-40db-4a08-95a3-0d28beb37c6c",
     "id": "7",
     "pageId": "3",
     "dhikrLength": "6",
@@ -184,7 +184,7 @@ export const IstighfarDhikrs: Dhikr[] =
   },
   {
     "category": "Istighfar",
-    "uuid": "f1d09a65-1277-4977-b859-83679152d218",
+    "uuid": "3cc4c0a9-8243-49db-9825-e7176e990636",
     "id": "7",
     "pageId": "4",
     "dhikrLength": "6",
@@ -194,7 +194,7 @@ export const IstighfarDhikrs: Dhikr[] =
   },
   {
     "category": "Istighfar",
-    "uuid": "b03aa7fb-9335-4525-b578-b42236a1176b",
+    "uuid": "fcd016d5-205f-4101-8460-f3b3f33a51ba",
     "id": "7",
     "pageId": "5",
     "dhikrLength": "6",
@@ -204,7 +204,7 @@ export const IstighfarDhikrs: Dhikr[] =
   },
   {
     "category": "Istighfar",
-    "uuid": "b396286f-e735-4fdc-acfd-31d19d9c85d8",
+    "uuid": "1364a398-7038-4d8a-b893-377451add1fd",
     "id": "7",
     "pageId": "6",
     "dhikrLength": "6",
@@ -214,17 +214,17 @@ export const IstighfarDhikrs: Dhikr[] =
   },
   {
     "category": "Istighfar",
-    "uuid": "121322b4-a651-418e-86e8-c58572cf1ca9",
+    "uuid": "1ef1380b-69cb-45e7-af0a-c9f4f6265098",
     "id": "8",
     "pageId": "1",
     "dhikrLength": "3",
     "transliteration": "Alhamdulillah (x3), Allahu Akbar (x3)",
-    "arabicText": "الْحَمْدُ لِلهِ ٣×، اللهُ أكْبَرُ ٣×",
+    "arabicText": "الْحَمْدُ لِلَّهِ ٣×، اللَّهُ أكْبَرُ ٣×",
     "translation": "All praise is due to Allah (x3). Allah is the Greatest (x3)."
   },
   {
     "category": "Istighfar",
-    "uuid": "aa131cee-9bdf-481c-bdf3-8bcc40085a58",
+    "uuid": "318c4902-1484-4981-8bbe-9323e44dbe0d",
     "id": "8",
     "pageId": "2",
     "dhikrLength": "3",
@@ -234,7 +234,7 @@ export const IstighfarDhikrs: Dhikr[] =
   },
   {
     "category": "Istighfar",
-    "uuid": "b1a51020-9e2b-4627-984e-8c0354f2d885",
+    "uuid": "e57e1b81-900d-4e8f-afef-c15d70df43c9",
     "id": "8",
     "pageId": "3",
     "dhikrLength": "3",

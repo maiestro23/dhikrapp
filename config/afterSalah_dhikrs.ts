@@ -4,27 +4,27 @@ export const AfterSalahDhikrs: Dhikr[] =
 [
   {
     "category": "After Salah",
-    "uuid": "4ef372f9-d1eb-4ad9-91f1-f4391d25dec5",
+    "uuid": "0d31dd56-9475-49d4-83bf-49688bdab5fe",
     "id": "1",
     "pageId": "1",
     "dhikrLength": "4",
     "transliteration": "Astaghfirullah (x3)",
-    "arabicText": "أَسْتَغْفِرُ اللهُ ٣×",
+    "arabicText": "أَسْتَغْفِرُ اللَّهَ ٣×",
     "translation": "I seek forgiveness from Allah (x3)"
   },
   {
     "category": "After Salah",
-    "uuid": "631b307a-f385-4c41-8fde-97f801e17562",
+    "uuid": "34f74e99-e75c-4b64-b770-6be6208354d0",
     "id": "1",
     "pageId": "2",
     "dhikrLength": "4",
     "transliteration": "Allahumma anta salam",
-    "arabicText": "اَللّٰهُمَّ أَنْتَ السَّلَامُ",
+    "arabicText": "اَللَّهُمَّ أَنْتَ السَّلَامُ",
     "translation": "O Allah, You are The Flawless and The Source of Peace"
   },
   {
     "category": "After Salah",
-    "uuid": "2588c4a8-cd3f-473f-9944-0d784899c71c",
+    "uuid": "1ea40b02-3aba-4d0f-9e18-38b171e3cf65",
     "id": "1",
     "pageId": "3",
     "dhikrLength": "4",
@@ -34,7 +34,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "3ae99a0f-9fa9-412a-ad21-713ff4da01c5",
+    "uuid": "b5eae292-8b03-4af3-aced-6914ca54e5a8",
     "id": "1",
     "pageId": "4",
     "dhikrLength": "4",
@@ -44,19 +44,19 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "843ff4e7-1fc8-47ee-ae5b-6dac23a45edd",
+    "uuid": "2724b7cf-220b-4351-8117-bd488daba130",
     "id": "2",
-    "pageId": "4",
+    "pageId": "1",
     "dhikrLength": "3",
     "transliteration": "Allahumma la mani'a lima a'tayt",
-    "arabicText": "اَللّٰهُمَّ لَا مَانِعَ لِمَا أَعْطَيْتَ",
+    "arabicText": "اَللَّهُمَّ لَا مَانِعَ لِمَا أَعْطَيْتَ",
     "translation": "O Allah, there is none who can withhold what You give"
   },
   {
     "category": "After Salah",
-    "uuid": "591e8675-b6fc-4b46-8d3a-77954f07f32d",
+    "uuid": "9194c598-0adc-4b94-bacc-70f873f43034",
     "id": "2",
-    "pageId": "5",
+    "pageId": "2",
     "dhikrLength": "3",
     "transliteration": "Wa la mu' tiya lima mana't",
     "arabicText": "وَلَا مُعْطِيَ لِمَا مَنَعْتَ",
@@ -64,9 +64,9 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "a21a8a24-a936-4c06-ab2c-a73e775e0782",
+    "uuid": "3f15325c-c5bc-4acc-8926-eb99b06b5ad6",
     "id": "2",
-    "pageId": "6",
+    "pageId": "3",
     "dhikrLength": "3",
     "transliteration": "Wa la yanfa'u dhal jaddi minkal jadd",
     "arabicText": "وَلَا يَنْفَعُ ذَا الْجَدِّ مِنْكَ الْجَدُّ",
@@ -74,47 +74,47 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "29447db6-bcbf-4774-8c3a-ef91db7895ed",
+    "uuid": "99dbbaeb-1457-49a3-a4a2-42471de57e40",
     "id": "3",
     "pageId": "1",
     "dhikrLength": "6",
     "transliteration": "Subhanallah (x33)",
-    "arabicText": "سُبْحَانَ اللهِ٣٣×",
+    "arabicText": "سُبْحَانَ اللَّهِ ٣٣×",
     "translation": "Glory be to Allah (x33)"
   },
   {
     "category": "After Salah",
-    "uuid": "786e2f01-521b-4ece-b0fa-5b1b0fa1a40e",
+    "uuid": "dadaf0ed-1bb3-46dd-9471-669d6eb48451",
     "id": "3",
     "pageId": "2",
     "dhikrLength": "6",
     "transliteration": "Alhamdulillah (x33)",
-    "arabicText": "اَلْحَمْدُ لِله ٣٣×",
+    "arabicText": "اَلْحَمْدُ لِلَّهِ ٣٣×",
     "translation": "All praise is due to Allah (x33)"
   },
   {
     "category": "After Salah",
-    "uuid": "96fdde61-0efa-471d-bd6e-eef40e94b110",
+    "uuid": "7cc4dfac-4116-452e-bfa2-f853c8a51120",
     "id": "3",
     "pageId": "3",
     "dhikrLength": "6",
     "transliteration": "Allahu akbar (x33)",
-    "arabicText": "اللهُ أَكْبَر ٣٣×",
+    "arabicText": "اللَّهُ أَكْبَر ٣٣×",
     "translation": "Allah is the Greatest (x33)"
   },
   {
     "category": "After Salah",
-    "uuid": "f3455a04-345f-48c1-853a-840bc0482f72",
+    "uuid": "7d2b2e84-5fe3-41e2-91d2-f7c44e83437d",
     "id": "3",
     "pageId": "4",
     "dhikrLength": "6",
     "transliteration": "La ilaha illa Allahu wahdahu la sharika lahu",
-    "arabicText": "لَا إِلٰهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيْكَ لَهُ",
+    "arabicText": "لَا إِلٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيْكَ لَهُ",
     "translation": "There is none worthy of worship besides Allah alone Who has no partner"
   },
   {
     "category": "After Salah",
-    "uuid": "c8175287-39fd-4cd2-8a1a-2d7306163e56",
+    "uuid": "f1713f42-8992-4a6c-b75b-85deb40a6f2d",
     "id": "3",
     "pageId": "5",
     "dhikrLength": "6",
@@ -124,7 +124,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "36b1c567-d590-4850-ae82-ecaa079b6c07",
+    "uuid": "86a5d8e1-4e40-48f1-ab15-705fff854577",
     "id": "3",
     "pageId": "6",
     "dhikrLength": "6",
@@ -134,27 +134,27 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "0d8c061a-4718-4260-ad8c-c9b0693893b5",
+    "uuid": "45f27eaa-ee70-4a41-884e-78a5af455527",
     "id": "4",
     "pageId": "1",
     "dhikrLength": "14",
     "transliteration": "Bismillahi rahmani raheem",
-    "arabicText": "بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ",
+    "arabicText": "بِسْمِ اللَّهِ الرَّحْمٰنِ الرَّحِيمِ",
     "translation": "In the name of Allah, the Most Gracious, the Most Merciful"
   },
   {
     "category": "After Salah",
-    "uuid": "71357d1e-a7c5-41a9-b123-515c98c58e24",
+    "uuid": "1198bf85-267f-41e4-9bdc-d75e10b01fa7",
     "id": "4",
     "pageId": "2",
     "dhikrLength": "14",
     "transliteration": "Allahu la ilaha illa huwa",
-    "arabicText": "اللهُ لَا إِلٰهَ إِلَّا هُوَ",
+    "arabicText": "اللَّهُ لَا إِلٰهَ إِلَّا هُوَ",
     "translation": "Allah - there is no God worthy of worship except Him"
   },
   {
     "category": "After Salah",
-    "uuid": "0185759b-3f9a-4224-a695-2ce4030897d5",
+    "uuid": "8baf03fa-9679-42f4-b998-7a7b88cb5b13",
     "id": "4",
     "pageId": "3",
     "dhikrLength": "14",
@@ -164,7 +164,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "a146542d-4f47-467a-a78f-30f74561f317",
+    "uuid": "40990bc7-ce6d-4945-b594-987505cac6c9",
     "id": "4",
     "pageId": "4",
     "dhikrLength": "14",
@@ -174,7 +174,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "8e6b2baa-eae2-49fe-a795-a438c1aa8106",
+    "uuid": "5c26bbcc-43ad-43a4-bc58-9c96ab1e5402",
     "id": "4",
     "pageId": "5",
     "dhikrLength": "14",
@@ -184,7 +184,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "ed79aca3-1538-4990-88cd-ffda0614555e",
+    "uuid": "c1e7e3f6-7fd3-4627-8276-e3974680b016",
     "id": "4",
     "pageId": "6",
     "dhikrLength": "14",
@@ -194,7 +194,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "ad1b1d40-f51d-4c4f-9577-6dff761550ad",
+    "uuid": "b0413ed9-c90c-4b23-a600-886751ebde9c",
     "id": "4",
     "pageId": "7",
     "dhikrLength": "14",
@@ -204,7 +204,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "96dd2c4f-18f5-4342-926b-728474fc055c",
+    "uuid": "e272ea70-994c-42d7-bbb4-e6d7bed5db74",
     "id": "4",
     "pageId": "8",
     "dhikrLength": "14",
@@ -214,7 +214,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "b3054f6e-19be-42fc-946b-d1fbf73fa1c8",
+    "uuid": "afa51712-2f6d-41e9-8a57-d9bce54bf985",
     "id": "4",
     "pageId": "9",
     "dhikrLength": "14",
@@ -224,7 +224,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "8feab064-17c8-456b-bbd3-7c2d3b060ed0",
+    "uuid": "2eacab0a-3511-4f45-a211-b09d22269ddf",
     "id": "4",
     "pageId": "10",
     "dhikrLength": "14",
@@ -234,7 +234,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "c5e9135a-c0bb-427e-8f29-d70da7fd33a4",
+    "uuid": "b8f094c4-bdd8-454d-b9b9-3cce8c660c52",
     "id": "4",
     "pageId": "11",
     "dhikrLength": "14",
@@ -244,7 +244,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "8d5da60d-bca4-436a-956f-077568406785",
+    "uuid": "15090b57-00f6-4112-8dc8-d99bf1f17dec",
     "id": "4",
     "pageId": "12",
     "dhikrLength": "14",
@@ -254,7 +254,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "2b2cf89c-01ac-4413-9718-40888551379d",
+    "uuid": "19e9ccb9-18e3-4f4c-b8a6-355588e9660a",
     "id": "4",
     "pageId": "13",
     "dhikrLength": "14",
@@ -264,7 +264,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "db7b10f0-c546-4093-a90f-67f9168f2616",
+    "uuid": "2cf146b3-a756-4519-b4ce-391fa4e044dd",
     "id": "4",
     "pageId": "14",
     "dhikrLength": "14",

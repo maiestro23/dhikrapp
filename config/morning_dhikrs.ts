@@ -4,37 +4,37 @@ export const MorningDhikrs: Dhikr[] =
 [
   {
     "category": "Morning Adhkar",
-    "uuid": "695b3c6f-f5d5-47d3-b3b9-b4c4407cc044",
+    "uuid": "9e067e3a-98fd-4e2d-a99b-497bde95fd46",
     "id": "1",
     "pageId": "1",
     "dhikrLength": "5",
     "transliteration": "Bismillahi rahmani raheem",
-    "arabicText": "بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ",
+    "arabicText": "بِسْمِ اللَّهِ الرَّحْمٰنِ الرَّحِيمِ",
     "translation": "In the name of Allah, the Most Gracious, the Most Merciful"
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "97293420-ee50-4d6c-8933-cc34dbbf8454",
+    "uuid": "a341d3a6-0542-4674-817f-dd1ab1a1cb34",
     "id": "1",
     "pageId": "2",
     "dhikrLength": "5",
     "transliteration": "Qul huwa Allahu ahad",
-    "arabicText": "قُلْ هُوَ اللهُ أَحَدٌ",
+    "arabicText": "قُلْ هُوَ اللَّهُ أَحَدٌ",
     "translation": "Say, He is Allah, [who is] One"
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "473936d1-48d9-4c08-9cab-0faf619e89bb",
+    "uuid": "47d87d31-70c7-419e-95b9-b9949544c478",
     "id": "1",
     "pageId": "3",
     "dhikrLength": "5",
     "transliteration": "Allahu samad",
-    "arabicText": "اللهُ الصَّمَدُ",
+    "arabicText": "اللَّهُ الصَّمَدُ",
     "translation": "Allah, the Eternal Refuge"
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "263089cb-8e59-4abb-80a7-bec809d5d456",
+    "uuid": "f30f9133-2010-499f-bf5a-157f9f859422",
     "id": "1",
     "pageId": "4",
     "dhikrLength": "5",
@@ -44,7 +44,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "9b3c5fb1-86f3-4aa1-aaf9-0406f421909c",
+    "uuid": "b8d11bd9-e79a-4fc5-9551-1e4909875bc7",
     "id": "1",
     "pageId": "5",
     "dhikrLength": "5",
@@ -54,17 +54,17 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "6083b961-fce7-4399-848c-a2c34b1d9dd0",
+    "uuid": "2a6de4cf-97b1-4d1f-9e1c-463eb4ca3210",
     "id": "2",
     "pageId": "1",
     "dhikrLength": "6",
     "transliteration": "Bismillahi rahmani raheem",
-    "arabicText": "بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ",
+    "arabicText": "بِسْمِ اللَّهِ الرَّحْمٰنِ الرَّحِيمِ",
     "translation": "In the name of Allah, the Most Gracious, the Most Merciful"
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "635d15f3-b8fe-408f-ad64-b7e0928aebe0",
+    "uuid": "1d6828d9-1a05-4b3f-b363-99098edb1365",
     "id": "2",
     "pageId": "2",
     "dhikrLength": "6",
@@ -74,7 +74,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "03f2fbcc-8719-4d2d-a44f-be5572460c4d",
+    "uuid": "3a58b9a6-76a1-43b3-a6c6-9946615a1f79",
     "id": "2",
     "pageId": "3",
     "dhikrLength": "6",
@@ -84,7 +84,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "5fe133af-dd17-42aa-a66a-04aa815e6e0d",
+    "uuid": "e48c215a-aa9d-4741-b4e2-741c06ad74ea",
     "id": "2",
     "pageId": "4",
     "dhikrLength": "6",
@@ -94,7 +94,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "2d7f8314-06f2-4a91-a2d6-941e41e9682e",
+    "uuid": "1dfeb5ea-8558-4638-ac43-f7ae135c8aa2",
     "id": "2",
     "pageId": "5",
     "dhikrLength": "6",
@@ -104,7 +104,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "afd2b061-1cb7-4b8c-a060-1c34d912cddb",
+    "uuid": "e31e847c-5a83-4740-bd39-b4161b80f887",
     "id": "2",
     "pageId": "6",
     "dhikrLength": "6",
@@ -114,17 +114,17 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "4c4699a8-9a94-44ef-97ac-d406c4dbae48",
+    "uuid": "1910a8a7-aa9c-4f25-be22-5af4b15c141a",
     "id": "3",
     "pageId": "1",
     "dhikrLength": "7",
     "transliteration": "Bismillahi rahmani raheem",
-    "arabicText": "بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ",
+    "arabicText": "بِسْمِ اللَّهِ الرَّحْمٰنِ الرَّحِيمِ",
     "translation": "In the name of Allah, the Most Gracious, the Most Merciful"
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "37370f53-2cce-41e5-b9d6-94b85755d076",
+    "uuid": "c74843b0-fdf0-492b-aa04-e62512b9bee4",
     "id": "3",
     "pageId": "2",
     "dhikrLength": "7",
@@ -134,7 +134,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "ed8b1a5e-a6e9-475f-a5d6-a5b683d0968d",
+    "uuid": "43a039e0-9b98-419c-956b-5b5eb6e8904c",
     "id": "3",
     "pageId": "3",
     "dhikrLength": "7",
@@ -144,7 +144,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "5e2a6696-ddaa-4780-9358-114301300d24",
+    "uuid": "dd20c6e7-1039-4ba1-ac80-4e47bfc191be",
     "id": "3",
     "pageId": "4",
     "dhikrLength": "7",
@@ -154,7 +154,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "1167c598-b393-48ac-9a73-ab7bc983822f",
+    "uuid": "e2b5ebd5-b00d-473e-8c70-6534b1031b54",
     "id": "3",
     "pageId": "5",
     "dhikrLength": "7",
@@ -164,7 +164,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "2c3a0c55-4d2c-4a85-ad1b-66e02b4aca5f",
+    "uuid": "2f72a93f-071f-4aea-8f8f-3f707d476e7c",
     "id": "3",
     "pageId": "6",
     "dhikrLength": "7",
@@ -174,7 +174,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "bf8dd72a-b09f-42c9-b3a5-84e5c7731a7b",
+    "uuid": "8af6f139-bfed-4a81-9744-3330177934bb",
     "id": "3",
     "pageId": "7",
     "dhikrLength": "7",
@@ -184,37 +184,37 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "1e13e4bd-0ed0-430f-9894-b39ecb925877",
+    "uuid": "9b1b2617-a726-470c-85af-05d731f6bac2",
     "id": "4",
     "pageId": "1",
     "dhikrLength": "13",
     "transliteration": "Asbahna wa asbahal mulku lillah",
-    "arabicText": "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلّٰهِ",
+    "arabicText": "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ",
     "translation": "We have entered a new day and with it the whole kingdom belongs to Allah"
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "cba55880-394d-4030-b05d-a0628ab06e1d",
+    "uuid": "9bdb5acb-aefd-4edc-a1f9-b6e5131e5a4e",
     "id": "4",
     "pageId": "2",
     "dhikrLength": "13",
     "transliteration": "Walhamdu lillah",
-    "arabicText": "وَالْحَمْدُ لِلّٰهِ",
+    "arabicText": "وَالْحَمْدُ لِلَّهِ",
     "translation": "All praise is due to Allah"
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "c1b33938-2d79-4408-abd6-cc18f9a7fd1f",
+    "uuid": "bf1af6c9-b602-4472-8fb3-4c30a8e7e448",
     "id": "4",
     "pageId": "3",
     "dhikrLength": "13",
     "transliteration": "La ilaha illa Allahu wahdahu la sharika lahu",
-    "arabicText": "لَا إِلٰهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيْكَ لَهُ",
+    "arabicText": "لَا إِلٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيْكَ لَهُ",
     "translation": "There is none worthy of worship besides Allah alone Who has no partner"
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "61f88c67-5659-4185-991f-ad0fd7e3d6f8",
+    "uuid": "fb1a9351-c392-4f82-9587-ba2d1bf97727",
     "id": "4",
     "pageId": "4",
     "dhikrLength": "13",
@@ -224,7 +224,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "6df8021e-0974-4e79-a9cc-5e8e2e38201d",
+    "uuid": "630fb6b8-4661-4ff8-9a54-10fde5869d87",
     "id": "4",
     "pageId": "5",
     "dhikrLength": "13",
@@ -234,7 +234,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "5724f07c-d5e8-44f0-94c9-be5ce47f8074",
+    "uuid": "096e8882-287d-48e4-936f-deea91a4bdfd",
     "id": "4",
     "pageId": "6",
     "dhikrLength": "13",
@@ -244,7 +244,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "93491915-3ce8-493d-b612-a349dd54af5b",
+    "uuid": "049d4308-49e6-428d-aeec-64431bfa7713",
     "id": "4",
     "pageId": "7",
     "dhikrLength": "13",
@@ -254,7 +254,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "18e405dd-1af8-4851-865c-fc2de7b78db3",
+    "uuid": "e79ac8e3-4407-413d-8852-30d76f25bfff",
     "id": "4",
     "pageId": "8",
     "dhikrLength": "13",
@@ -264,7 +264,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "907b0f0a-2abe-48d9-9bb9-813e3fae447e",
+    "uuid": "4b6ca462-c430-42b4-9152-3aa0d9672526",
     "id": "4",
     "pageId": "9",
     "dhikrLength": "13",
@@ -274,7 +274,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "ab3a7534-58c3-411a-b4ef-8ebd6763f215",
+    "uuid": "091632af-358f-42c7-9ed9-d15e3c5b45d4",
     "id": "4",
     "pageId": "10",
     "dhikrLength": "13",
@@ -284,7 +284,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "07780364-37f9-4da0-bf43-4901bd7a9b30",
+    "uuid": "c8ad337e-4628-4d17-8da3-377ed48d4605",
     "id": "4",
     "pageId": "11",
     "dhikrLength": "13",
@@ -294,7 +294,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "0bf4e8fc-8b33-4e5f-83ac-e26f63dfbb0b",
+    "uuid": "09fe9cbe-535c-4d1d-b748-5e723ec67b3f",
     "id": "4",
     "pageId": "12",
     "dhikrLength": "13",
@@ -304,7 +304,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "77b37f1d-f823-4960-8a26-f77ebac76e5b",
+    "uuid": "633714a5-580e-4889-a2cc-583429b712b8",
     "id": "4",
     "pageId": "13",
     "dhikrLength": "13",
@@ -314,17 +314,17 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "f36037bd-b823-4be8-ba15-652f7d2970f2",
+    "uuid": "e74bfd41-1200-4fb1-b7fe-020d3233c544",
     "id": "5",
     "pageId": "1",
     "dhikrLength": "5",
     "transliteration": "Allahumma bika asbahna",
-    "arabicText": "اَللّٰهُمَّ بِكَ أَصْبَحْنَا",
+    "arabicText": "اَللَّهُمَّ بِكَ أَصْبَحْنَا",
     "translation": "O Allah, You bring us the beginning of the day"
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "690e5e4b-daab-4c63-9d53-662362062633",
+    "uuid": "2146407d-aebb-448e-82cb-fca22ab1a199",
     "id": "5",
     "pageId": "2",
     "dhikrLength": "5",
@@ -334,7 +334,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "a760777c-82b7-42b1-9342-78dfd5c58908",
+    "uuid": "f75779a8-05b8-4496-9efc-96b90caee6da",
     "id": "5",
     "pageId": "3",
     "dhikrLength": "5",
@@ -344,7 +344,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "60b32e77-1129-4157-9306-f07b22e38a87",
+    "uuid": "f8f6fecc-e2e8-4d7e-bc08-73c6fb8c79d8",
     "id": "5",
     "pageId": "4",
     "dhikrLength": "5",
@@ -354,7 +354,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "3d311a69-accd-4eb8-a56d-cb14581d3534",
+    "uuid": "bae0671e-4e19-4f5d-a209-c3054818c4fd",
     "id": "5",
     "pageId": "5",
     "dhikrLength": "5",
@@ -364,17 +364,17 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "41b43633-0535-47ba-bb03-59ebee6c27f3",
+    "uuid": "acb83e39-03c7-498c-a21f-53e726aed458",
     "id": "6",
     "pageId": "1",
     "dhikrLength": "9",
     "transliteration": "Allahumma anta rabbi",
-    "arabicText": "اَللّٰهُمَّ أَنْتَ رَبِّيْ",
+    "arabicText": "اَللَّهُمَّ أَنْتَ رَبِّيْ",
     "translation": "O Allah, You are my Lord"
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "86cc544a-db12-40be-a32d-a6c805460795",
+    "uuid": "eee203c9-d881-412a-bd75-e11bd148f100",
     "id": "6",
     "pageId": "2",
     "dhikrLength": "9",
@@ -384,7 +384,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "52070349-ea31-4fc8-bfa4-792ce8c00225",
+    "uuid": "a0cdeefa-8a1d-492f-ac05-d8f61f97c6e1",
     "id": "6",
     "pageId": "3",
     "dhikrLength": "9",
@@ -394,7 +394,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "014377a7-59ca-40fd-b74f-0bdb3b14bbe8",
+    "uuid": "785b6e78-2780-4213-ad1e-6195efb52984",
     "id": "6",
     "pageId": "4",
     "dhikrLength": "9",
@@ -404,7 +404,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "df374709-fca1-4c7d-a0bb-bb62853a9082",
+    "uuid": "6097bbb9-4696-436f-a7fb-f03abdbaf02f",
     "id": "6",
     "pageId": "5",
     "dhikrLength": "9",
@@ -414,7 +414,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "57b5c381-f1cf-448e-985d-9f1f309a0163",
+    "uuid": "3810c4d1-55ae-44c1-a7e9-2e19ac8792ac",
     "id": "6",
     "pageId": "6",
     "dhikrLength": "9",
@@ -424,7 +424,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "126f405d-b890-4ee8-85c9-8cdce655ba08",
+    "uuid": "a22e27af-6db9-4ad0-b276-ac7e794f2474",
     "id": "6",
     "pageId": "7",
     "dhikrLength": "9",
@@ -434,7 +434,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "b57362be-b530-4931-b4a8-05f95e5ec079",
+    "uuid": "b0199f3f-f8cf-47d0-868f-bc0ade9e83d9",
     "id": "6",
     "pageId": "8",
     "dhikrLength": "9",
@@ -444,7 +444,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "331df67f-dec0-4026-906e-7f6bf5ff6760",
+    "uuid": "a909fae3-4629-4ff4-bf05-7aee8615ff53",
     "id": "6",
     "pageId": "9",
     "dhikrLength": "9",
@@ -454,17 +454,17 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "a187f536-50e2-4951-8eda-8abf8fdd59d1",
+    "uuid": "a89ecf05-2617-48d5-99f7-df1ec7942e8f",
     "id": "7",
     "pageId": "1",
     "dhikrLength": "14",
     "transliteration": "Allahumma inni as alukal 'afwa",
-    "arabicText": "اَللّٰهُمَّ إِنِّيْ أَسْأَلُكَ الْعَفْوَ",
+    "arabicText": "اَللَّهُمَّ إِنِّيْ أَسْأَلُكَ الْعَفْوَ",
     "translation": "O Allah, I ask You for forgiveness"
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "692615ef-81d7-49d0-b2d9-d9b0ea2cb2fe",
+    "uuid": "41211817-16ba-46bd-b221-89a8360548a9",
     "id": "7",
     "pageId": "2",
     "dhikrLength": "14",
@@ -474,17 +474,17 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "621aadf4-012c-4fc6-b537-fd196cbbc4df",
+    "uuid": "02d63b7b-98b3-459b-b5bb-75a8b53ec4ce",
     "id": "7",
     "pageId": "3",
     "dhikrLength": "14",
     "transliteration": "Allahumma inni as alukal 'afwa",
-    "arabicText": "اَللّٰهُمَّ إِنِّيْ أَسْأَلُكَ الْعَفْوَ",
+    "arabicText": "اَللَّهُمَّ إِنِّيْ أَسْأَلُكَ الْعَفْوَ",
     "translation": "O Allah, I ask You for forgiveness"
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "e3ffb69f-3f99-4dfb-834f-5814942435e8",
+    "uuid": "109737a8-87ec-4efa-9f86-3a7360a568e6",
     "id": "7",
     "pageId": "4",
     "dhikrLength": "14",
@@ -494,7 +494,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "e1bb3802-bf3f-4694-9eac-dd1579911741",
+    "uuid": "e85b876f-5e46-44d0-bf9f-26dc29d3d977",
     "id": "7",
     "pageId": "5",
     "dhikrLength": "14",
@@ -504,17 +504,17 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "b972d0d3-679b-4523-ab3b-50c76875f5e1",
+    "uuid": "613a360d-91fe-4d77-87a0-193c728178bb",
     "id": "7",
     "pageId": "6",
     "dhikrLength": "14",
     "transliteration": "Allahumma stur 'awrati",
-    "arabicText": "اَللّٰهُمَّ اسْتُرْ عَوْرَاتِيْ",
+    "arabicText": "اَللَّهُمَّ اسْتُرْ عَوْرَاتِيْ",
     "translation": "O Allah, conceal my faults"
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "77e958c0-4e06-45b6-a4a9-ac5818df93dd",
+    "uuid": "c05f2c0f-8cdc-41a7-a3ba-bb7ee1943d62",
     "id": "7",
     "pageId": "7",
     "dhikrLength": "14",
@@ -524,17 +524,17 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "8177d076-fd76-4c3a-a876-6e4c75d9d7f3",
+    "uuid": "01c9cffa-bf69-4335-b4ec-563c72456c14",
     "id": "7",
     "pageId": "8",
     "dhikrLength": "14",
     "transliteration": "Allahummah fadhni mim bayni yadayya",
-    "arabicText": "اَللّٰهُمَّ احْفَظْنِيْ مِنْ بَيْنِ يَدَيَّ",
+    "arabicText": "اَللَّهُمَّ احْفَظْنِيْ مِنْ بَيْنِ يَدَيَّ",
     "translation": "O Allah, guard me from in front of me"
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "a1f05737-8258-496c-9670-7d9c0c979f86",
+    "uuid": "26b0a6c2-d2f3-4585-8258-45105e074649",
     "id": "7",
     "pageId": "9",
     "dhikrLength": "14",
@@ -544,7 +544,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "e2888d12-f98c-4cf1-8fe2-f479bb2b797e",
+    "uuid": "ef49ff4a-b34f-4422-9a36-825c9bc5c5b6",
     "id": "7",
     "pageId": "10",
     "dhikrLength": "14",
@@ -554,7 +554,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "ad64f10f-5d22-4fd7-976a-b3d140215ded",
+    "uuid": "8d2a3ba4-3527-4780-a12f-6cab417189f5",
     "id": "7",
     "pageId": "11",
     "dhikrLength": "14",
@@ -564,7 +564,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "9c1cb431-04c8-421c-a654-24c209c7130d",
+    "uuid": "4ee1265e-2b17-4f0b-a8c6-ae50ac99a3a4",
     "id": "7",
     "pageId": "12",
     "dhikrLength": "14",
@@ -574,7 +574,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "e5fb5385-989a-47fe-8331-9608ffe070c5",
+    "uuid": "4fe8671e-e8fe-4309-8133-da3928d9e99b",
     "id": "7",
     "pageId": "13",
     "dhikrLength": "14",
@@ -584,7 +584,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "d4af07b5-704e-4572-8c4a-c3b8f3873c4e",
+    "uuid": "db9afa1f-0d0c-4ec6-accc-a75b6c30e929",
     "id": "7",
     "pageId": "14",
     "dhikrLength": "14",
@@ -594,17 +594,17 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "cc16a4ff-3c0f-4b01-b513-3a6c1ea42947",
+    "uuid": "fbf1b195-a3d4-4c5c-9fad-6ecbb82622ea",
     "id": "8",
     "pageId": "1",
     "dhikrLength": "4",
     "transliteration": "Hasbi Allahu",
-    "arabicText": "حَسْبِيَ اللهُ",
+    "arabicText": "حَسْبِيَ اللَّهُ",
     "translation": "Allah is sufficient for me"
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "c6e613ea-1519-4080-be05-395ba486d7fd",
+    "uuid": "85f33525-99ae-478c-a812-208c9b6ef409",
     "id": "8",
     "pageId": "2",
     "dhikrLength": "4",
@@ -614,7 +614,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "aa5219b0-8538-42e4-9e60-104b8e3b94e4",
+    "uuid": "6c5c0d00-f1a7-45c4-9b67-b60483c192df",
     "id": "8",
     "pageId": "3",
     "dhikrLength": "4",
@@ -624,7 +624,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "f5434311-daeb-44d5-ad50-0197d16c3871",
+    "uuid": "6c1fa1e7-cdfd-4804-a73f-bbbf9077c15a",
     "id": "8",
     "pageId": "4",
     "dhikrLength": "4",
@@ -634,7 +634,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "bf5e97c8-8d19-4b08-921f-e6487d55036f",
+    "uuid": "6a9a445f-c8f4-43e4-ab0c-384e8aa67f2a",
     "id": "9",
     "pageId": "1",
     "dhikrLength": "5",
@@ -644,7 +644,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "bf2458e3-d4e7-4b27-b4ad-5a97d255eacb",
+    "uuid": "c1e329f3-dfde-481f-ba6c-d81f0d0d2d64",
     "id": "9",
     "pageId": "2",
     "dhikrLength": "5",
@@ -654,7 +654,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "a3bd03e7-9cbb-4983-8654-e7d5ebb75bc4",
+    "uuid": "8c02d78a-819c-4726-bd8a-6007a4c7a41e",
     "id": "9",
     "pageId": "3",
     "dhikrLength": "5",
@@ -664,7 +664,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "9385d706-b4e9-4a6f-bfdb-57a60fef9143",
+    "uuid": "8e4048d1-c9a6-4796-89e4-d6799bd72531",
     "id": "9",
     "pageId": "4",
     "dhikrLength": "5",
@@ -674,7 +674,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "7cc71ef8-9ca3-4381-b9fa-40eb8f2acfe4",
+    "uuid": "ad676aca-3b49-4adc-a0b2-b11c2a377be1",
     "id": "9",
     "pageId": "5",
     "dhikrLength": "5",
@@ -684,17 +684,17 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "f8b63f2f-1ea1-4a07-bdd7-0b43d0774120",
+    "uuid": "e3aea441-c698-4771-8166-5f6c377cf1a3",
     "id": "10",
     "pageId": "1",
     "dhikrLength": "4",
     "transliteration": "Bismillahi lladhi la yadurru",
-    "arabicText": "بِسْمِ اللهِ الَّذِيْ لَا يَضُرُّ",
+    "arabicText": "بِسْمِ اللَّهِ الَّذِيْ لَا يَضُرُّ",
     "translation": "In the Name of Allah, with whose Name nothing can harm"
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "c1f20128-8a80-4370-bda4-c6dd5e9b3377",
+    "uuid": "e56471d5-0a5d-45bb-ba68-9e17db946ea2",
     "id": "10",
     "pageId": "2",
     "dhikrLength": "4",
@@ -704,17 +704,17 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "aa5247f7-296a-4f65-b445-5e6c9750c4e4",
+    "uuid": "c7e47bf2-7bb4-448b-8500-9418a4a7d78f",
     "id": "10",
     "pageId": "3",
     "dhikrLength": "4",
-    "transliteration": "Wa la fi sama'i",
+    "transliteration": "Wa la fi sama-ee",
     "arabicText": "وَلَا فِي السَّمَاءِ",
     "translation": "nor in the sky"
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "ccc0b0fa-77fd-42df-ade5-fe09560f02e2",
+    "uuid": "d4eb2244-fabf-4468-bfdf-a290fa6b4898",
     "id": "10",
     "pageId": "4",
     "dhikrLength": "4",
@@ -724,17 +724,17 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "4339718c-3c7e-4adc-9c6d-9f03e6189432",
+    "uuid": "1cebec15-c57a-4c28-8e1c-7878bb13b1e5",
     "id": "11",
     "pageId": "1",
     "dhikrLength": "2",
-    "transliteration": "Astaghfirullaha",
-    "arabicText": "أَسْتَغْفِرُ اللهَ",
+    "transliteration": "Astaghfirullah",
+    "arabicText": "أَسْتَغْفِرُ اللَّهَ",
     "translation": "I seek forgiveness from Allah"
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "0d7ba774-11f4-4f15-8161-3e17bdeea9c9",
+    "uuid": "087148d4-127b-4b95-ba1c-5bca866970b9",
     "id": "11",
     "pageId": "2",
     "dhikrLength": "2",
@@ -744,37 +744,37 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "b442f432-2b08-45c8-8f9b-7d6b9235ff03",
+    "uuid": "17ae7f81-bbe1-46f2-a490-0b21ceb40461",
     "id": "12",
     "pageId": "1",
     "dhikrLength": "1",
     "transliteration": "Subhanallahi wa bi hamdih",
-    "arabicText": "سُبْحَانَ اللهِ وَبِحَمْدِهِ",
+    "arabicText": "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",
     "translation": "Allah is free from imperfection and all praise is due to Him"
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "ec2af140-0556-4ee0-b83e-1c537aba9904",
+    "uuid": "6ee23b3e-66f2-458f-bd88-1258d7a381cc",
     "id": "13",
     "pageId": "1",
     "dhikrLength": "14",
     "transliteration": "Bismillahi rahmani raheem",
-    "arabicText": "بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ",
+    "arabicText": "بِسْمِ اللَّهِ الرَّحْمٰنِ الرَّحِيمِ",
     "translation": "In the name of Allah, the Most Gracious, the Most Merciful"
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "70cbc30e-12de-4b81-8bf3-c45ebc75ce30",
+    "uuid": "456c89d9-de0e-4d86-aa2e-fdf04d5418f7",
     "id": "13",
     "pageId": "2",
     "dhikrLength": "14",
     "transliteration": "Allahu la ilaha illa huwa",
-    "arabicText": "اللهُ لَا إِلٰهَ إِلَّا هُوَ",
+    "arabicText": "اللَّهُ لَا إِلٰهَ إِلَّا هُوَ",
     "translation": "Allah - there is no God worthy of worship except Him"
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "29ae2f29-eb78-4e2d-99e0-370171d82bc7",
+    "uuid": "7a493b3f-5f52-4085-a6c6-9332df9bf867",
     "id": "13",
     "pageId": "3",
     "dhikrLength": "14",
@@ -784,7 +784,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "e2d3fad2-8c9d-4bba-baa6-f05a35131a6d",
+    "uuid": "7b165c9d-ebbd-4566-b068-dbce6cdae761",
     "id": "13",
     "pageId": "4",
     "dhikrLength": "14",
@@ -794,7 +794,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "f8d530a9-024b-4394-a8ca-7d622b4c0f6e",
+    "uuid": "6d89958a-5f52-46ee-b025-6fbbb61e56f9",
     "id": "13",
     "pageId": "5",
     "dhikrLength": "14",
@@ -804,7 +804,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "b8faea45-cb10-4f1d-a29c-c6bf6b9330dd",
+    "uuid": "be7e4185-dd6a-4265-b3dd-a152cd8f031b",
     "id": "13",
     "pageId": "6",
     "dhikrLength": "14",
@@ -814,7 +814,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "33113104-c185-4622-b26b-0d55182dbaf4",
+    "uuid": "bbee906f-f54c-428a-b466-83c75c91a0fd",
     "id": "13",
     "pageId": "7",
     "dhikrLength": "14",
@@ -824,7 +824,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "54a4ea8e-a84b-48ac-a1e4-2c8c9f0c53a4",
+    "uuid": "ef7d43e8-dcea-4392-b079-5aab9974e579",
     "id": "13",
     "pageId": "8",
     "dhikrLength": "14",
@@ -834,7 +834,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "cec6062f-5fe4-4b58-99d9-a1a346ae1f45",
+    "uuid": "cb3fd968-94a8-4943-ab7f-e3a4df5825ac",
     "id": "13",
     "pageId": "9",
     "dhikrLength": "14",
@@ -844,7 +844,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "2377cf51-587b-4a26-b013-2bdd36a56047",
+    "uuid": "5b347636-6f8f-4cfa-b459-5a9f0a48ad28",
     "id": "13",
     "pageId": "10",
     "dhikrLength": "14",
@@ -854,7 +854,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "cfafabbe-75ef-4cfc-8160-8447dac8cafd",
+    "uuid": "fe567961-264c-404c-9eb5-b698f83c285b",
     "id": "13",
     "pageId": "11",
     "dhikrLength": "14",
@@ -864,7 +864,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "3d17ac9c-8472-4ca5-bcdb-5922d8a9ed6b",
+    "uuid": "b405aad9-9950-4ab1-9be1-69821eba94ab",
     "id": "13",
     "pageId": "12",
     "dhikrLength": "14",
@@ -874,7 +874,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "450b495d-2e32-4ca2-92ab-93c20309a7d0",
+    "uuid": "51280622-cd5c-41f2-abca-45047e8a51bb",
     "id": "13",
     "pageId": "13",
     "dhikrLength": "14",
@@ -884,7 +884,7 @@ export const MorningDhikrs: Dhikr[] =
   },
   {
     "category": "Morning Adhkar",
-    "uuid": "64692803-312a-4f4f-8d93-a2e9ff2d7916",
+    "uuid": "2e800e9b-f3c4-4b6d-a6eb-d681627deb7f",
     "id": "13",
     "pageId": "14",
     "dhikrLength": "14",
