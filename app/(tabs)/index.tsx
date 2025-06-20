@@ -57,6 +57,9 @@ export default function DhikrScreen() {
   // Compteur simple pour détecter les tours complets
   const [pagesVisitedInCurrentTour, setPagesVisitedInCurrentTour] = useState(0);
   const [tourCompletionCount, setTourCompletionCount] = useState(0);
+  
+  // Nouveau state pour tracker si la popup a déjà été montrée pour cette catégorie
+  const [categoryPopupShown, setCategoryPopupShown] = useState(false);
 
   useEffect(() => {
     start();
@@ -77,6 +80,8 @@ export default function DhikrScreen() {
       // Réinitialiser les compteurs quand on change de catégorie
       setPagesVisitedInCurrentTour(0);
       setTourCompletionCount(0);
+      // Réinitialiser le flag de popup pour la nouvelle catégorie
+      setCategoryPopupShown(false);
     }
   }, [dhikrs]);
 
@@ -95,6 +100,12 @@ export default function DhikrScreen() {
   
   // Fonction pour vérifier si la catégorie est complète
   const showCategoryCompletePopup = useCallback(() => {
+    // Vérifier si la popup a déjà été montrée pour cette catégorie
+    if (categoryPopupShown) {
+      console.log('🚫 Category popup already shown, skipping...');
+      return;
+    }
+    
     // Obtenir le nom de la catégorie
     let categoryName = 'General';
     
@@ -106,9 +117,11 @@ export default function DhikrScreen() {
     
     setCompletedCategoryName(categoryName);
     setShowCategoryCompleteModal(true);
+    // Marquer que la popup a été montrée pour cette catégorie
+    setCategoryPopupShown(true);
     
     console.log('🎉 Category Complete popup shown for:', categoryName);
-  }, [dhikrs, categoryUrl]);
+  }, [dhikrs, categoryUrl, categoryPopupShown]);
 
   const handlePageSelected = useCallback((e: any) => {
     const index = e.nativeEvent.position;
@@ -127,18 +140,20 @@ export default function DhikrScreen() {
         const newCount = prev + 1;
         
         console.log(`📄 Page visited: ${realPageIndex + 1}/${dhikrs.length}, Total in tour: ${newCount}`);
-        
-
         console.log(`📄 New count : ${newCount}`);
 
         // Vérifier si on a completé un tour (visité autant de pages que la longueur de la catégorie)
         if (newCount === dhikrs.length) {
-          console.log('🔄 Tour completed! Showing popup...');
+          console.log('🔄 Tour completed! Checking if popup should be shown...');
           
-          // Montrer la popup
-          setTimeout(() => {
-            showCategoryCompletePopup();
-          }, 100);
+          // Montrer la popup seulement si elle n'a pas encore été montrée
+          if (!categoryPopupShown) {
+            setTimeout(() => {
+              showCategoryCompletePopup();
+            }, 100);
+          } else {
+            console.log('🚫 Category popup already shown, skipping...');
+          }
           
           // Incrémenter le compteur de tours et réinitialiser le compteur de pages
           setTourCompletionCount(prevTours => prevTours + 1);
@@ -178,7 +193,7 @@ export default function DhikrScreen() {
         }, 50);
       }, 10);
     }
-  }, [dhikrs.length, incrementCount, isAdjustingPosition, scrollState, showCategoryCompletePopup]);
+  }, [dhikrs.length, incrementCount, isAdjustingPosition, scrollState, showCategoryCompletePopup, categoryPopupShown]);
 
   const handleScrollStateChanged = useCallback((e: any) => {
     const state = e.nativeEvent.pageScrollState;
