@@ -6,7 +6,9 @@ import {
   TouchableOpacity, 
   Modal, 
   Dimensions,
-  Image 
+  Image,
+  Share,
+  Alert
 } from 'react-native';
 
 interface CategoryCompleteModalProps {
@@ -25,6 +27,32 @@ export const CategoryCompleteModal: React.FC<CategoryCompleteModalProps> = ({
   khairisEarned
 }) => {
   const shareIcon = require('../assets/icons/customShareIcon.png');
+  
+  const handleShare = async () => {
+    try {
+      const shareContent = {
+        message: `🎉 I just completed the "${categoryName}" category and earned ${khairisEarned} Khairis! ✨\n\nJoin me in building a daily dhikr habit with this amazing app! 🤲`,
+        title: 'Dhikr App - Category Complete!',
+        url: 'https://apps.apple.com/app/khair-daily-adhkar/id6744126455', // Replace with your actual app store link
+      };
+      
+      const result = await Share.share(shareContent);
+      
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          console.log('Shared via:', result.activityType);
+        } else {
+          console.log('Shared successfully');
+        }
+        // Close modal after successful share
+        onClose();
+      }
+    } catch (error) {
+      console.error('Error sharing:', error);
+      Alert.alert('Error', 'Failed to share. Please try again.');
+    }
+  };
+
   return (
     <Modal
       visible={visible}
@@ -42,10 +70,14 @@ export const CategoryCompleteModal: React.FC<CategoryCompleteModalProps> = ({
           activeOpacity={1}
           onPress={(e) => e.stopPropagation()}
         >
-          {/* Icon circle */}
-          <View style={styles.iconContainer}>
+          {/* Icon circle - Now clickable for sharing */}
+          <TouchableOpacity 
+            style={styles.iconContainer}
+            onPress={handleShare}
+            activeOpacity={0.7}
+          >
             <Image source={shareIcon} style={styles.iconImage} onError={() => console.log('Image failed to load')}/>
-          </View>
+          </TouchableOpacity>
 
           {/* Text content */}
           <View style={styles.textContent}>
