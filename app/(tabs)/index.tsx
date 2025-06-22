@@ -9,8 +9,9 @@ import { useFavoritesStore } from '../../stores/favoritesStore';
 import { useDhikrStore } from '../../stores/dhikrStore';
 import { ScreenBackground } from '../../components/ScreenBackground';
 import { CategoryCompleteModal } from '../../components/CategoryCompleteModal'; // Import du nouveau composant
-import { router, useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import { Dhikr } from '@/config/dhikrs';
+import LoadingScreen from '@/components/LoadingScreen'; // Ajustez le chemin selon votre structure
 
 const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme, positionIndex, categoryLength }: any) => (
   <View style={styles.dhikrCard}>
@@ -60,6 +61,29 @@ export default function DhikrScreen() {
   
   // Nouveau state pour tracker si la popup a déjà été montrée pour cette catégorie
   const [categoryPopupShown, setCategoryPopupShown] = useState(false);
+
+  // États pour le LoadingScreen
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Détection quand l'écran est focalisé (navigation vers cette page)
+  useFocusEffect(
+    useCallback(() => {
+      setIsLoading(true);
+      return () => {
+        // Cleanup quand on quitte l'écran
+        setIsLoading(false);
+      };
+    }, [])
+  );
+
+  const handleLoadingComplete = () => {
+    // L'animation d'entrée est terminée
+  };
+
+  const handleFadeOutComplete = () => {
+    // Le fade out est terminé, on peut masquer le loading
+    setIsLoading(false);
+  };
 
   useEffect(() => {
     start();
@@ -204,6 +228,18 @@ export default function DhikrScreen() {
   const handleCloseModal = useCallback(() => {
     setShowCategoryCompleteModal(false);
   }, []);
+
+  // Afficher le LoadingScreen pendant le chargement
+  if (isLoading) {
+    return (
+      <LoadingScreen 
+        visible={isLoading} 
+        onAnimationComplete={handleLoadingComplete}
+        onFadeOutComplete={handleFadeOutComplete}
+        category={dhikrs[0].category}
+      />
+    );
+  }
 
   if (!dhikrs || dhikrs.length === 0) {
     return (
