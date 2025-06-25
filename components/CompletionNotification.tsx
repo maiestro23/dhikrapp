@@ -20,7 +20,7 @@ export const CompletionNotification: React.FC<CompletionNotificationProps> = ({
     onClose,
     title = "Category Complete!",
     subtitle = "+25 Khairis earned ✨",
-    duration = 5000,
+    duration = 3000,
     iconBackgroundColor = "#7E0F3B",
     categoryName = 'General',
     khairisAmount = 15
@@ -28,7 +28,7 @@ export const CompletionNotification: React.FC<CompletionNotificationProps> = ({
 }) => {
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const slideAnim = useRef(new Animated.Value(-50)).current;
-    const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const timerRef = useRef<number | null>(null);
     const shareIcon = require('../assets/icons/customShareIcon.png');
 
     const closeNotification = () => {
@@ -179,9 +179,6 @@ const styles = StyleSheet.create({
         marginRight: 22,
     },
     iconImage: {
-        //width: 24,
-        //height: 24,
-        //tintColor: '#FFFFFF',
     },
     textContent: {
         flex: 1,
