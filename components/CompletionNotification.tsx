@@ -20,7 +20,7 @@ export const CompletionNotification: React.FC<CompletionNotificationProps> = ({
     onClose,
     title = "Category Complete!",
     subtitle = "+25 Khairis earned ✨",
-    duration = 3000,
+    duration = 4000,
     iconBackgroundColor = "#7E0F3B",
     categoryName = 'General',
     khairisAmount = 15
@@ -39,12 +39,12 @@ export const CompletionNotification: React.FC<CompletionNotificationProps> = ({
         Animated.parallel([
             Animated.timing(fadeAnim, {
                 toValue: 0,
-                duration: 300,
+                duration: 1000,
                 useNativeDriver: true,
             }),
             Animated.timing(slideAnim, {
                 toValue: -50,
-                duration: 300,
+                duration: 1000,
                 useNativeDriver: true,
             })
         ]).start(() => {
@@ -57,12 +57,12 @@ export const CompletionNotification: React.FC<CompletionNotificationProps> = ({
             Animated.parallel([
                 Animated.timing(fadeAnim, {
                     toValue: 1,
-                    duration: 300,
+                    duration: 1000,
                     useNativeDriver: true,
                 }),
                 Animated.timing(slideAnim, {
                     toValue: 0,
-                    duration: 300,
+                    duration: 1000,
                     useNativeDriver: true,
                 })
             ]).start();
@@ -116,7 +116,7 @@ export const CompletionNotification: React.FC<CompletionNotificationProps> = ({
                     transform: [{ translateY: slideAnim }]
                 }
             ]}
-            // Removed pointerEvents="none" to enable touch interactions
+        // Removed pointerEvents="none" to enable touch interactions
         >
             <View style={styles.modalContainer}>
                 <View style={[styles.iconContainer, { backgroundColor: iconBackgroundColor }]}>
@@ -129,7 +129,7 @@ export const CompletionNotification: React.FC<CompletionNotificationProps> = ({
                     <Text style={styles.title}>{title}</Text>
                     <Text style={styles.subtitle}>{subtitle}</Text>
                 </View>
-                
+
                 <TouchableOpacity
                     style={styles.closeButton}
                     onPress={closeNotification}
@@ -145,7 +145,7 @@ export const CompletionNotification: React.FC<CompletionNotificationProps> = ({
 const styles = StyleSheet.create({
     overlay: {
         position: 'absolute',
-        bottom: 120,
+        bottom: 100,
         left: 20,
         right: 20,
         zIndex: 10,
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     },
     modalContainer: {
         width: width * 0.9,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
         borderRadius: 16,
         paddingVertical: 16,
         paddingHorizontal: 16,

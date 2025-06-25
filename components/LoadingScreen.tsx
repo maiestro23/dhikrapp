@@ -102,17 +102,6 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
                 ]}
             >
                 <Text style={styles.text}>Khair.</Text>
-                <Animated.View
-                    style={[
-                        styles.line,
-                        {
-                            width: lineAnim.interpolate({
-                                inputRange: [0, 1],
-                                outputRange: [0, 200]
-                            })
-                        }
-                    ]}
-                />
             </Animated.View>
 
         </LinearGradient>
