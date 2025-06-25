@@ -35,6 +35,8 @@ const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme, positionInde
   </View>
 );
 
+import { CompletionNotification } from '../../components/CompletionNotification';
+
 export default function DhikrScreen() {
   const { theme } = useTheme();
   const { start, stop } = useTimeTracking();
@@ -47,6 +49,8 @@ export default function DhikrScreen() {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [scrollState, setScrollState] = useState<'idle' | 'dragging' | 'settling'>('idle');
   const [isAdjustingPosition, setIsAdjustingPosition] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+  const [completedCycles, setCompletedCycles] = useState(0);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -65,6 +69,7 @@ export default function DhikrScreen() {
     if (dhikrs && dhikrs.length > 0) {
       setPagerKey(prev => prev + 1);
       setCurrentIndex(1);
+      setCompletedCycles(0);
     }
   }, [dhikrs]);
 
@@ -100,6 +105,12 @@ export default function DhikrScreen() {
       console.log('Triggering immediate adjustment for index:', index);
       setIsAdjustingPosition(true);
 
+      // Détecter le cycle complet et afficher la notification
+      if (index === 0 || index === lastFakeIndex) {
+        setCompletedCycles(prev => prev + 1);
+        setShowNotification(true);
+      }
+
       setTimeout(() => {
         if (pagerRef.current) {
           try {
@@ -125,6 +136,10 @@ export default function DhikrScreen() {
   const handleScrollStateChanged = useCallback((e: any) => {
     const state = e.nativeEvent.pageScrollState;
     setScrollState(state);
+  }, []);
+
+  const handleCloseNotification = useCallback(() => {
+    setShowNotification(false);
   }, []);
 
   if (!dhikrs || dhikrs.length === 0) {
@@ -191,6 +206,11 @@ export default function DhikrScreen() {
           <Text style={styles.categoryText}>{currentCategory}</Text>
         </TouchableOpacity>
 
+        <CompletionNotification 
+          visible={showNotification} 
+          onClose={handleCloseNotification}
+        />
+
         <PagerView
           key={pagerKey}
           ref={pagerRef}
@@ -219,7 +239,7 @@ export default function DhikrScreen() {
   );
 }
 
-// Les styles restent identiques
+// Les styles avec la notification ajoutée
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -326,6 +346,7 @@ const styles = StyleSheet.create({
     color: '#8C8F7B',
     textAlign: 'center',
   },
+
   pageIndicator: {
     fontFamily: 'Sofia-Pro-ExtraLight',
     fontSize: 14,
