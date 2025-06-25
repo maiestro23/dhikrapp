@@ -8,10 +8,8 @@ import { useTimeTracking } from '../../hooks/useTimeTracking';
 import { useFavoritesStore } from '../../stores/favoritesStore';
 import { useDhikrStore } from '../../stores/dhikrStore';
 import { ScreenBackground } from '../../components/ScreenBackground';
-import { CategoryCompleteModal } from '../../components/CategoryCompleteModal'; // Import du nouveau composant
-import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { Dhikr } from '@/config/dhikrs';
-import LoadingScreen from '@/components/LoadingScreen'; // Ajustez le chemin selon votre structure
 
 const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme, positionIndex, categoryLength }: any) => (
   <View style={styles.dhikrCard}>
@@ -51,41 +49,6 @@ export default function DhikrScreen() {
   const [isAdjustingPosition, setIsAdjustingPosition] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // États pour la modal de catégorie complète
-  const [showCategoryCompleteModal, setShowCategoryCompleteModal] = useState(false);
-  const [completedCategoryName, setCompletedCategoryName] = useState('');
-
-  // Compteur simple pour détecter les tours complets
-  const [pagesVisitedInCurrentTour, setPagesVisitedInCurrentTour] = useState(0);
-  const [tourCompletionCount, setTourCompletionCount] = useState(0);
-
-  // Nouveau state pour tracker si la popup a déjà été montrée pour cette catégorie
-  const [categoryPopupShown, setCategoryPopupShown] = useState(false);
-
-  /*
-  // États pour le LoadingScreen
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Détection quand l'écran est focalisé (navigation vers cette page)
-  useFocusEffect(
-    useCallback(() => {
-      setIsLoading(true);
-      return () => {
-        // Cleanup quand on quitte l'écran
-        setIsLoading(false);
-      };
-    }, [])
-  );
-
-  const handleLoadingComplete = () => {
-    // L'animation d'entrée est terminée
-  };
-
-  const handleFadeOutComplete = () => {
-    // Le fade out est terminé, on peut masquer le loading
-    setIsLoading(false);
-  };
-*/
   useEffect(() => {
     start();
     return () => {
@@ -102,11 +65,6 @@ export default function DhikrScreen() {
     if (dhikrs && dhikrs.length > 0) {
       setPagerKey(prev => prev + 1);
       setCurrentIndex(1);
-      // Réinitialiser les compteurs quand on change de catégorie
-      setPagesVisitedInCurrentTour(0);
-      setTourCompletionCount(0);
-      // Réinitialiser le flag de popup pour la nouvelle catégorie
-      setCategoryPopupShown(false);
     }
   }, [dhikrs]);
 
@@ -123,31 +81,6 @@ export default function DhikrScreen() {
   const params = useLocalSearchParams();
   const categoryUrl = params.category as string || 'General';
 
-  // Fonction pour vérifier si la catégorie est complète
-  const showCategoryCompletePopup = useCallback(() => {
-    // Vérifier si la popup a déjà été montrée pour cette catégorie
-    if (categoryPopupShown) {
-      console.log('🚫 Category popup already shown, skipping...');
-      return;
-    }
-
-    // Obtenir le nom de la catégorie
-    let categoryName = 'General';
-
-    if (categoryUrl && categoryUrl === 'favourites') {
-      categoryName = 'Favourites';
-    } else {
-      categoryName = dhikrs[0]?.category || 'General';
-    }
-
-    setCompletedCategoryName(categoryName);
-    setShowCategoryCompleteModal(true);
-    // Marquer que la popup a été montrée pour cette catégorie
-    setCategoryPopupShown(true);
-
-    console.log('🎉 Category Complete popup shown for:', categoryName);
-  }, [dhikrs, categoryUrl, categoryPopupShown]);
-
   const handlePageSelected = useCallback((e: any) => {
     const index = e.nativeEvent.position;
 
@@ -156,37 +89,6 @@ export default function DhikrScreen() {
     // Logique existante pour le comptage et l'ajustement circulaire
     if (!isAdjustingPosition && index >= 1 && index <= dhikrs.length) {
       incrementCount();
-
-      // Convertir l'index circulaire en index réel (0-based)
-      const realPageIndex = index - 1;
-
-      // Incrémenter le compteur de pages visitées
-      setPagesVisitedInCurrentTour(prev => {
-        const newCount = prev + 1;
-
-        console.log(`📄 Page visited: ${realPageIndex + 1}/${dhikrs.length}, Total in tour: ${newCount}`);
-        console.log(`📄 New count : ${newCount}`);
-
-        // Vérifier si on a completé un tour (visité autant de pages que la longueur de la catégorie)
-        if (newCount === dhikrs.length) {
-          console.log('🔄 Tour completed! Checking if popup should be shown...');
-
-          // Montrer la popup seulement si elle n'a pas encore été montrée
-          if (!categoryPopupShown) {
-            setTimeout(() => {
-              showCategoryCompletePopup();
-            }, 100);
-          } else {
-            console.log('🚫 Category popup already shown, skipping...');
-          }
-
-          // Incrémenter le compteur de tours et réinitialiser le compteur de pages
-          setTourCompletionCount(prevTours => prevTours + 1);
-          return 0; // Réinitialiser pour le prochain tour
-        }
-
-        return newCount;
-      });
     }
 
     console.log('Page selected:', index, 'isAdjusting:', isAdjustingPosition, 'scrollState:', scrollState);
@@ -218,31 +120,13 @@ export default function DhikrScreen() {
         }, 50);
       }, 10);
     }
-  }, [dhikrs.length, incrementCount, isAdjustingPosition, scrollState, showCategoryCompletePopup, categoryPopupShown]);
+  }, [dhikrs.length, incrementCount, isAdjustingPosition, scrollState]);
 
   const handleScrollStateChanged = useCallback((e: any) => {
     const state = e.nativeEvent.pageScrollState;
     setScrollState(state);
   }, []);
 
-  // Fonction pour fermer la modal
-  const handleCloseModal = useCallback(() => {
-    setShowCategoryCompleteModal(false);
-  }, []);
-
-  /*
-  // Afficher le LoadingScreen pendant le chargement
-  if (isLoading) {
-    return (
-      <LoadingScreen 
-        visible={isLoading} 
-        onAnimationComplete={handleLoadingComplete}
-        onFadeOutComplete={handleFadeOutComplete}
-        category={dhikrs[0].category}
-      />
-    );
-  }
-*/
   if (!dhikrs || dhikrs.length === 0) {
     return (
       <ScreenBackground>
@@ -330,14 +214,6 @@ export default function DhikrScreen() {
             </View>
           ))}
         </PagerView>
-
-        {/* Modal de catégorie complète */}
-        <CategoryCompleteModal
-          visible={showCategoryCompleteModal}
-          onClose={handleCloseModal}
-          categoryName={completedCategoryName}
-          khairisEarned={categoryLength} // Vous pouvez ajuster la logique des Khairis earned
-        />
       </View>
     </ScreenBackground>
   );
