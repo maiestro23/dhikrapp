@@ -50,18 +50,19 @@ export default function DhikrScreen() {
   const [scrollState, setScrollState] = useState<'idle' | 'dragging' | 'settling'>('idle');
   const [isAdjustingPosition, setIsAdjustingPosition] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  
+
   // États pour la modal de catégorie complète
   const [showCategoryCompleteModal, setShowCategoryCompleteModal] = useState(false);
   const [completedCategoryName, setCompletedCategoryName] = useState('');
-  
+
   // Compteur simple pour détecter les tours complets
   const [pagesVisitedInCurrentTour, setPagesVisitedInCurrentTour] = useState(0);
   const [tourCompletionCount, setTourCompletionCount] = useState(0);
-  
+
   // Nouveau state pour tracker si la popup a déjà été montrée pour cette catégorie
   const [categoryPopupShown, setCategoryPopupShown] = useState(false);
 
+  /*
   // États pour le LoadingScreen
   const [isLoading, setIsLoading] = useState(false);
 
@@ -84,7 +85,7 @@ export default function DhikrScreen() {
     // Le fade out est terminé, on peut masquer le loading
     setIsLoading(false);
   };
-
+*/
   useEffect(() => {
     start();
     return () => {
@@ -121,7 +122,7 @@ export default function DhikrScreen() {
   // Obtenir les paramètres au niveau du composant
   const params = useLocalSearchParams();
   const categoryUrl = params.category as string || 'General';
-  
+
   // Fonction pour vérifier si la catégorie est complète
   const showCategoryCompletePopup = useCallback(() => {
     // Vérifier si la popup a déjà été montrée pour cette catégorie
@@ -129,21 +130,21 @@ export default function DhikrScreen() {
       console.log('🚫 Category popup already shown, skipping...');
       return;
     }
-    
+
     // Obtenir le nom de la catégorie
     let categoryName = 'General';
-    
+
     if (categoryUrl && categoryUrl === 'favourites') {
       categoryName = 'Favourites';
     } else {
       categoryName = dhikrs[0]?.category || 'General';
     }
-    
+
     setCompletedCategoryName(categoryName);
     setShowCategoryCompleteModal(true);
     // Marquer que la popup a été montrée pour cette catégorie
     setCategoryPopupShown(true);
-    
+
     console.log('🎉 Category Complete popup shown for:', categoryName);
   }, [dhikrs, categoryUrl, categoryPopupShown]);
 
@@ -155,21 +156,21 @@ export default function DhikrScreen() {
     // Logique existante pour le comptage et l'ajustement circulaire
     if (!isAdjustingPosition && index >= 1 && index <= dhikrs.length) {
       incrementCount();
-      
+
       // Convertir l'index circulaire en index réel (0-based)
       const realPageIndex = index - 1;
-      
+
       // Incrémenter le compteur de pages visitées
       setPagesVisitedInCurrentTour(prev => {
         const newCount = prev + 1;
-        
+
         console.log(`📄 Page visited: ${realPageIndex + 1}/${dhikrs.length}, Total in tour: ${newCount}`);
         console.log(`📄 New count : ${newCount}`);
 
         // Vérifier si on a completé un tour (visité autant de pages que la longueur de la catégorie)
         if (newCount === dhikrs.length) {
           console.log('🔄 Tour completed! Checking if popup should be shown...');
-          
+
           // Montrer la popup seulement si elle n'a pas encore été montrée
           if (!categoryPopupShown) {
             setTimeout(() => {
@@ -178,12 +179,12 @@ export default function DhikrScreen() {
           } else {
             console.log('🚫 Category popup already shown, skipping...');
           }
-          
+
           // Incrémenter le compteur de tours et réinitialiser le compteur de pages
           setTourCompletionCount(prevTours => prevTours + 1);
           return 0; // Réinitialiser pour le prochain tour
         }
-        
+
         return newCount;
       });
     }
@@ -229,6 +230,7 @@ export default function DhikrScreen() {
     setShowCategoryCompleteModal(false);
   }, []);
 
+  /*
   // Afficher le LoadingScreen pendant le chargement
   if (isLoading) {
     return (
@@ -240,7 +242,7 @@ export default function DhikrScreen() {
       />
     );
   }
-
+*/
   if (!dhikrs || dhikrs.length === 0) {
     return (
       <ScreenBackground>

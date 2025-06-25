@@ -25,7 +25,6 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
     category
 }) => {
     const fadeAnim = useRef(new Animated.Value(0)).current;
-    const scaleAnim = useRef(new Animated.Value(0.8)).current;
     const lineAnim = useRef(new Animated.Value(0)).current;
     const [shouldRender, setShouldRender] = React.useState(visible);
 
@@ -33,11 +32,6 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
         Animated.parallel([
             Animated.timing(fadeAnim, {
                 toValue: 0,
-                duration: 500,
-                useNativeDriver: true,
-            }),
-            Animated.timing(scaleAnim, {
-                toValue: 0.8,
                 duration: 500,
                 useNativeDriver: true,
             }),
@@ -57,7 +51,6 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
             setShouldRender(true);
             // Reset animations
             fadeAnim.setValue(0);
-            scaleAnim.setValue(0.8);
             lineAnim.setValue(0);
 
             // Animation sequence
@@ -66,12 +59,6 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
                 Animated.timing(fadeAnim, {
                     toValue: 1,
                     duration: 300,
-                    useNativeDriver: true,
-                }),
-                // Scale in text
-                Animated.timing(scaleAnim, {
-                    toValue: 1,
-                    duration: 600,
                     useNativeDriver: true,
                 }),
                 // Animate line
@@ -111,7 +98,6 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
                     styles.content,
                     {
                         opacity: fadeAnim,
-                        transform: [{ scale: scaleAnim }]
                     }
                 ]}
             >
@@ -129,19 +115,6 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
                 />
             </Animated.View>
 
-
-
-            <Animated.View
-                style={[
-                    styles.content,
-                    {
-                        opacity: fadeAnim,
-                        transform: [{ scale: scaleAnim }]
-                    }
-                ]}
-            >
-                <Text style={styles.underlineText}>{category}</Text>
-            </Animated.View>
         </LinearGradient>
     );
 };
