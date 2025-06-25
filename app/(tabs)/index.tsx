@@ -40,7 +40,7 @@ const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme, positionInde
 export default function DhikrScreen() {
   const { theme } = useTheme();
   const { start, stop } = useTimeTracking();
-  const { incrementCount, goalProgress, totalCount } = useProgress();
+  const { incrementCount, goalProgress, totalCount, todayProgress } = useProgress();
   const dhikrs = useDhikrStore().getDhikrsByUrlCategory();
   const categoryLength = dhikrs.length;
   const { isFavorite, addFavorite, removeFavorite } = useFavoritesStore();
@@ -295,7 +295,7 @@ export default function DhikrScreen() {
 
           <View style={styles.rightHeader}>
             <Text style={styles.goalText}>Dhikr Goal: {Math.min(Math.round(goalProgress), 100)}%</Text>
-            <Text style={styles.khairisText}>Khairis: {totalCount >= 1000 ? `${(totalCount / 1000).toFixed(1)}k` : totalCount}✨</Text>
+            <Text style={styles.khairisText}>Khairis: {todayProgress >= 1000 ? `${(todayProgress / 1000).toFixed(1)}k` : todayProgress}✨</Text>
           </View>
         </View>
 
