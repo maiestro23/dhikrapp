@@ -209,6 +209,9 @@ export default function DhikrScreen() {
         <CompletionNotification 
           visible={showNotification} 
           onClose={handleCloseNotification}
+          subtitle= {`+${categoryLength} Khairis earned ✨`}
+          categoryName = { dhikrs[0]?.category}
+          khairisAmount = {categoryLength}
         />
 
         <PagerView
