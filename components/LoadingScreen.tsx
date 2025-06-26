@@ -15,32 +15,25 @@ interface LoadingScreenProps {
     visible?: boolean;
     onAnimationComplete?: () => void;
     onFadeOutComplete?: () => void;
-    category: string;
+    category?: string;
 }
 
 const LoadingScreen: React.FC<LoadingScreenProps> = ({
     visible = true,
     onAnimationComplete,
     onFadeOutComplete,
-    category
+    category = 'General'
 }) => {
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const lineAnim = useRef(new Animated.Value(0)).current;
     const [shouldRender, setShouldRender] = React.useState(visible);
 
     const fadeOut = () => {
-        Animated.parallel([
-            Animated.timing(fadeAnim, {
-                toValue: 0,
-                duration: 500,
-                useNativeDriver: true,
-            }),
-            Animated.timing(lineAnim, {
-                toValue: 0,
-                duration: 300,
-                useNativeDriver: false,
-            }),
-        ]).start(() => {
+        Animated.timing(fadeAnim, {
+            toValue: 0,
+            duration: 800, // Durée du fade out
+            useNativeDriver: true,
+        }).start(() => {
             setShouldRender(false);
             onFadeOutComplete?.();
         });
@@ -78,7 +71,6 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
                 }, 1000);
             });
         } else if (!visible && shouldRender) {
-            // Si visible devient false, commencer le fade out
             fadeOut();
         }
     }, [visible]);
@@ -86,25 +78,27 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
     if (!shouldRender) return null;
 
     return (
-        <LinearGradient
-            colors={['#931748', '#43061C']}
-            start={{ x: 0.12, y: 0 }} // Angle de 168.05deg converti en coordonnées start/end
-            end={{ x: 0.88, y: 1 }}
-            style={styles.container}
+        <Animated.View 
+            style={[
+                styles.container,
+                {
+                    opacity: fadeAnim,
+                }
+            ]}
         >
+            <LinearGradient
+                colors={['#931748', '#43061C']}
+                start={{ x: 0.12, y: 0 }}
+                end={{ x: 0.88, y: 1 }}
+                style={styles.gradientContainer}
+            />
+            
             <StatusBar barStyle="light-content" backgroundColor="#931748" />
-            <Animated.View
-                style={[
-                    styles.content,
-                    {
-                        opacity: fadeAnim,
-                    }
-                ]}
-            >
+            
+            <View style={styles.content}>
                 <Text style={styles.text}>Khair.</Text>
-            </Animated.View>
-
-        </LinearGradient>
+            </View>
+        </Animated.View>
     );
 };
 
@@ -115,10 +109,16 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
-        //backgroundColor: '#8B1538',
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 9999,
+    },
+    gradientContainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
     },
     content: {
         alignItems: 'center',
@@ -126,25 +126,25 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 64,
-        fontWeight: '300', // Light weight
+        fontWeight: '300',
         color: '#FFFFFF',
-        fontFamily: 'Classico', // Vous pouvez remplacer par votre police personnalisée
+        fontFamily: 'Classico',
         letterSpacing: 2,
         marginBottom: 40,
-    },
-
-    underlineText: {
-        fontSize: 24,
-        fontWeight: '300', // Light weight
-        color: '#FFFFFF',
-        fontFamily: 'Classico', // Vous pouvez remplacer par votre police personnalisée
-        letterSpacing: 2,
-        marginTop: 40,
     },
     line: {
         height: 2,
         backgroundColor: '#FFFFFF',
         borderRadius: 1,
+        marginVertical: 20,
+    },
+    underlineText: {
+        fontSize: 24,
+        fontWeight: '300',
+        color: '#FFFFFF',
+        fontFamily: 'Classico',
+        letterSpacing: 2,
+        marginTop: 20,
     },
 });
 

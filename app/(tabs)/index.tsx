@@ -210,7 +210,7 @@ export default function DhikrScreen() {
           visible={showNotification} 
           onClose={handleCloseNotification}
           subtitle= {`+${categoryLength} Khairis earned ✨`}
-          categoryName = { dhikrs[0]?.category}
+          categoryName = { currentCategory }
           khairisAmount = {categoryLength}
         />
 

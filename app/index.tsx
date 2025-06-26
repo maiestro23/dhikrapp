@@ -24,22 +24,23 @@ export default function SplashScreen() {
   };
 
   const handleLoadingComplete = () => {
+        // Si dailyGoal existe, rediriger vers les tabs
+    if (dailyGoal) {
+      setShouldRedirect(true);
+      router.replace('/(tabs)');
+    }
     setLoadingComplete(true);
   };
 
   const handleLoadingFadeOut = () => {
     setShowLoading(false);
     
-    // Si dailyGoal existe, rediriger vers les tabs
-    if (dailyGoal) {
-      setShouldRedirect(true);
-      router.replace('/(tabs)');
-    }
+
   };
 
   return (
     <>
-      {!shouldRedirect && (
+      {!shouldRedirect && !dailyGoal && (
         <LinearGradient
           colors={['rgb(240,244,234)', 'rgb(251,248,244)', 'rgb(251,240,238)']}
           locations={[0.158, 0.5112, 0.8644]}

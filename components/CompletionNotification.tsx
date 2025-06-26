@@ -22,7 +22,7 @@ export const CompletionNotification: React.FC<CompletionNotificationProps> = ({
     subtitle = "+25 Khairis earned ✨",
     duration = 4000,
     iconBackgroundColor = "#7E0F3B",
-    categoryName = 'General',
+    categoryName,
     khairisAmount = 15
 
 }) => {

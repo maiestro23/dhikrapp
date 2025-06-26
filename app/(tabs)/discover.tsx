@@ -36,7 +36,7 @@ const categories = [
   },
   {
     id: 'afterSalah',
-    title: 'After Salah',
+    title: 'After\nSalah',
     subtitle: 'Seek forgiveness and purification',
     // Image spirituelle/mosque ou montagne
     backgroundImage: require('../../assets/images/Istighfar_bg.png'), // Remplacez par votre chemin d'image
