@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Animated, Dimensions, Image, Share } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Animated, Dimensions, Share } from 'react-native';
+import { Send } from 'lucide-react-native';
 
 const { width } = Dimensions.get('window');
 
@@ -15,6 +16,8 @@ interface CompletionNotificationProps {
     khairisAmount: number;
 }
 
+
+
 export const CompletionNotification: React.FC<CompletionNotificationProps> = ({
     visible,
     onClose,
@@ -29,7 +32,6 @@ export const CompletionNotification: React.FC<CompletionNotificationProps> = ({
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const slideAnim = useRef(new Animated.Value(-50)).current;
     const timerRef = useRef<number | null>(null);
-    const shareIcon = require('../assets/icons/customShareIcon.png');
 
     const closeNotification = () => {
         if (timerRef.current) {
@@ -88,7 +90,7 @@ export const CompletionNotification: React.FC<CompletionNotificationProps> = ({
             const shareContent = {
                 message: `🎉 I just completed the "${categoryName}" category and earned ${khairisAmount} Khairis! ✨\n\nJoin me in building a daily dhikr habit with this amazing app! 🤲`,
                 title: 'Dhikr App - Category Complete!',
-                url: 'https://apps.apple.com/app/khair-daily-adhkar/id6744126455', // Replace with your actual app store link
+                url: 'https://apps.apple.com/app/khair-daily-adhkar/id6744126455',
             };
 
             const result = await Share.share(shareContent);
@@ -99,7 +101,6 @@ export const CompletionNotification: React.FC<CompletionNotificationProps> = ({
                 } else {
                     console.log('Shared successfully');
                 }
-                // Close modal after successful share
                 onClose();
             }
         } catch (error) {
@@ -116,12 +117,11 @@ export const CompletionNotification: React.FC<CompletionNotificationProps> = ({
                     transform: [{ translateY: slideAnim }]
                 }
             ]}
-        // Removed pointerEvents="none" to enable touch interactions
         >
             <View style={styles.modalContainer}>
                 <View style={[styles.iconContainer, { backgroundColor: iconBackgroundColor }]}>
                     <TouchableOpacity onPress={handleShare} activeOpacity={0.7}>
-                        <Image source={shareIcon} style={styles.iconImage} onError={() => console.log('Image failed to load')} />
+                        <Send size={24} color="#FFFFFF" />
                     </TouchableOpacity>
                 </View>
 
@@ -177,8 +177,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginRight: 22,
-    },
-    iconImage: {
     },
     textContent: {
         flex: 1,
