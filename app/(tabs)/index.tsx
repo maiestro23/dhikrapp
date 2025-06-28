@@ -10,6 +10,7 @@ import { useDhikrStore } from '../../stores/dhikrStore';
 import { ScreenBackground } from '../../components/ScreenBackground';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Dhikr } from '@/config/dhikrs';
+import { CompletionNotification } from '../../components/CompletionNotification';
 
 const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme, positionIndex, categoryLength }: any) => (
   <View style={styles.dhikrCard}>
@@ -35,14 +36,16 @@ const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme, positionInde
   </View>
 );
 
-import { CompletionNotification } from '../../components/CompletionNotification';
-
 export default function DhikrScreen() {
   const { theme } = useTheme();
   const { start, stop } = useTimeTracking();
   const { incrementCount, goalProgress, totalCount, todayProgress } = useProgress();
   const dhikrs = useDhikrStore().getDhikrsByUrlCategory();
+  
+  
   const categoryLength = dhikrs.length;
+  
+  
   const { isFavorite, addFavorite, removeFavorite } = useFavoritesStore();
 
   const pagerRef = useRef<PagerView>(null);

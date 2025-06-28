@@ -52,6 +52,14 @@ const categories = [
   }
 ];
 
+// Données pour la section Tasbih
+const tasbihItems = [
+  { id: 'subhanallah', text: 'Subhanallah' },
+  { id: 'alhamdulillah', text: 'Alhamdulillah' },
+  { id: 'allahuakbar', text: 'Allahu Akbar' },
+  { id: 'astaghfirullah', text: 'Astaghfirullah' },
+];
+
 // Composant pour les onglets General/Favourites - EXACT du design
 const TabButton = ({ title, onPress }: any) => (
   <TouchableOpacity
@@ -94,6 +102,17 @@ const CategoryCard = ({ category, onPress }: any) => (
   </TouchableOpacity>
 );
 
+// Composant pour les boutons Tasbih
+const TasbihButton = ({ item, onPress }: any) => (
+  <TouchableOpacity
+    style={styles.tasbihButton}
+    onPress={() => onPress(item)}
+    activeOpacity={0.8}
+  >
+    <Text style={styles.tasbihButtonText}>{item.text}</Text>
+  </TouchableOpacity>
+);
+
 export default function DiscoverScreen() {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState('General');
@@ -110,6 +129,19 @@ export default function DiscoverScreen() {
     });
   };
 
+  // Fonction pour gérer les clics sur les boutons Tasbih
+  const handleTasbihPress = (item: any) => {
+    router.push({
+      pathname: '/(tabs)',
+      params: {
+        category: item.id,
+        categoryTitle: item.text,
+        tasbihType: item.id
+      }
+    });
+  };
+
+  // Filtrer les catégories selon la recherche - FONCTIONNALITÉ EXACTE
   const filteredCategories = categories.filter(category =>
     category.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     category.subtitle.toLowerCase().includes(searchQuery.toLowerCase())
@@ -140,28 +172,41 @@ export default function DiscoverScreen() {
           </View>
         </View>
 
-
-
         {/* ===== SECTION CATEGORIES - EXACT du design ===== */}
         <View style={styles.categoriesSection}>
           <ScrollView
             style={styles.categoriesContainer}
             showsVerticalScrollIndicator={false}
           >
-                    {/* ===== ONGLETS General/Favourites - EXACT du design ===== */}
-        <View style={styles.tabsContainer}>
+            {/* ===== ONGLETS General/Favourites - EXACT du design ===== */}
+            <View style={styles.tabsContainer}>
+              <TabButton
+                title="General"
+                onPress={() => handleCategoryPress({ id: 'General', title: 'General' })}
+              />
+              <TabButton
+                title="Favourites"
+                onPress={() => handleCategoryPress({ id: 'favourites', title: 'Favourites' })}
+              />
+            </View>
 
-          <TabButton
-            title="General"
-            onPress={() => handleCategoryPress({ id: 'General', title: 'General' })}
-          />
-          <TabButton
-            title="Favourites"
-            onPress={() => handleCategoryPress({ id: 'favourites', title: 'Favourites' })}
-          />
-        </View>
+            {/* ===== SECTION TASBIH - NOUVELLE ===== */}
+            <View style={styles.tasbihSection}>
+              <Text style={styles.sectionTitle}>Tasbih</Text>
+              <Text style={styles.sectionSubtitle}>Single dhikr sessions</Text>
+              
+              <View style={styles.tasbihGrid}>
+                {tasbihItems.map((item, index) => (
+                  <TasbihButton
+                    key={item.id}
+                    item={item}
+                    onPress={handleTasbihPress}
+                  />
+                ))}
+              </View>
+            </View>
+
             <Text style={styles.sectionTitle}>Categories</Text>
-
 
             {/* Grille de catégories 2x2 - EXACT du design */}
             <View style={styles.categoriesGrid}>
@@ -257,37 +302,62 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  // tabButtonActive: {
-  //   backgroundColor: '#7E0F3B', // Votre couleur exacte
-  //   shadowColor: '#7E0F3B',
-  //   shadowOffset: {
-  //     width: 0,
-  //     height: 4,
-  //   },
-  //   shadowOpacity: 0.3,
-  //   shadowRadius: 6,
-  //   elevation: 6,
-  // },
   tabButtonText: {
     fontFamily: 'Sofia-Pro',
     fontSize: 16,
     color: '#fff', // Couleur pour l'état inactif
     fontWeight: '500',
   },
-  // tabButtonTextActive: {
-  //   color: '#FFFFFF', // Blanc pour le texte actif sur fond #7E0F3B
-  //   fontWeight: '600',
-  // },
 
-  // ===== CATEGORIES SECTION STYLES - EXACT du design =====
-  categoriesSection: {
-    flex: 1,
+  // ===== TASBIH SECTION STYLES - NOUVEAUX =====
+  tasbihSection: {
+    marginBottom: 22,
   },
   sectionTitle: {
     fontFamily: 'Classico', // EXACT : Font du titre de section
     fontSize: 24, // EXACT : Taille du titre
     color: '#181818', // EXACT : Couleur du titre
-    paddingBottom: 20
+    marginBottom: 8,
+  },
+  sectionSubtitle: {
+    fontFamily: 'Sofia-Pro-Light',
+    fontSize: 14,
+    color: '#8C8F7B',
+    marginBottom: 20,
+  },
+  tasbihGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    //gap: 4,
+  },
+  tasbihButton: {
+    width: (width - 56) / 2, // Ajusté pour le gap et padding
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    backgroundColor: '#7E0F3B',
+    borderRadius: 12,
+    alignItems: 'center',
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  tasbihButtonText: {
+    fontFamily: 'Sofia-Pro',
+    fontSize: 16,
+    color: '#FFFFFF',
+    fontWeight: '500',
+  },
+
+  // ===== CATEGORIES SECTION STYLES - EXACT du design =====
+  categoriesSection: {
+    flex: 1,
   },
   categoriesContainer: {
     flex: 1,
@@ -307,12 +377,6 @@ const styles = StyleSheet.create({
     borderRadius: 16, // EXACT : Coins arrondis des cartes
     overflow: 'hidden',
     shadowColor: '#000', // EXACT : Couleur de l'ombre
-    //shadowOffset: {
-    // width: 0,
-    // height: 4, // EXACT : Offset de l'ombre
-    //},
-    //shadowOpacity: 0.15, // EXACT : Opacité de l'ombre
-    //shadowRadius: 6, // EXACT : Rayon de l'ombre
     elevation: 8, // EXACT : Élévation Android
   },
   // NOUVEAU : Style pour ImageBackground
@@ -331,7 +395,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    //backgroundColor: 'rgba(0, 0, 0, 0.4)', // Overlay sombre pour la lisibilité
   },
   categoryCardContent: {
     flex: 1,
@@ -352,9 +415,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF', // EXACT : Couleur blanche
     textAlign: 'center',
     marginBottom: 4, // EXACT : Espacement sous le titre
-    // RENFORCÉ : Text shadow pour meilleure lisibilité sur images
-    //textShadowColor: 'rgba(0, 0, 0, 0.8)',
-    //textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 4,
   },
   categorySubtitle: {
@@ -362,10 +422,6 @@ const styles = StyleSheet.create({
     fontSize: 12, // EXACT : Taille des sous-titres
     color: 'rgba(255, 255, 255, 0.95)', // LÉGÈREMENT MODIFIÉ : Plus opaque pour meilleure lisibilité
     textAlign: 'center',
-    // RENFORCÉ : Text shadow pour meilleure lisibilité sur images
-    //textShadowColor: 'rgba(0, 0, 0, 0.8)',
-    //textShadowOffset: { width: 0, height: 2 },
-    //textShadowRadius: 4,
   },
 
   // ===== SPACING - EXACT du design =====

@@ -6,6 +6,8 @@ import { useLocalSearchParams } from 'expo-router';
 import { AfterSalahDhikrs } from '@/config/afterSalah_dhikrs';
 import { IstighfarDhikrs } from '@/config/istighfar_dhikrs';
 import { FavoriteDhikr, useFavoritesStore } from './favoritesStore';
+import { AlhamdulillahDhikrs, AllahuAkbarDhikrs, AstaghfirullahDhikrs, SubhanallahDhikrs } from '@/config/tasbih_dhikrs';
+import { generateTasbihSession } from '@/config/tasbihGenerator';
 
 interface Dhikr {
   id: string;
@@ -70,6 +72,19 @@ export const useDhikrStore = create<DhikrState>()((set, get) => ({
     const category = params.category as string || 'General';
 
     switch (category) {
+      // Tasbih
+      case 'subhanallah':
+        console.log(generateTasbihSession('subhanallah')); // 33
+
+        return  generateTasbihSession('subhanallah');
+      case 'alhamdulillah':
+        return generateTasbihSession('alhamdulillah');
+      case 'allahuakbar':
+        return generateTasbihSession('allahuakbar');
+      case 'astaghfirullah':
+        return generateTasbihSession('astaghfirullah');
+      
+      //Categories
       case 'morning':
         return MorningDhikrs;
       case 'evening':
