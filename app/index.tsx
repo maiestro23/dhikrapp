@@ -16,7 +16,7 @@ const isSmallDevice = height <= 667;
 export default function SplashScreen() {
   const [showLoading, setShowLoading] = useState(true);
   const [loadingComplete, setLoadingComplete] = useState(false);
-  const [shouldRedirect, setShouldRedirect] = useState(false);
+
   const { dailyGoal } = useProgressStore();
 
   const handleGetStarted = () => {
@@ -24,23 +24,27 @@ export default function SplashScreen() {
   };
 
   const handleLoadingComplete = () => {
-        // Si dailyGoal existe, rediriger vers les tabs
-    if (dailyGoal) {
-      setShouldRedirect(true);
-      router.replace('/(tabs)');
-    }
     setLoadingComplete(true);
   };
 
   const handleLoadingFadeOut = () => {
     setShowLoading(false);
     
-
+    // Si dailyGoal existe, rediriger vers les tabs
+    if (dailyGoal) {
+      router.replace('/(tabs)');
+    }
   };
+
+  // Si dailyGoal existe et le loading est terminé, rediriger immédiatement
+  if (dailyGoal && !showLoading) {
+    return <Redirect href="/(tabs)" />;
+  }
 
   return (
     <>
-      {!shouldRedirect && !dailyGoal && (
+      {/* Afficher le contenu seulement pour la première utilisation */}
+      {!dailyGoal && (
         <LinearGradient
           colors={['rgb(240,244,234)', 'rgb(251,248,244)', 'rgb(251,240,238)']}
           locations={[0.158, 0.5112, 0.8644]}
