@@ -43,8 +43,8 @@ export default function SplashScreen() {
 
   return (
     <>
-      {/* Afficher le contenu seulement pour la première utilisation */}
-      {!dailyGoal && (
+      {/* Afficher le contenu seulement pour la première utilisation ET après le loading */}
+      {!dailyGoal && !showLoading && (
         <LinearGradient
           colors={['rgb(240,244,234)', 'rgb(251,248,244)', 'rgb(251,240,238)']}
           locations={[0.158, 0.5112, 0.8644]}
