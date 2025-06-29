@@ -9,12 +9,12 @@ import CustomDiscoverIcon from '@/assets/icons/customDiscoverIcon';
 import CustomProfileIcon from '@/assets/icons/customProfileIcon';
 import CustomProfileFilledIcon from '@/assets/icons/customProfileFilledIcon';
 
-const { width: screenWidth } = Dimensions.get('window');
+//const { width: screenWidth } = Dimensions.get('window');
 
 export default function TabLayout() {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
-  
+
   return (
     <Tabs
       screenOptions={{
@@ -35,17 +35,17 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Dhikr',
-          tabBarIcon: ({ color, size, focused }) => ( 
-            <CustomQuotesIcon color={'#5A5D4D'} size={24} fill={focused ? '#5A5D4D' : '#fff'}/>
+          tabBarIcon: ({ color, size, focused }) => (
+            <CustomQuotesIcon color={'#5A5D4D'} size={24} fill={focused ? '#5A5D4D' : '#fff'} />
           ),
         }}
       />
       <Tabs.Screen
-        name="search"
+        name="discover"
         options={{
-          title: 'Search',
+          title: 'Discover',
           tabBarIcon: ({ color, size, focused }) => (
-            <CustomDiscoverIcon color={'#5A5D4D'} size={24} fill={focused ? '#5A5D4D' : '#fff'}/>
+            <CustomDiscoverIcon color={'#5A5D4D'} size={24} fill={focused ? '#5A5D4D' : '#fff'} />
           ),
         }}
       />
@@ -55,29 +55,39 @@ export default function TabLayout() {
           title: 'Profile',
           tabBarIcon: ({ color, size, focused }) => (
 
-            focused ?  <CustomProfileFilledIcon /> : <CustomProfileIcon /> 
+            focused ? <CustomProfileFilledIcon /> : <CustomProfileIcon />
             //<CustomProfileIcon color={'#5A5D4D'} size={24} fill={focused ? '#5A5D4D' : '#fff'}/>
           ),
         }}
       />
 
-    <Tabs.Screen
-        name="profile/favorites"
-
+      <Tabs.Screen
+        // Hidden tabs
+        name="search"
         options={{
-        tabBarItemStyle:  {display: 'none'},
+          tabBarItemStyle: { display: 'none' },
+          title: 'Search',
+          tabBarIcon: ({ color, size, focused }) => (
+            <CustomDiscoverIcon color={'#5A5D4D'} size={24} fill={focused ? '#5A5D4D' : '#fff'} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="profile/favorites"
+        options={{
+          tabBarItemStyle: { display: 'none' },
           title: 'Profile',
           tabBarIcon: ({ color, size }) => (
             <User color={color} size={24} />
           ),
         }}
       />
-      
 
       <Tabs.Screen
         name="profile/goal"
         options={{
-        tabBarItemStyle:  {display: 'none'},
+          tabBarItemStyle: { display: 'none' },
           title: 'Profile',
           tabBarIcon: ({ color, size }) => (
             <User color={color} size={24} />
@@ -85,8 +95,27 @@ export default function TabLayout() {
         }}
       />
 
+      <Tabs.Screen
+        name="profile/privacy"
+        options={{
+          tabBarItemStyle: { display: 'none' },
+          title: 'Privacy',
+          tabBarIcon: ({ color, size }) => (
+            <User color={color} size={24} />
+          ),
+        }}
+      />
 
-      
+      <Tabs.Screen
+        name="profile/terms"
+        options={{
+          tabBarItemStyle: { display: 'none' },
+          title: 'Terms',
+          tabBarIcon: ({ color, size }) => (
+            <User color={color} size={24} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

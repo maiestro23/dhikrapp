@@ -5,7 +5,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { BookLine } from '../components/BookLine';
 import { useProgressStore } from '@/stores/progressStore';
 import CustomBookImage from '@/assets/images/customBookImage';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import LoadingScreen from '@/components/LoadingScreen';
 
 const { width, height } = Dimensions.get('window');
 const CONTENT_PADDING = 24;
@@ -13,78 +14,80 @@ const CONTENT_WIDTH = Math.min(402, width - (CONTENT_PADDING * 2));
 const isSmallDevice = height <= 667;
 
 export default function SplashScreen() {
+  const [showLoading, setShowLoading] = useState(true);
+  const [loadingComplete, setLoadingComplete] = useState(false);
+
+  const { dailyGoal } = useProgressStore();
+
   const handleGetStarted = () => {
     router.replace('/instructions');
   };
 
-  const { dailyGoal } = useProgressStore();
+  const handleLoadingComplete = () => {
+    setLoadingComplete(true);
+  };
 
-  useEffect(() => {
+  const handleLoadingFadeOut = () => {
+    setShowLoading(false);
+    
+    // Si dailyGoal existe, rediriger vers les tabs
     if (dailyGoal) {
-      const timer = setTimeout(() => {
-        router.replace('/(tabs)');
-      }, 1000);
-
-      return () => clearTimeout(timer);
+      router.replace('/(tabs)');
     }
-  }, [dailyGoal, router]);
+  };
 
-  if (dailyGoal) {
-    return (
-      <LinearGradient
-        colors={['rgb(240,244,234)', 'rgb(251,248,244)', 'rgb(251,240,238)']}
-        locations={[0.158, 0.5112, 0.8644]}
-        start={[0, 1]} end={[1, 0]}
-        style={styles.container}
-      >
-        <SafeAreaView style={styles.safeArea}>
-          <View style={[
-            styles.content,
-            isSmallDevice && styles.noPadding,
-            { width: CONTENT_WIDTH }
-          ]}>
-            <Text style={styles.quote}>Your daily dose of Khair...</Text>
-          </View>
-        </SafeAreaView>
-      </LinearGradient>
-    );
+  // Si dailyGoal existe et le loading est terminé, rediriger immédiatement
+  if (dailyGoal && !showLoading) {
+    return <Redirect href="/(tabs)" />;
   }
 
   return (
-    <LinearGradient
-      colors={['rgb(240,244,234)', 'rgb(251,248,244)', 'rgb(251,240,238)']}
-      locations={[0.158, 0.5112, 0.8644]}
-      start={[0, 1]} end={[1, 0]}
-      style={styles.container}
-    >
-      <SafeAreaView style={styles.safeArea}>
-        <View style={[
-          styles.content,
-          isSmallDevice && styles.noPadding,
-          { width: CONTENT_WIDTH }
-        ]}>
-          <View style={styles.quoteContainer}>
-            <Text style={styles.quote}>"Verily, in the</Text>
-            <Text style={styles.quote}>remembrance of Allah</Text>
-            <Text style={styles.quote}>do hearts find rest."</Text>
-            <View style={styles.referenceContainer}>
-              <Text style={styles.reference}>(13:28)</Text>
+    <>
+      {/* Afficher le contenu seulement pour la première utilisation ET après le loading */}
+      {!dailyGoal && !showLoading && (
+        <LinearGradient
+          colors={['rgb(240,244,234)', 'rgb(251,248,244)', 'rgb(251,240,238)']}
+          locations={[0.158, 0.5112, 0.8644]}
+          start={[0, 1]} end={[1, 0]}
+          style={styles.container}
+        >
+          <SafeAreaView style={styles.safeArea}>
+            <View style={[
+              styles.content,
+              isSmallDevice && styles.noPadding,
+              { width: CONTENT_WIDTH }
+            ]}>
+              <View style={styles.quoteContainer}>
+                <Text style={styles.quote}>"Verily, in the</Text>
+                <Text style={styles.quote}>remembrance of Allah</Text>
+                <Text style={styles.quote}>do hearts find rest."</Text>
+                <View style={styles.referenceContainer}>
+                  <Text style={styles.reference}>(13:28)</Text>
+                </View>
+              </View>
+
+              <View style={styles.imageContainer}>
+                <CustomBookImage />
+              </View>
+
+              <TouchableOpacity
+                style={styles.button}
+                onPress={handleGetStarted}
+              >
+                <Text style={styles.buttonText}>Get started</Text>
+              </TouchableOpacity>
             </View>
-          </View>
+          </SafeAreaView>
+        </LinearGradient>
+      )}
 
-          <View style={styles.imageContainer}>
-            <CustomBookImage />
-          </View>
-
-          <TouchableOpacity
-            style={styles.button}
-            onPress={handleGetStarted}
-          >
-            <Text style={styles.buttonText}>Get started</Text>
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
-    </LinearGradient>
+      <LoadingScreen
+        visible={showLoading}
+        category="Dhikr"
+        onAnimationComplete={handleLoadingComplete}
+        onFadeOutComplete={handleLoadingFadeOut}
+      />
+    </>
   );
 }
 

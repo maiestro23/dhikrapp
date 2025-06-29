@@ -8,8 +8,10 @@ import { useTimeTracking } from '../../hooks/useTimeTracking';
 import { useFavoritesStore } from '../../stores/favoritesStore';
 import { useDhikrStore } from '../../stores/dhikrStore';
 import { ScreenBackground } from '../../components/ScreenBackground';
+import { router, useLocalSearchParams } from 'expo-router';
+import { Dhikr } from '@/config/dhikrs';
 
-const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme }: any) => (
+const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme, positionIndex, categoryLength }: any) => (
   <View style={styles.dhikrCard}>
     <View style={styles.textWrapper}>
       <Text style={styles.arabicText}>{dhikr.arabicText}</Text>
@@ -25,71 +27,97 @@ const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme }: any) => (
           fill={!isFavorite ? 'transparent' : theme.colors.accent}
         />
       </TouchableOpacity>
+
+      <Text style={styles.pageIndicator}>
+        {positionIndex}/{categoryLength}
+      </Text>
     </View>
   </View>
 );
 
+import { CompletionNotification } from '../../components/CompletionNotification';
+
 export default function DhikrScreen() {
   const { theme } = useTheme();
   const { start, stop } = useTimeTracking();
-  const { incrementCount, goalProgress } = useProgress();
-  const { dhikrs } = useDhikrStore();
+  const { incrementCount, goalProgress, totalCount, todayProgress } = useProgress();
+  const dhikrs = useDhikrStore().getDhikrsByUrlCategory();
+  const categoryLength = dhikrs.length;
   const { isFavorite, addFavorite, removeFavorite } = useFavoritesStore();
 
   const pagerRef = useRef<PagerView>(null);
   const [currentIndex, setCurrentIndex] = useState(1);
   const [scrollState, setScrollState] = useState<'idle' | 'dragging' | 'settling'>('idle');
   const [isAdjustingPosition, setIsAdjustingPosition] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+  const [completedCycles, setCompletedCycles] = useState(0);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     start();
     return () => {
       stop();
-      // Clean up timeout on unmount
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
     };
   }, [start, stop]);
 
+  const [pagerKey, setPagerKey] = useState(0);
+
+  useEffect(() => {
+    if (dhikrs && dhikrs.length > 0) {
+      setPagerKey(prev => prev + 1);
+      setCurrentIndex(1);
+      setCompletedCycles(0);
+    }
+  }, [dhikrs]);
+
   const toggleFavorite = useCallback((dhikr: any, isFav: boolean) => {
-    if (isFav) removeFavorite(dhikr.id);
+    if (isFav) removeFavorite(dhikr.uuid);
     else addFavorite(dhikr);
   }, [addFavorite, removeFavorite]);
 
+  const handleCategoryPress = useCallback(() => {
+    router.replace('/discover');
+  }, []);
+
+  // Obtenir les paramètres au niveau du composant
+  const params = useLocalSearchParams();
+  const categoryUrl = params.category as string || 'General';
+
   const handlePageSelected = useCallback((e: any) => {
     const index = e.nativeEvent.position;
-    
-    // Always update currentIndex to track where we are
+
     setCurrentIndex(index);
-    
-    // Only increment count for real pages (indices 1 to dhikrs.length)
-    // Don't increment during adjustments or on fake pages
+
+    // Logique existante pour le comptage et l'ajustement circulaire
     if (!isAdjustingPosition && index >= 1 && index <= dhikrs.length) {
       incrementCount();
     }
-    
+
     console.log('Page selected:', index, 'isAdjusting:', isAdjustingPosition, 'scrollState:', scrollState);
-    
-    // Handle circular adjustment immediately when we hit fake pages
+
     const lastRealIndex = dhikrs.length;
     const lastFakeIndex = dhikrs.length + 1;
-    
+
     if (!isAdjustingPosition && (index === 0 || index === lastFakeIndex)) {
       console.log('Triggering immediate adjustment for index:', index);
       setIsAdjustingPosition(true);
-      
-      // Use a shorter timeout for immediate response
+
+      // Détecter le cycle complet et afficher la notification
+      if (index === 0 || index === lastFakeIndex) {
+        setCompletedCycles(prev => prev + 1);
+        setShowNotification(true);
+      }
+
       setTimeout(() => {
         if (pagerRef.current) {
           try {
             if (index === 0) {
-              // Move from fake last to real last
               pagerRef.current.setPageWithoutAnimation(lastRealIndex);
               console.log('Adjusted from fake last (0) to real last (' + lastRealIndex + ')');
             } else if (index === lastFakeIndex) {
-              // Move from fake first to real first
               pagerRef.current.setPageWithoutAnimation(1);
               console.log('Adjusted from fake first (' + lastFakeIndex + ') to real first (1)');
             }
@@ -97,12 +125,11 @@ export default function DhikrScreen() {
             console.warn('PagerView position adjustment failed:', error);
           }
         }
-        
-        // Reset adjustment flag
+
         setTimeout(() => {
           setIsAdjustingPosition(false);
         }, 50);
-      }, 10); // Much shorter delay for immediate response
+      }, 10);
     }
   }, [dhikrs.length, incrementCount, isAdjustingPosition, scrollState]);
 
@@ -111,68 +138,101 @@ export default function DhikrScreen() {
     setScrollState(state);
   }, []);
 
-  // Simplified circular scrolling - removed the complex useEffect approach
-  // The adjustment now happens directly in handlePageSelected for immediate response
+  const handleCloseNotification = useCallback(() => {
+    setShowNotification(false);
+  }, []);
 
-  // Early return if no data
   if (!dhikrs || dhikrs.length === 0) {
     return (
       <ScreenBackground>
         <View style={[styles.container, styles.loadingContainer]}>
-          <Text style={styles.loadingText}>Loading dhikrs...</Text>
+          <Text style={[styles.noFavouriteTitle, { color: theme.colors.text.primary }]}>
+            No favourites yet?
+          </Text>
+          <Text style={styles.loadingText}>Tap the heart 🤍 on any adhkar to start</Text>
+          <Text style={styles.loadingText}>building your own custom playlist.</Text>
+          <TouchableOpacity
+            style={styles.noFavbutton}
+            onPress={handleCategoryPress}
+          >
+            <Text style={styles.noFavButtonText}>Explore Adhkar</Text>
+          </TouchableOpacity>
         </View>
       </ScreenBackground>
     );
   }
 
-  // Create circular pages with validation
   const circularPages = [
-    dhikrs[dhikrs.length - 1], // fake last
-    ...dhikrs,                 // real items
-    dhikrs[0],                 // fake first
+    dhikrs[dhikrs.length - 1],
+    ...dhikrs,
+    dhikrs[0],
   ];
 
   const barHeightPx = Math.max(0, Math.min((goalProgress / 100) * 500, 500));
+
+  let currentCategory = 'General'
+  if (categoryUrl && categoryUrl === 'favourites') {
+    currentCategory = 'Favourites';
+  } else {
+    currentCategory = dhikrs[0]?.category;
+  }
 
   return (
     <ScreenBackground>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.greeting}>Assalamu Alaikum</Text>
-          <Text style={styles.date}>
-            {new Date().toLocaleDateString('en-US', {
-              weekday: 'long',
-              month: 'long',
-              day: 'numeric'
-            })}
-          </Text>
+          <View style={styles.leftHeader}>
+            <Text style={styles.greeting}>Assalamu Alaikum</Text>
+            <Text style={styles.date}>
+              {new Date().toLocaleDateString('en-US', {
+                weekday: 'long',
+                month: 'long',
+                day: 'numeric'
+              })}
+            </Text>
+          </View>
+
+          <View style={styles.rightHeader}>
+            <Text style={styles.goalText}>Dhikr Goal: {Math.min(Math.round(goalProgress), 100)}%</Text>
+            <Text style={styles.khairisText}>Khairis: {todayProgress >= 1000 ? `${(todayProgress / 1000).toFixed(1)}k` : todayProgress}✨</Text>
+          </View>
         </View>
 
-        <View style={styles.progressContainer}>
-          <View style={styles.progressBarContainer}>
-            <View style={[styles.progressBar, { height: Math.round(barHeightPx) }]} />
-          </View>
-          <Text style={styles.progressText}>
-            {Math.min(Math.round(goalProgress), 100)}%
-          </Text>
-        </View>
+        <TouchableOpacity
+          style={styles.categoryTag}
+          onPress={handleCategoryPress}
+          activeOpacity={0.7}
+        >
+          <Text style={styles.categoryText}>{currentCategory}</Text>
+        </TouchableOpacity>
+
+        <CompletionNotification 
+          visible={showNotification} 
+          onClose={handleCloseNotification}
+          subtitle= {`+${categoryLength} Khairis earned ✨`}
+          categoryName = { currentCategory }
+          khairisAmount = {categoryLength}
+        />
 
         <PagerView
+          key={pagerKey}
           ref={pagerRef}
           initialPage={1}
           style={{ flex: 1 }}
           orientation="vertical"
           onPageSelected={handlePageSelected}
           onPageScrollStateChanged={handleScrollStateChanged}
-          scrollEnabled={!isAdjustingPosition} // Disable scrolling during adjustments
+          scrollEnabled={!isAdjustingPosition}
         >
           {circularPages.map((dhikr: any, index: number) => (
             <View key={`dhikr-${dhikr?.id || index}-${index}`}>
               <DhikrContent
-                dhikr={dhikr}
-                isFavorite={isFavorite(dhikr?.id)}
+                dhikr={dhikr as Dhikr}
+                isFavorite={isFavorite(dhikr?.uuid)}
                 onToggleFavorite={toggleFavorite}
                 theme={theme}
+                positionIndex={index}
+                categoryLength={categoryLength}
               />
             </View>
           ))}
@@ -182,6 +242,7 @@ export default function DhikrScreen() {
   );
 }
 
+// Les styles avec la notification ajoutée
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -191,18 +252,51 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loadingText: {
-    fontFamily: 'Sofia-Pro-Light',
+    fontFamily: 'Sofia-Pro-ExtraLight',
     fontSize: 16,
     color: '#8C8F7B',
   },
-  header: {},
+  noFavouriteTitle: {
+    paddingLeft: 16,
+    marginTop: 28,
+    fontFamily: 'Classico',
+    fontSize: 32,
+    color: '#181818',
+    marginBottom: 22
+  },
+  noFavbutton: {
+    width: '100%',
+    height: 42,
+    maxWidth: 252,
+    backgroundColor: '#7E0F3B',
+    borderRadius: 52,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 80,
+  },
+  noFavButtonText: {
+    fontFamily: 'Sofia-Pro-Regular',
+    fontSize: 18,
+    lineHeight: 26,
+    color: '#FFFFFF',
+    textAlign: 'center',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    paddingHorizontal: 20,
+  },
+  leftHeader: {
+    flex: 1,
+  },
+  rightHeader: {},
   greeting: {
     fontFamily: 'Sofia-Pro-Light',
     fontSize: 17,
     lineHeight: 20,
     color: '#8C8F7B',
     marginBottom: 4,
-    marginLeft: 20
   },
   date: {
     fontFamily: 'Sofia-Pro-Light',
@@ -210,7 +304,59 @@ const styles = StyleSheet.create({
     lineHeight: 14,
     color: '#6F7C50',
     opacity: 0.5,
-    marginLeft: 20
+  },
+  goalText: {
+    fontFamily: 'Sofia-Pro',
+    fontSize: 15,
+    lineHeight: 20,
+    color: '#6F7C50',
+    opacity: 0.5,
+    marginBottom: 4,
+    textAlign: 'left',
+    fontVariant: ['tabular-nums'],
+  },
+  khairisText: {
+    fontFamily: 'Sofia-Pro',
+    fontSize: 15,
+    lineHeight: 14,
+    color: '#6F7C50',
+    opacity: 0.5,
+    textAlign: 'left',
+    fontVariant: ['tabular-nums'],
+  },
+  categoryTag: {
+    zIndex: 3,
+    position: "absolute",
+    alignSelf: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    marginTop: 20,
+    top: 70,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  categoryText: {
+    fontFamily: 'Sofia-Pro',
+    fontSize: 14,
+    color: '#8C8F7B',
+    textAlign: 'center',
+  },
+
+  pageIndicator: {
+    fontFamily: 'Sofia-Pro-ExtraLight',
+    fontSize: 14,
+    color: '#8C8F7B',
+    marginTop: 12,
+    fontVariant: ['tabular-nums'],
+    textAlign: 'center',
   },
   progressContainer: {
     position: 'absolute',
@@ -258,11 +404,9 @@ const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingRight: 20,
   },
   textWrapper: {
     paddingTop: 15,
-    paddingLeft: 30,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 24,

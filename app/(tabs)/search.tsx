@@ -13,7 +13,7 @@ export default function SearchScreen() {
   const [query, setQuery] = useState('');
   const { recentSearches, addRecentSearch, clearRecentSearches } = useSearchStore();
   const { dhikrs } = useDhikrStore();
-  const { isFavorite, addFavorite, removeFavorite } = useFavoritesStore();
+  const { favorites, isFavorite, addFavorite, removeFavorite } = useFavoritesStore();
 
   const fuse = new Fuse(dhikrs, {
     keys: ['arabicText', 'transliteration', 'translation', 'category'],
@@ -69,6 +69,34 @@ export default function SearchScreen() {
     </View>
   );
 
+  const renderFavoriteItem = ({ item }: { item: any }) => (
+    <View style={[styles.resultItem, { backgroundColor: theme.colors.card }]}>
+      <View style={styles.resultContent}>
+        <Text style={[styles.arabicText, { color: theme.colors.text.primary }]}>
+          {item.arabicText}
+        </Text>
+        <Text style={[styles.transliteration]}>
+          {item.transliteration}
+        </Text>
+        <Text style={[styles.translation]}>
+          {item.translation}
+        </Text>
+      </View>
+      <TouchableOpacity
+        style={[
+          styles.favoriteButton
+        ]}
+        onPress={() => handleFavoritePress(item)}
+      >
+        <Heart
+          size={24}
+          color={theme.colors.accent}
+          fill={theme.colors.accent}
+        />
+      </TouchableOpacity>
+    </View>
+  );
+
   const renderRecentSearch = ({ item }: { item: string }) => (
     <TouchableOpacity 
       style={[styles.recentItem, { backgroundColor: theme.colors.card }]}
@@ -107,27 +135,90 @@ export default function SearchScreen() {
           showsVerticalScrollIndicator={false}
         />
       ) : (
-        <View style={styles.recentContainer}>
-          <View style={styles.recentHeader}>
-            <Text style={[styles.recentTitle, { color: theme.colors.text.primary }]}>
-              Recent Searches
-            </Text>
-            {recentSearches.length > 0 && (
-              <TouchableOpacity onPress={clearRecentSearches}>
-                <Text style={[styles.clearText, { color: theme.colors.accent }]}>
-                  Clear All
-                </Text>
-              </TouchableOpacity>
-            )}
-          </View>
-          <FlatList
-            data={recentSearches}
-            renderItem={renderRecentSearch}
-            keyExtractor={(item, index) => `recent-${index}`}
-            contentContainerStyle={styles.recentList}
-            showsVerticalScrollIndicator={false}
-          />
-        </View>
+        <FlatList
+          data={[]}
+          renderItem={() => null}
+          ListHeaderComponent={() => (
+            <View>
+              {/* Section des recherches récentes */}
+              <View style={styles.sectionContainer}>
+                <View style={styles.sectionHeader}>
+                  <Text style={[styles.sectionTitle, { color: theme.colors.text.primary }]}>
+                    Recent Searches
+                  </Text>
+                  {recentSearches.length > 0 && (
+                    <TouchableOpacity onPress={clearRecentSearches}>
+                      <Text style={[styles.clearText, { color: theme.colors.accent }]}>
+                        Clear All
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+                {recentSearches.length > 0 ? (
+                  <View style={styles.recentList}>
+                    {recentSearches.map((item, index) => (
+                      <TouchableOpacity 
+                        key={`recent-${index}`}
+                        style={[styles.recentItem, { backgroundColor: theme.colors.card }]}
+                        onPress={() => handleSearch(item)}
+                      >
+                        <Text style={[styles.recentText, { color: theme.colors.text.primary }]}>{item}</Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                ) : (
+                  <Text style={[styles.emptyText, { color: theme.colors.text.secondary }]}>
+                    No recent searches
+                  </Text>
+                )}
+              </View>
+
+              {/* Section des favoris */}
+              <View style={styles.sectionContainer}>
+                <View style={styles.sectionHeader}>
+                  <Text style={[styles.sectionTitle, { color: theme.colors.text.primary }]}>
+                    Favorites
+                  </Text>
+                </View>
+                {favorites.length > 0 ? (
+                  <View style={styles.favoritesList}>
+                    {favorites.map((item, index) => (
+                      <View key={`favorite-${index}`} style={[styles.resultItem, { backgroundColor: theme.colors.card }]}>
+                        <View style={styles.resultContent}>
+                          <Text style={[styles.arabicText, { color: theme.colors.text.primary }]}>
+                            {item.arabicText}
+                          </Text>
+                          <Text style={[styles.transliteration]}>
+                            {item.transliteration}
+                          </Text>
+                          <Text style={[styles.translation]}>
+                            {item.translation}
+                          </Text>
+                        </View>
+                        <TouchableOpacity
+                          style={[styles.favoriteButton]}
+                          onPress={() => handleFavoritePress(item)}
+                        >
+                          <Heart
+                            size={24}
+                            color={theme.colors.accent}
+                            fill={theme.colors.accent}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    ))}
+                  </View>
+                ) : (
+                  <Text style={[styles.emptyText, { color: theme.colors.text.secondary }]}>
+                    No favorites yet
+                  </Text>
+                )}
+              </View>
+            </View>
+          )}
+          contentContainerStyle={styles.mainContainer}
+          showsVerticalScrollIndicator={false}
+        />
       )}
     </ScreenBackground>
   );
@@ -148,6 +239,26 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: 'Sans',
     fontSize: 16,
+  },
+  mainContainer: {
+    padding: 16,
+  },
+  sectionContainer: {
+    marginBottom: 32,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    fontFamily: 'Sans-Medium',
+    fontSize: 18,
+  },
+  clearText: {
+    fontFamily: 'Sans',
+    fontSize: 14,
   },
   resultsList: {
     padding: 16,
@@ -186,26 +297,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  recentContainer: {
-    flex: 1,
-    padding: 16,
-  },
-  recentHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  recentTitle: {
-    fontFamily: 'Sans-Medium',
-    fontSize: 18,
-  },
-  clearText: {
-    fontFamily: 'Sans',
-    fontSize: 14,
-  },
   recentList: {
     gap: 8,
+  },
+  favoritesList: {
+    gap: 12,
   },
   recentItem: {
     padding: 12,
@@ -215,5 +311,12 @@ const styles = StyleSheet.create({
   recentText: {
     fontFamily: 'Sans',
     fontSize: 14,
+  },
+  emptyText: {
+    fontFamily: 'Sans',
+    fontSize: 14,
+    fontStyle: 'italic',
+    textAlign: 'center',
+    paddingVertical: 20,
   },
 });

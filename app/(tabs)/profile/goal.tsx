@@ -11,10 +11,11 @@ import {
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { useProgressStore } from '@/stores/progressStore';
-import { ArrowLeft } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '@/context/ThemeContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SwipeBackWrapper } from '@/components/SwipeBackWrapper';
+import { ProfileBackground } from '@/components/ProfileBackground'; // Nouveau composant
 
 const goalOptions = [
   { count: 100, time: '2 mins a day' },
@@ -72,120 +73,118 @@ export default function GoalSelectionScreen() {
   };
 
   return (
-    <LinearGradient
-      colors={['rgb(240,244,234)', 'rgb(251,248,244)', 'rgb(251,240,238)']}
-      locations={[0.158, 0.5112, 0.8644]}
-      style={styles.container}
+    <SwipeBackWrapper 
+      onSwipeBack={handleBack}
+      backgroundComponent={<ProfileBackground />}
     >
-      <KeyboardAvoidingView
+      <LinearGradient
+        colors={['rgb(240,244,234)', 'rgb(251,248,244)', 'rgb(251,240,238)']}
+        locations={[0.158, 0.5112, 0.8644]}
         style={styles.container}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={[
-            styles.scrollContent,
-            { paddingBottom: insets.bottom + 140 } // ⬅️ Padded to avoid tab bar
-          ]}
-          keyboardShouldPersistTaps="handled"
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
-
-          <View style={styles.content}>
-            <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-              <ArrowLeft color={theme.colors.text.primary} size={24} />
-            </TouchableOpacity>
-
-            <View style={styles.header}>
-              <Text style={styles.title}>
-                How much adhkar do you want to read per day?
-              </Text>
-              <Text style={styles.subtitle}>
-                Your current goal is: {dailyGoal}
-              </Text>
-            </View>
-
-            <View style={styles.goalsGrid}>
-              {goalOptions.map((option) => (
-                <TouchableOpacity
-                  key={option.count}
-                  style={[
-                    styles.goalCard,
-                    selectedGoal === option.count && styles.selectedGoal,
-                  ]}
-                  onPress={() => handleGoalSelect(option.count)}
-                >
-                  <Text
-                    style={[
-                      styles.goalCount,
-                      selectedGoal === option.count && styles.selectedText,
-                    ]}
-                  >
-                    {option.count}
-                  </Text>
-                  <Text
-                    style={[
-                      styles.goalLabel,
-                      selectedGoal === option.count && styles.selectedText,
-                    ]}
-                  >
-                    adhkar
-                  </Text>
-                  <Text
-                    style={[
-                      styles.goalTime,
-                      selectedGoal === option.count && styles.selectedText,
-                    ]}
-                  >
-                    ({option.time})
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-
-            <View style={styles.customInputContainer}>
-              <Text style={styles.customInputLabel}>Enter Custom Adhkar</Text>
-              <View style={styles.inputWrapper}>
-                <TextInput
-                  style={[
-                    styles.customInput,
-                    customGoal.length > 0 && styles.customInputActive,
-                  ]}
-                  value={customGoal}
-                  onChangeText={handleCustomGoalChange}
-                  placeholder="|5000"
-                  placeholderTextColor="rgba(142, 26, 59, 0.3)"
-                  keyboardType="number-pad"
-                  maxLength={5}
-                  returnKeyType="done"
-                  onSubmitEditing={validateAndStart}
-                />
+          <ScrollView
+            style={styles.scrollView}
+            contentContainerStyle={[
+              styles.scrollContent,
+              { paddingBottom: insets.bottom + 140 }
+            ]}
+            keyboardShouldPersistTaps="handled"
+          >
+            <View style={styles.content}>
+              <View style={styles.header}>
+                <Text style={styles.title}>
+                  Daily Goal
+                </Text>
+                <Text style={styles.currentDailyGoal}>
+                  Your current goal is: {dailyGoal}
+                </Text>
               </View>
-              {error && <Text style={styles.errorText}>{error}</Text>}
+
+              <View style={styles.goalsGrid}>
+                {goalOptions.map((option) => (
+                  <TouchableOpacity
+                    key={option.count}
+                    style={[
+                      styles.goalCard,
+                      selectedGoal === option.count && styles.selectedGoal,
+                    ]}
+                    onPress={() => handleGoalSelect(option.count)}
+                  >
+                    <Text
+                      style={[
+                        styles.goalCount,
+                        selectedGoal === option.count && styles.selectedText,
+                      ]}
+                    >
+                      {option.count}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.goalLabel,
+                        selectedGoal === option.count && styles.selectedText,
+                      ]}
+                    >
+                      adhkar
+                    </Text>
+                    <Text
+                      style={[
+                        styles.goalTime,
+                        selectedGoal === option.count && styles.selectedText,
+                      ]}
+                    >
+                      ({option.time})
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+
+              <View style={styles.customInputContainer}>
+                <Text style={styles.customInputLabel}>Enter Custom Adhkar</Text>
+                <View style={styles.inputWrapper}>
+                  <TextInput
+                    style={[
+                      styles.customInput,
+                      customGoal.length > 0 && styles.customInputActive,
+                    ]}
+                    value={customGoal}
+                    onChangeText={handleCustomGoalChange}
+                    placeholder="|5000"
+                    placeholderTextColor="rgba(142, 26, 59, 0.3)"
+                    keyboardType="number-pad"
+                    maxLength={5}
+                    returnKeyType="done"
+                    onSubmitEditing={validateAndStart}
+                  />
+                </View>
+                {error && <Text style={styles.errorText}>{error}</Text>}
+              </View>
+
+              <TouchableOpacity
+                style={[
+                  styles.button,
+                  !selectedGoal && !customGoal && styles.buttonDisabled,
+                ]}
+                onPress={validateAndStart}
+                disabled={!selectedGoal && !customGoal}
+              >
+                <Text style={styles.buttonText}>Bismillah</Text>
+              </TouchableOpacity>
             </View>
-
-            <TouchableOpacity
-              style={[
-                styles.button,
-                !selectedGoal && !customGoal && styles.buttonDisabled,
-              ]}
-              onPress={validateAndStart}
-              disabled={!selectedGoal && !customGoal}
-            >
-              <Text style={styles.buttonText}>Bismillah</Text>
-            </TouchableOpacity>
-          </View>
-
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </LinearGradient>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </LinearGradient>
+    </SwipeBackWrapper>
   );
 }
 
-
+// Styles identiques au fichier original
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //backgroundColor: '#F8F7F2',
   },
   scrollView: {
     flex: 1,
@@ -203,6 +202,7 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     marginBottom: 10,
+    marginTop: 20,
   },
   title: {
     fontFamily: 'Classico',
@@ -210,12 +210,13 @@ const styles = StyleSheet.create({
     color: '#1A1A1A',
     textAlign: 'center',
     marginBottom: 8,
-    paddingHorizontal: 20,
+    padding: 20,
   },
-  subtitle: {
+  currentDailyGoal: {
     fontFamily: 'Sofia-Pro-ExtraLight',
     fontSize: 16,
-    color: '#666666',
+    color: '#6F7C50',
+    opacity: 0.5,
     textAlign: 'center',
     paddingBottom: 10,
   },
@@ -223,9 +224,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 16,
-    //marginBottom: 10,
   },
-
   goalCard: {
     width: '47%',
     aspectRatio: 1,
@@ -237,42 +236,35 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#EEEEEE',
   },
-
   selectedGoal: {
     borderColor: '#8E1A3B',
     borderWidth: 2,
     aspectRatio: 1,
     padding: 20,
   },
-
   goalCount: {
     fontFamily: 'Sofia-Pro-Regular',
     fontSize: 36,
     color: '#8E1A3B',
     marginBottom: 4,
   },
-
   goalLabel: {
     fontFamily: 'Sofia-Pro-ExtraLight',
     fontSize: 14,
     color: '#666666',
     marginBottom: 2,
   },
-
   goalTime: {
     fontFamily: 'Sofia-Pro-ExtraLight',
     fontSize: 12,
     color: '#999999',
   },
-
   selectedText: {
     color: '#8E1A3B',
   },
-
   customInputContainer: {
     marginBottom: 24,
   },
-
   customInputLabel: {
     fontFamily: 'Sofia-Pro-ExtraLight',
     fontSize: 18,
@@ -280,11 +272,9 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     textAlign: 'center',
   },
-
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    //gap: 8,
   },
   customInput: {
     flex: 1,
@@ -301,14 +291,6 @@ const styles = StyleSheet.create({
   },
   customInputActive: {
     borderColor: '#8E1A3B',
-  },
-  submitButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#8E1A3B',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   errorText: {
     fontFamily: 'Sans',
@@ -340,9 +322,5 @@ const styles = StyleSheet.create({
   },
   buttonDisabled: {
     backgroundColor: '#CCCCCC',
-  },
-
-  backButton: {
-    padding: 4,
   },
 });

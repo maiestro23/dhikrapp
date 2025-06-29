@@ -1,9 +1,9 @@
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions, Platform } from 'react-native';
-import { router } from 'expo-router';
 import { Flag, Bookmark, ChevronRight } from 'lucide-react-native';
-import { useTheme } from '../../context/ThemeContext';
-import { useProgress } from '../../hooks/useProgress';
-import { ScreenBackground } from '../../components/ScreenBackground';
+import { useTheme } from '@/context/ThemeContext'; // Ajustez le chemin
+import { useProgress } from '@/hooks/useProgress'; // Ajustez le chemin
+import { ScreenBackground } from '@/components/ScreenBackground'; // Ajustez le chemin
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -12,10 +12,10 @@ const TAB_BAR_HEIGHT = 80;
 const isTablet = () => {
   const { height, width } = Dimensions.get('window');
   const aspectRatio = height / width;
-  return Platform.OS === 'ios' && aspectRatio < 1.6; // simple heuristic for tablets
+  return Platform.OS === 'ios' && aspectRatio < 1.6;
 };
 
-export default function ProfileScreen() {
+export const ProfileBackground: React.FC = () => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const {
@@ -26,10 +26,6 @@ export default function ProfileScreen() {
     remainingToGoal,
     todayProgress
   } = useProgress();
-
-  const handleNavigation = (route: string) => {
-    router.replace(route);
-  };
 
   const bottomPadding = isTablet()
     ? TAB_BAR_HEIGHT + insets.bottom + 120
@@ -111,7 +107,7 @@ export default function ProfileScreen() {
         <View style={styles.menuContainer}>
           <TouchableOpacity
             style={[styles.menuItem, { backgroundColor: theme.colors.card }]}
-            onPress={() => handleNavigation('/profile/goal')}
+            // onPress désactivé pour l'arrière-plan
           >
             <View style={[styles.menuIconContainer, { backgroundColor: theme.colors.background }]}>
               <Flag size={20} color={theme.colors.accent} />
@@ -122,7 +118,7 @@ export default function ProfileScreen() {
 
           <TouchableOpacity
             style={[styles.menuItem, { backgroundColor: theme.colors.card }]}
-            onPress={() => handleNavigation('/profile/favorites')}
+            // onPress désactivé pour l'arrière-plan
           >
             <View style={[styles.menuIconContainer, { backgroundColor: theme.colors.background }]}>
               <Bookmark size={20} color={theme.colors.accent} />
@@ -135,24 +131,26 @@ export default function ProfileScreen() {
         <View style={[styles.footerMenu, { backgroundColor: theme.colors.card }]}>
           <TouchableOpacity
             style={[styles.footerMenuItem, { borderBottomColor: theme.colors.border, borderBottomWidth: 1 }]}
-            onPress={() => handleNavigation('/profile/terms')}
+            // onPress désactivé pour l'arrière-plan
           >
             <Text style={[styles.footerMenuText, { color: theme.colors.text.primary }]}>Terms of service</Text>
             <ChevronRight size={20} color={theme.colors.text.secondary} />
           </TouchableOpacity>
 
-          {/* You can repeat other footer menu items as needed */}
-          <TouchableOpacity style={styles.footerMenuItem} onPress={() => handleNavigation('/profile/privacy')}>
+          <TouchableOpacity 
+            style={styles.footerMenuItem} 
+            // onPress désactivé pour l'arrière-plan
+          >
             <Text style={[styles.footerMenuText, { color: theme.colors.text.primary }]}>Privacy policy</Text>
             <ChevronRight size={20} color={theme.colors.text.secondary} />
           </TouchableOpacity>
-
         </View>
       </ScrollView>
     </ScreenBackground>
   );
-}
+};
 
+// Styles identiques à profile.tsx
 const styles = StyleSheet.create({
   content: {
     flex: 1,
