@@ -1,19 +1,32 @@
+// tasbihGenerator.ts - Version avec cache
+
 import { Dhikr } from "./dhikrs"
 import {
     SubhanallahDhikrs,
     AlhamdulillahDhikrs,
     AllahuAkbarDhikrs,
     AstaghfirullahDhikrs
-} from "./tasbih_dhikrs" // Remplacez par le bon chemin
+} from "./tasbih_dhikrs"
 
-// Type pour les différents types de Tasbih
 export type TasbihType = 'subhanallah' | 'alhamdulillah' | 'allahuakbar' | 'astaghfirullah';
 
-// Fonction qui génère 33 fois le même dhikr
-export const generateTasbihSession = (tasbihType: TasbihType): Dhikr[] => {
+// 🔥 SOLUTION : Cache pour éviter les re-générations
+const tasbihCache = new Map<string, Dhikr[]>();
+
+export const generateTasbihSession = (tasbihType: TasbihType, count: number = 33): Dhikr[] => {
+    // Créer une clé unique pour ce type et count
+    const cacheKey = `${tasbihType}-${count}`;
+    
+    // Vérifier si on a déjà généré cette combinaison
+    if (tasbihCache.has(cacheKey)) {
+        console.log(`Cache hit for ${cacheKey}`);
+        return tasbihCache.get(cacheKey)!;
+    }
+
+    console.log(`Generating new tasbih session: ${cacheKey}`);
+
     let baseDhikr: Dhikr;
 
-    // Sélectionner le dhikr de base selon le type
     switch (tasbihType) {
         case 'subhanallah':
             baseDhikr = SubhanallahDhikrs[0];
@@ -31,22 +44,43 @@ export const generateTasbihSession = (tasbihType: TasbihType): Dhikr[] => {
             throw new Error(`Type de Tasbih non reconnu: ${tasbihType}`);
     }
 
-    // Générer un tableau de 33 éléments avec le même dhikr
-    return Array.from({ length: 33 }, (_, index) => ({
+    const validCount = Math.max(1, Math.min(count, 10000));
+
+    const result = Array.from({ length: validCount }, (_, index) => ({
         ...baseDhikr,
-        uuid: `${baseDhikr.uuid}-${index + 1}`, // UUID unique pour chaque répétition
-        id: (index + 1).toString() // ID séquentiel de 1 à 33
+        uuid: `${baseDhikr.uuid}-${index + 1}`,
+        id: (index + 1).toString()
     }));
+
+    // Mettre en cache le résultat
+    tasbihCache.set(cacheKey, result);
+    
+    return result;
 };
 
-// Fonction utilitaire pour obtenir le type de Tasbih à partir d'un ID
+export const generateTasbihFromParams = (tasbihType: string, countParam: string): Dhikr[] => {
+    const type = getTasbihTypeFromId(tasbihType);
+    if (!type) {
+        console.warn(`Type de tasbih non reconnu: ${tasbihType}`);
+        return [];
+    }
+
+    const count = parseInt(countParam, 10);
+    if (isNaN(count) || count <= 0) {
+        console.warn(`Count invalide: ${countParam}, utilisation de 33 par défaut`);
+        return generateTasbihSession(type, 33);
+    }
+
+    return generateTasbihSession(type, count);
+};
+
 export const getTasbihTypeFromId = (id: string): TasbihType | null => {
     switch (id) {
         case 'subhanallah':
             return 'subhanallah';
         case 'alhamdulillah':
             return 'alhamdulillah';
-        case 'allahu-akbar':
+        case 'allahuakbar':
             return 'allahuakbar';
         case 'astaghfirullah':
             return 'astaghfirullah';
@@ -55,21 +89,12 @@ export const getTasbihTypeFromId = (id: string): TasbihType | null => {
     }
 };
 
-// Exemple d'utilisation :
-/*
-// Générer une session de 33 Subhanallah
-const subhanallahSession = generateTasbihSession('subhanallah');
-console.log(subhanallahSession.length); // 33
+// Fonction pour vider le cache si nécessaire
+export const clearTasbihCache = () => {
+    tasbihCache.clear();
+};
 
-// Générer une session de 33 Alhamdulillah
-const alhamdulillahSession = generateTasbihSession('alhamdulillah');
-console.log(alhamdulillahSession[0].transliteration); // "Alhamdulillah"
-console.log(alhamdulillahSession[32].id); // "33"
-
-// Utilisation avec les paramètres de navigation
-const tasbihType = getTasbihTypeFromId('subhanallah');
-if (tasbihType) {
-  const session = generateTasbihSession(tasbihType);
-  // Utiliser la session...
-}
-*/
+// Fonction pour obtenir la taille du cache (debugging)
+export const getTasbihCacheSize = () => {
+    return tasbihCache.size;
+};

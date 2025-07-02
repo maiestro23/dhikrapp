@@ -7,7 +7,7 @@ import { AfterSalahDhikrs } from '@/config/afterSalah_dhikrs';
 import { IstighfarDhikrs } from '@/config/istighfar_dhikrs';
 import { FavoriteDhikr, useFavoritesStore } from './favoritesStore';
 import { AlhamdulillahDhikrs, AllahuAkbarDhikrs, AstaghfirullahDhikrs, SubhanallahDhikrs } from '@/config/tasbih_dhikrs';
-import { generateTasbihSession } from '@/config/tasbihGenerator';
+import { generateTasbihFromParams, generateTasbihSession } from '@/config/tasbihGenerator';
 
 interface Dhikr {
   id: string;
@@ -70,22 +70,26 @@ export const useDhikrStore = create<DhikrState>()((set, get) => ({
     // Get URL params inside the store
     const params = useLocalSearchParams();
     const category = params.category as string || 'General';
+    const count = params.count as string;
+    const tasbihType = params.tasbihType as string;
 
-
-            console.log("Category is : ", category)  // 33
-    switch (category) {
-      // Tasbih
-      case 'subhanallah':
-        console.log(generateTasbihSession('subhanallah')); // 33
-
-        return  generateTasbihSession('subhanallah');
-      case 'alhamdulillah':
-        return generateTasbihSession('alhamdulillah');
-      case 'allahuakbar':
-        return generateTasbihSession('allahuakbar');
-      case 'astaghfirullah':
-        return generateTasbihSession('astaghfirullah');
+    // Si c'est un type de tasbih avec un count spécifique
+    if (tasbihType && count) {
+      console.log('Generating tasbih session:', { tasbihType, count });
       
+      // Utiliser la nouvelle fonction pour éviter les boucles infinies
+      const dhikrs = generateTasbihFromParams(tasbihType, count);
+      
+      if (dhikrs.length === 0) {
+        console.warn('Aucun dhikr généré, retour aux dhikrs par défaut');
+        // Retourner une valeur par défaut ou une liste vide
+        return [];
+      }
+      
+      return dhikrs;
+    }
+    
+    switch (category) {
       //Categories
       case 'morning':
         return MorningDhikrs;

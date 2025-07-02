@@ -60,6 +60,14 @@ const tasbihItems = [
   { id: 'astaghfirullah', text: 'Astaghfirullah' },
 ];
 
+// Données pour les options de comptage
+const countOptions = [
+  { id: '33x', label: '33x' },
+  { id: '100x', label: '100x' },
+  { id: '500x', label: '500x' },
+  { id: 'custom', label: 'Custom' }
+];
+
 // Composant pour les onglets General/Favourites - EXACT du design
 const TabButton = ({ title, onPress }: any) => (
   <TouchableOpacity
@@ -113,10 +121,34 @@ const TasbihButton = ({ item, onPress }: any) => (
   </TouchableOpacity>
 );
 
+// Nouveau composant pour les boutons de comptage
+const CountButton = ({ option, isSelected, onPress }: any) => (
+  <TouchableOpacity
+    style={[
+      styles.countButton,
+      isSelected && styles.countButtonSelected
+    ]}
+    onPress={() => onPress(option)}
+    activeOpacity={0.8}
+  >
+    <Text style={[
+      styles.countButtonText,
+      isSelected && styles.countButtonTextSelected
+    ]}>
+      {option.label}
+    </Text>
+  </TouchableOpacity>
+);
+
 export default function DiscoverScreen() {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState('General');
   const [searchQuery, setSearchQuery] = useState('');
+  
+  // Nouveaux états pour la section Tasbih
+  const [selectedCount, setSelectedCount] = useState('33x');
+  const [customCount, setCustomCount] = useState('');
+  const [showCustomInput, setShowCustomInput] = useState(false);
 
   // ✅ FONCTION NAVIGATION CORRIGÉE - Navigation vers DhikrScreen avec paramètres
   const handleCategoryPress = (category: any) => {
@@ -129,14 +161,38 @@ export default function DiscoverScreen() {
     });
   };
 
-  // Fonction pour gérer les clics sur les boutons Tasbih
+  // Fonction pour gérer la sélection du comptage
+  const handleCountSelection = (option: any) => {
+    setSelectedCount(option.id);
+    if (option.id === 'custom') {
+      setShowCustomInput(true);
+    } else {
+      setShowCustomInput(false);
+      setCustomCount('');
+    }
+  };
+
+  // Fonction modifiée pour gérer les clics sur les boutons Tasbih
   const handleTasbihPress = (item: any) => {
+    // Déterminer le count à utiliser
+    let finalCount = '33'; // Valeur par défaut
+    
+    if (selectedCount === 'custom' && customCount && parseInt(customCount) > 0) {
+      finalCount = customCount;
+    } else if (selectedCount !== 'custom') {
+      // Extraire le nombre des options (33x, 100x, 500x)
+      finalCount = selectedCount.replace('x', '');
+    }
+    
+    console.log('Navigating with count:', finalCount, 'for item:', item.id);
+    
     router.push({
       pathname: '/(tabs)',
       params: {
         category: item.id,
         categoryTitle: item.text,
-        tasbihType: item.id
+        tasbihType: item.id,
+        count: finalCount
       }
     });
   };
@@ -190,11 +246,41 @@ export default function DiscoverScreen() {
               />
             </View>
 
-            {/* ===== SECTION TASBIH - NOUVELLE ===== */}
+            {/* ===== SECTION TASBIH - MISE À JOUR ===== */}
             <View style={styles.tasbihSection}>
               <Text style={styles.sectionTitle}>Tasbih</Text>
-              <Text style={styles.sectionSubtitle}>Single dhikr sessions</Text>
+              <Text style={styles.sectionSubtitle}>Custom dhikr sessions.</Text>
               
+              {/* Section de sélection du nombre */}
+              <View style={styles.countSection}>
+                <Text style={styles.countLabel}>Count:</Text>
+                <View style={styles.countOptionsContainer}>
+                  {countOptions.map((option) => (
+                    <CountButton
+                      key={option.id}
+                      option={option}
+                      isSelected={selectedCount === option.id}
+                      onPress={handleCountSelection}
+                    />
+                  ))}
+                </View>
+                
+                {/* Input personnalisé */}
+                {showCustomInput && (
+                  <View style={styles.customInputContainer}>
+                    <TextInput
+                      style={styles.customInput}
+                      placeholder="Enter count"
+                      placeholderTextColor="#8C8F7B"
+                      value={customCount}
+                      onChangeText={setCustomCount}
+                      keyboardType="numeric"
+                    />
+                  </View>
+                )}
+              </View>
+              
+              {/* Boutons Tasbih */}
               <View style={styles.tasbihGrid}>
                 {tasbihItems.map((item, index) => (
                   <TasbihButton
@@ -228,7 +314,7 @@ export default function DiscoverScreen() {
   );
 }
 
-// ===== STYLES MODIFIÉS POUR LES IMAGES =====
+// ===== STYLES COMPLETS =====
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -309,7 +395,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 
-  // ===== TASBIH SECTION STYLES - NOUVEAUX =====
+  // ===== TASBIH SECTION STYLES - MODIFIÉS =====
   tasbihSection: {
     marginBottom: 22,
   },
@@ -325,6 +411,63 @@ const styles = StyleSheet.create({
     color: '#8C8F7B',
     marginBottom: 20,
   },
+
+  // ===== NOUVEAUX STYLES POUR LA SÉLECTION DE COMPTAGE =====
+  countSection: {
+    marginBottom: 20,
+  },
+  countLabel: {
+    fontFamily: 'Sofia-Pro',
+    fontSize: 16,
+    color: '#181818',
+    marginBottom: 12,
+  },
+  countOptionsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
+  countButton: {
+    flex: 1,
+    marginHorizontal: 4,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 8,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+  },
+  countButtonSelected: {
+    backgroundColor: '#7E0F3B',
+    borderColor: '#7E0F3B',
+  },
+  countButtonText: {
+    fontFamily: 'Sofia-Pro',
+    fontSize: 14,
+    color: '#181818',
+    fontWeight: '500',
+  },
+  countButtonTextSelected: {
+    color: '#FFFFFF',
+  },
+  customInputContainer: {
+    marginTop: 8,
+  },
+  customInput: {
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    fontFamily: 'Sofia-Pro',
+    fontSize: 16,
+    color: '#181818',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    textAlign: 'center',
+  },
+
+  // ===== TASBIH GRID STYLES =====
   tasbihGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
