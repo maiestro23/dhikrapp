@@ -71,6 +71,8 @@ export const useDhikrStore = create<DhikrState>()((set, get) => ({
     const params = useLocalSearchParams();
     const category = params.category as string || 'General';
 
+
+            console.log("Category is : ", category)  // 33
     switch (category) {
       // Tasbih
       case 'subhanallah':
