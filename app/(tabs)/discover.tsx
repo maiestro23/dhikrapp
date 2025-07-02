@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -122,23 +122,30 @@ const TasbihButton = ({ item, onPress }: any) => (
 );
 
 // Nouveau composant pour les boutons de comptage
-const CountButton = ({ option, isSelected, onPress }: any) => (
-  <TouchableOpacity
-    style={[
-      styles.countButton,
-      isSelected && styles.countButtonSelected
-    ]}
-    onPress={() => onPress(option)}
-    activeOpacity={0.8}
-  >
-    <Text style={[
-      styles.countButtonText,
-      isSelected && styles.countButtonTextSelected
-    ]}>
-      {option.label}
-    </Text>
-  </TouchableOpacity>
-);
+const CountButton = ({ option, isSelected, onPress, customCount }: any) => {
+  // Afficher le nombre custom au lieu de "Custom" si un nombre est entré
+  const displayText = option.id === 'custom' && customCount && parseInt(customCount) > 0 
+    ? customCount 
+    : option.label;
+
+  return (
+    <TouchableOpacity
+      style={[
+        styles.countButton,
+        isSelected && styles.countButtonSelected
+      ]}
+      onPress={() => onPress(option)}
+      activeOpacity={0.8}
+    >
+      <Text style={[
+        styles.countButtonText,
+        isSelected && styles.countButtonTextSelected
+      ]}>
+        {displayText}
+      </Text>
+    </TouchableOpacity>
+  );
+};
 
 export default function DiscoverScreen() {
   const { theme } = useTheme();
@@ -148,7 +155,7 @@ export default function DiscoverScreen() {
   // Nouveaux états pour la section Tasbih
   const [selectedCount, setSelectedCount] = useState('33x');
   const [customCount, setCustomCount] = useState('');
-  const [showCustomInput, setShowCustomInput] = useState(false);
+  const hiddenInputRef = useRef<TextInput>(null);
 
   // ✅ FONCTION NAVIGATION CORRIGÉE - Navigation vers DhikrScreen avec paramètres
   const handleCategoryPress = (category: any) => {
@@ -165,11 +172,18 @@ export default function DiscoverScreen() {
   const handleCountSelection = (option: any) => {
     setSelectedCount(option.id);
     if (option.id === 'custom') {
-      setShowCustomInput(true);
+      // Ouvrir automatiquement le clavier numérique sans montrer l'input
+      setTimeout(() => {
+        hiddenInputRef.current?.focus();
+      }, 100);
     } else {
-      setShowCustomInput(false);
       setCustomCount('');
     }
+  };
+
+  // Fonction pour gérer les changements dans l'input caché
+  const handleCustomCountChange = (value: string) => {
+    setCustomCount(value);
   };
 
   // Fonction modifiée pour gérer les clics sur les boutons Tasbih
@@ -261,23 +275,21 @@ export default function DiscoverScreen() {
                       option={option}
                       isSelected={selectedCount === option.id}
                       onPress={handleCountSelection}
+                      customCount={customCount}
                     />
                   ))}
                 </View>
                 
-                {/* Input personnalisé */}
-                {showCustomInput && (
-                  <View style={styles.customInputContainer}>
-                    <TextInput
-                      style={styles.customInput}
-                      placeholder="Enter count"
-                      placeholderTextColor="#8C8F7B"
-                      value={customCount}
-                      onChangeText={setCustomCount}
-                      keyboardType="numeric"
-                    />
-                  </View>
-                )}
+                {/* Input caché pour capturer la saisie */}
+                <TextInput
+                  ref={hiddenInputRef}
+                  style={styles.hiddenInput}
+                  value={customCount}
+                  onChangeText={handleCustomCountChange}
+                  keyboardType="numeric"
+                  returnKeyType="done"
+                  autoFocus={false}
+                />
               </View>
               
               {/* Boutons Tasbih */}
@@ -465,6 +477,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E0E0E0',
     textAlign: 'center',
+  },
+  hiddenInput: {
+    position: 'absolute',
+    left: -1000,
+    opacity: 0,
+    height: 0,
+    width: 0,
   },
 
   // ===== TASBIH GRID STYLES =====
