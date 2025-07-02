@@ -110,7 +110,6 @@ export default function DiscoverScreen() {
     });
   };
 
-  // Filtrer les catégories selon la recherche - FONCTIONNALITÉ EXACTE
   const filteredCategories = categories.filter(category =>
     category.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     category.subtitle.toLowerCase().includes(searchQuery.toLowerCase())
