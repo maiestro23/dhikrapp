@@ -13,6 +13,7 @@ import { Search } from 'lucide-react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { ScreenBackground } from '../../components/ScreenBackground';
 import { router } from 'expo-router';
+import { PageTransitionWrapper } from '@/components/PageTransitionWrapper';
 
 const { width } = Dimensions.get('window');
 
@@ -217,115 +218,117 @@ export default function DiscoverScreen() {
   );
 
   return (
-    <ScreenBackground>
-      <View style={styles.container}>
-        {/* ===== HEADER - EXACT du design ===== */}
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>Discover</Text>
-          <Text style={styles.headerSubtitle}>
-            Your personal adhkar library
-          </Text>
-        </View>
-
-        {/* ===== BARRE DE RECHERCHE - EXACT du design ===== */}
-        <View style={styles.searchContainer}>
-          <View style={styles.searchInputContainer}>
-            <Search size={20} color="#8C8F7B" style={styles.searchIcon} />
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Search"
-              placeholderTextColor="#8C8F7B"
-              value={searchQuery}
-              onChangeText={setSearchQuery}
-            />
+    <PageTransitionWrapper animationType="fade" duration={350}>
+      <ScreenBackground>
+        <View style={styles.container}>
+          {/* ===== HEADER - EXACT du design ===== */}
+          <View style={styles.header}>
+            <Text style={styles.headerTitle}>Discover</Text>
+            <Text style={styles.headerSubtitle}>
+              Your personal adhkar library
+            </Text>
           </View>
-        </View>
 
-        {/* ===== SECTION CATEGORIES - EXACT du design ===== */}
-        <View style={styles.categoriesSection}>
-          <ScrollView
-            style={styles.categoriesContainer}
-            showsVerticalScrollIndicator={false}
-          >
-            {/* ===== ONGLETS General/Favourites - EXACT du design ===== */}
-            <View style={styles.tabsContainer}>
-              <TabButton
-                title="General"
-                onPress={() => handleCategoryPress({ id: 'General', title: 'General' })}
-              />
-              <TabButton
-                title="Favourites"
-                onPress={() => handleCategoryPress({ id: 'favourites', title: 'Favourites' })}
+          {/* ===== BARRE DE RECHERCHE - EXACT du design ===== */}
+          <View style={styles.searchContainer}>
+            <View style={styles.searchInputContainer}>
+              <Search size={20} color="#8C8F7B" style={styles.searchIcon} />
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Search"
+                placeholderTextColor="#8C8F7B"
+                value={searchQuery}
+                onChangeText={setSearchQuery}
               />
             </View>
+          </View>
 
-            {/* ===== SECTION TASBIH - MISE À JOUR ===== */}
-            <View style={styles.tasbihSection}>
-              <Text style={styles.sectionTitle}>Tasbih</Text>
-              <Text style={styles.sectionSubtitle}>Custom dhikr sessions</Text>
-
-              {/* Section de sélection du nombre - MODIFIÉE */}
-              <View style={styles.countSection}>
-                <View style={styles.countRow}>
-
-                  <View style={styles.countOptionsContainer}>
-
-                    {countOptions.map((option) => (
-                      <CountButton
-                        key={option.id}
-                        option={option}
-                        isSelected={selectedCount === option.id}
-                        onPress={handleCountSelection}
-                        customCount={customCount}
-                      />
-                    ))}
-                  </View>
-                </View>
-
-                {/* Input caché pour capturer la saisie */}
-                <TextInput
-                  ref={hiddenInputRef}
-                  style={styles.hiddenInput}
-                  value={customCount}
-                  onChangeText={handleCustomCountChange}
-                  returnKeyType="done"
-                  autoFocus={false}
-                  keyboardType="number-pad"
-                  maxLength={3}
+          {/* ===== SECTION CATEGORIES - EXACT du design ===== */}
+          <View style={styles.categoriesSection}>
+            <ScrollView
+              style={styles.categoriesContainer}
+              showsVerticalScrollIndicator={false}
+            >
+              {/* ===== ONGLETS General/Favourites - EXACT du design ===== */}
+              <View style={styles.tabsContainer}>
+                <TabButton
+                  title="General"
+                  onPress={() => handleCategoryPress({ id: 'General', title: 'General' })}
+                />
+                <TabButton
+                  title="Favourites"
+                  onPress={() => handleCategoryPress({ id: 'favourites', title: 'Favourites' })}
                 />
               </View>
 
-              {/* Boutons Tasbih */}
-              <View style={styles.tasbihGrid}>
-                {tasbihItems.map((item, index) => (
-                  <TasbihButton
-                    key={item.id}
-                    item={item}
-                    onPress={handleTasbihPress}
+              {/* ===== SECTION TASBIH - MISE À JOUR ===== */}
+              <View style={styles.tasbihSection}>
+                <Text style={styles.sectionTitle}>Tasbih</Text>
+                <Text style={styles.sectionSubtitle}>Custom dhikr sessions</Text>
+
+                {/* Section de sélection du nombre - MODIFIÉE */}
+                <View style={styles.countSection}>
+                  <View style={styles.countRow}>
+
+                    <View style={styles.countOptionsContainer}>
+
+                      {countOptions.map((option) => (
+                        <CountButton
+                          key={option.id}
+                          option={option}
+                          isSelected={selectedCount === option.id}
+                          onPress={handleCountSelection}
+                          customCount={customCount}
+                        />
+                      ))}
+                    </View>
+                  </View>
+
+                  {/* Input caché pour capturer la saisie */}
+                  <TextInput
+                    ref={hiddenInputRef}
+                    style={styles.hiddenInput}
+                    value={customCount}
+                    onChangeText={handleCustomCountChange}
+                    returnKeyType="done"
+                    autoFocus={false}
+                    keyboardType="number-pad"
+                    maxLength={3}
+                  />
+                </View>
+
+                {/* Boutons Tasbih */}
+                <View style={styles.tasbihGrid}>
+                  {tasbihItems.map((item, index) => (
+                    <TasbihButton
+                      key={item.id}
+                      item={item}
+                      onPress={handleTasbihPress}
+                    />
+                  ))}
+                </View>
+              </View>
+
+              <Text style={styles.sectionTitle}>Categories</Text>
+              <Text style={styles.sectionSubtitle}>Curated adhkar for every occasion</Text>
+              {/* Grille de catégories 2x2 - EXACT du design */}
+              <View style={styles.categoriesGrid}>
+                {filteredCategories.map((category, index) => (
+                  <CategoryCard
+                    key={category.id}
+                    category={category}
+                    onPress={handleCategoryPress}
                   />
                 ))}
               </View>
-            </View>
 
-            <Text style={styles.sectionTitle}>Categories</Text>
-            <Text style={styles.sectionSubtitle}>Curated adhkar for every occasion</Text>
-            {/* Grille de catégories 2x2 - EXACT du design */}
-            <View style={styles.categoriesGrid}>
-              {filteredCategories.map((category, index) => (
-                <CategoryCard
-                  key={category.id}
-                  category={category}
-                  onPress={handleCategoryPress}
-                />
-              ))}
-            </View>
-
-            {/* Espacement en bas pour éviter la collision avec la navigation */}
-            <View style={styles.bottomSpacing} />
-          </ScrollView>
+              {/* Espacement en bas pour éviter la collision avec la navigation */}
+              <View style={styles.bottomSpacing} />
+            </ScrollView>
+          </View>
         </View>
-      </View>
-    </ScreenBackground>
+      </ScreenBackground>
+    </PageTransitionWrapper>
   );
 }
 

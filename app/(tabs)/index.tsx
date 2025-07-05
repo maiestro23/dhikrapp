@@ -11,6 +11,7 @@ import { ScreenBackground } from '../../components/ScreenBackground';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Dhikr } from '@/config/dhikrs';
 import { CompletionNotification } from '../../components/CompletionNotification';
+import { PageTransitionWrapper } from '@/components/PageTransitionWrapper';
 
 const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme, positionIndex, categoryLength }: any) => (
   <View style={styles.dhikrCard}>
@@ -198,67 +199,70 @@ export default function DhikrScreen() {
   }
 
   return (
-    <ScreenBackground>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <View style={styles.leftHeader}>
-            <Text style={styles.greeting}>Assalamu Alaikum</Text>
-            <Text style={styles.date}>
-              {new Date().toLocaleDateString('en-US', {
-                weekday: 'long',
-                month: 'long',
-                day: 'numeric'
-              })}
-            </Text>
-          </View>
 
-          <View style={styles.rightHeader}>
-            <Text style={styles.goalText}>Dhikr Goal: {Math.min(Math.round(goalProgress), 100)}%</Text>
-            <Text style={styles.khairisText}>Khairis: {todayProgress >= 1000 ? `${(todayProgress / 1000).toFixed(1)}k` : todayProgress}✨</Text>
-          </View>
-        </View>
-
-        <TouchableOpacity
-          style={styles.categoryTag}
-          onPress={handleCategoryPress}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.categoryText}>{currentCategory}</Text>
-        </TouchableOpacity>
-
-        <CompletionNotification
-          visible={showNotification}
-          onClose={handleCloseNotification}
-          subtitle={`+${categoryLength} Khairis earned ✨`}
-          categoryName={currentCategory}
-          khairisAmount={categoryLength}
-        />
-
-        <PagerView
-          key={pagerKey}
-          ref={pagerRef}
-          initialPage={1}
-          style={{ flex: 1 }}
-          orientation="vertical"
-          onPageSelected={handlePageSelected}
-          onPageScrollStateChanged={handleScrollStateChanged}
-          scrollEnabled={!isAdjustingPosition}
-        >
-          {circularPages.map((dhikr: any, index: number) => (
-            <View key={`dhikr-${dhikr?.id || index}-${index}`}>
-              <DhikrContent
-                dhikr={dhikr as Dhikr}
-                isFavorite={isFavorite(dhikr?.uuid)}
-                onToggleFavorite={toggleFavorite}
-                theme={theme}
-                positionIndex={index}
-                categoryLength={categoryLength}
-              />
+    <PageTransitionWrapper animationType="fade" duration={350}>
+      <ScreenBackground>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <View style={styles.leftHeader}>
+              <Text style={styles.greeting}>Assalamu Alaikum</Text>
+              <Text style={styles.date}>
+                {new Date().toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </Text>
             </View>
-          ))}
-        </PagerView>
-      </View>
-    </ScreenBackground>
+
+            <View style={styles.rightHeader}>
+              <Text style={styles.goalText}>Dhikr Goal: {Math.min(Math.round(goalProgress), 100)}%</Text>
+              <Text style={styles.khairisText}>Khairis: {todayProgress >= 1000 ? `${(todayProgress / 1000).toFixed(1)}k` : todayProgress}✨</Text>
+            </View>
+          </View>
+
+          <TouchableOpacity
+            style={styles.categoryTag}
+            onPress={handleCategoryPress}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.categoryText}>{currentCategory}</Text>
+          </TouchableOpacity>
+
+          <CompletionNotification
+            visible={showNotification}
+            onClose={handleCloseNotification}
+            subtitle={`+${categoryLength} Khairis earned ✨`}
+            categoryName={currentCategory}
+            khairisAmount={categoryLength}
+          />
+
+          <PagerView
+            key={pagerKey}
+            ref={pagerRef}
+            initialPage={1}
+            style={{ flex: 1 }}
+            orientation="vertical"
+            onPageSelected={handlePageSelected}
+            onPageScrollStateChanged={handleScrollStateChanged}
+            scrollEnabled={!isAdjustingPosition}
+          >
+            {circularPages.map((dhikr: any, index: number) => (
+              <View key={`dhikr-${dhikr?.id || index}-${index}`}>
+                <DhikrContent
+                  dhikr={dhikr as Dhikr}
+                  isFavorite={isFavorite(dhikr?.uuid)}
+                  onToggleFavorite={toggleFavorite}
+                  theme={theme}
+                  positionIndex={index}
+                  categoryLength={categoryLength}
+                />
+              </View>
+            ))}
+          </PagerView>
+        </View>
+      </ScreenBackground>
+    </PageTransitionWrapper>
   );
 }
 
