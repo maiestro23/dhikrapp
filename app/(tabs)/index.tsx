@@ -149,11 +149,11 @@ export default function DhikrScreen() {
     return (
       <ScreenBackground>
         <View style={[styles.container, styles.loadingContainer]}>
-          <Text style={[styles.noFavouriteTitle, { color: theme.colors.text.primary }]}>
+          <Text style={[styles.noFavouriteTitle]}>
             No favourites yet?
           </Text>
           <Text style={styles.loadingText}>Tap the heart 🤍 on any adhkar to start</Text>
-          <Text style={styles.loadingText}>building your own custom playlist.</Text>
+          <Text style={styles.loadingText}>building your own custom playlist</Text>
           <TouchableOpacity
             style={styles.noFavbutton}
             onPress={handleCategoryPress}
@@ -263,23 +263,23 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     marginTop: 28,
     fontFamily: 'Classico',
-    fontSize: 32,
+    fontSize: 24,
     color: '#181818',
-    marginBottom: 22
+    marginBottom: 8
   },
   noFavbutton: {
-    width: '100%',
+    width: '50%',
     height: 42,
     maxWidth: 252,
     backgroundColor: '#7E0F3B',
     borderRadius: 52,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 80,
+    marginTop: 36,
   },
   noFavButtonText: {
     fontFamily: 'Sofia-Pro-Regular',
-    fontSize: 18,
+    fontSize: 16,
     lineHeight: 26,
     color: '#FFFFFF',
     textAlign: 'center',
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
   },
   date: {
     fontFamily: 'Sofia-Pro-Light',
-    fontSize: 13,
+    fontSize: 14,
     lineHeight: 14,
     color: '#6F7C50',
     opacity: 0.5,

@@ -38,13 +38,13 @@ export default function SplashScreen() {
 
   // Si dailyGoal existe et le loading est terminé, rediriger immédiatement
   if (dailyGoal && !showLoading) {
-    return <Redirect href="/(tabs)" />;
+   // return <Redirect href="/(tabs)" />;
   }
 
   return (
     <>
       {/* Afficher le contenu seulement pour la première utilisation ET après le loading */}
-      {!dailyGoal && !showLoading && (
+      { (
         <LinearGradient
           colors={['rgb(240,244,234)', 'rgb(251,248,244)', 'rgb(251,240,238)']}
           locations={[0.158, 0.5112, 0.8644]}
@@ -58,9 +58,9 @@ export default function SplashScreen() {
               { width: CONTENT_WIDTH }
             ]}>
               <View style={styles.quoteContainer}>
-                <Text style={styles.quote}>"Verily, in the</Text>
-                <Text style={styles.quote}>remembrance of Allah</Text>
-                <Text style={styles.quote}>do hearts find rest."</Text>
+                <Text style={styles.quote}>"Verily, in the remembrance of Allah do hearts find rest."</Text>
+                <Text style={styles.quote}></Text>
+                <Text style={styles.quote}></Text>
                 <View style={styles.referenceContainer}>
                   <Text style={styles.reference}>(13:28)</Text>
                 </View>

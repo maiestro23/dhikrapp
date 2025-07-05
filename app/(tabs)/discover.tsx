@@ -224,7 +224,7 @@ export default function DiscoverScreen() {
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Discover</Text>
           <Text style={styles.headerSubtitle}>
-            Discover categories, moods and playlists.
+            Your personal adhkar library
           </Text>
         </View>
 
@@ -263,21 +263,23 @@ export default function DiscoverScreen() {
             {/* ===== SECTION TASBIH - MISE À JOUR ===== */}
             <View style={styles.tasbihSection}>
               <Text style={styles.sectionTitle}>Tasbih</Text>
-              <Text style={styles.sectionSubtitle}>Custom dhikr sessions.</Text>
+              <Text style={styles.sectionSubtitle}>Custom dhikr sessions</Text>
               
-              {/* Section de sélection du nombre */}
+              {/* Section de sélection du nombre - MODIFIÉE */}
               <View style={styles.countSection}>
-                <Text style={styles.countLabel}>Count:</Text>
-                <View style={styles.countOptionsContainer}>
-                  {countOptions.map((option) => (
-                    <CountButton
-                      key={option.id}
-                      option={option}
-                      isSelected={selectedCount === option.id}
-                      onPress={handleCountSelection}
-                      customCount={customCount}
-                    />
-                  ))}
+                <View style={styles.countRow}>
+                  <Text style={styles.countLabel}>Count:</Text>
+                  <View style={styles.countOptionsContainer}>
+                    {countOptions.map((option) => (
+                      <CountButton
+                        key={option.id}
+                        option={option}
+                        isSelected={selectedCount === option.id}
+                        onPress={handleCountSelection}
+                        customCount={customCount}
+                      />
+                    ))}
+                  </View>
                 </View>
                 
                 {/* Input caché pour capturer la saisie */}
@@ -305,7 +307,7 @@ export default function DiscoverScreen() {
             </View>
 
             <Text style={styles.sectionTitle}>Categories</Text>
-
+              <Text style={styles.sectionSubtitle}>Curated adhkar for every occasion</Text>
             {/* Grille de catégories 2x2 - EXACT du design */}
             <View style={styles.categoriesGrid}>
               {filteredCategories.map((category, index) => (
@@ -340,7 +342,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontFamily: 'Classico', // EXACT : Font cohérente
-    fontSize: 32, // EXACT : Taille du titre
+    fontSize: 30, // EXACT : Taille du titre
     color: '#181818', // EXACT : Noir foncé
     marginBottom: 8, // EXACT : Espacement sous le titre
   },
@@ -413,31 +415,38 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontFamily: 'Classico', // EXACT : Font du titre de section
-    fontSize: 24, // EXACT : Taille du titre
+    fontSize: 26, // EXACT : Taille du titre
     color: '#181818', // EXACT : Couleur du titre
     marginBottom: 8,
   },
   sectionSubtitle: {
     fontFamily: 'Sofia-Pro-Light',
-    fontSize: 14,
-    color: '#8C8F7B',
+    fontSize: 16,
+        color: '#8C8F7B', // EXACT : Gris-vert du design
+//    color: '#8C8F7B',
     marginBottom: 20,
   },
 
-  // ===== NOUVEAUX STYLES POUR LA SÉLECTION DE COMPTAGE =====
+  // ===== STYLES MODIFIÉS POUR LA SÉLECTION DE COMPTAGE =====
   countSection: {
     marginBottom: 20,
+  },
+  countRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
   },
   countLabel: {
     fontFamily: 'Sofia-Pro',
     fontSize: 16,
     color: '#181818',
-    marginBottom: 12,
+    marginRight: 16, // Espacement entre le label et les boutons
+    minWidth: 50, // Largeur minimale pour le label
   },
   countOptionsContainer: {
     flexDirection: 'row',
+    flex: 1,
     justifyContent: 'space-between',
-    marginBottom: 12,
   },
   countButton: {
     flex: 1,
