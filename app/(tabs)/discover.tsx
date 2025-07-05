@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -52,6 +52,22 @@ const categories = [
   }
 ];
 
+// Données pour la section Tasbih
+const tasbihItems = [
+  { id: 'subhanallah', text: 'Subhanallah' },
+  { id: 'alhamdulillah', text: 'Alhamdulillah' },
+  { id: 'allahuakbar', text: 'Allahu Akbar' },
+  { id: 'astaghfirullah', text: 'Astaghfirullah' },
+];
+
+// Données pour les options de comptage
+const countOptions = [
+  { id: '33x', label: '33x' },
+  { id: '100x', label: '100x' },
+  { id: '500x', label: '500x' },
+  { id: 'custom', label: 'Custom' }
+];
+
 // Composant pour les onglets General/Favourites - EXACT du design
 const TabButton = ({ title, onPress }: any) => (
   <TouchableOpacity
@@ -94,10 +110,52 @@ const CategoryCard = ({ category, onPress }: any) => (
   </TouchableOpacity>
 );
 
+// Composant pour les boutons Tasbih
+const TasbihButton = ({ item, onPress }: any) => (
+  <TouchableOpacity
+    style={styles.tasbihButton}
+    onPress={() => onPress(item)}
+    activeOpacity={0.8}
+  >
+    <Text style={styles.tasbihButtonText}>{item.text}</Text>
+  </TouchableOpacity>
+);
+
+// Nouveau composant pour les boutons de comptage
+const CountButton = ({ option, isSelected, onPress, customCount }: any) => {
+  // Afficher le nombre custom au lieu de "Custom" si un nombre est entré
+  const displayText = option.id === 'custom' && customCount && parseInt(customCount) > 0
+    ? customCount
+    : option.label;
+
+  return (
+    <TouchableOpacity
+      style={[
+        styles.countButton,
+        isSelected && styles.countButtonSelected
+      ]}
+      onPress={() => onPress(option)}
+      activeOpacity={0.8}
+    >
+      <Text style={[
+        styles.countButtonText,
+        isSelected && styles.countButtonTextSelected
+      ]}>
+        {displayText}
+      </Text>
+    </TouchableOpacity>
+  );
+};
+
 export default function DiscoverScreen() {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState('General');
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Nouveaux états pour la section Tasbih
+  const [selectedCount, setSelectedCount] = useState('33x');
+  const [customCount, setCustomCount] = useState('');
+  const hiddenInputRef = useRef<TextInput>(null);
 
   // ✅ FONCTION NAVIGATION CORRIGÉE - Navigation vers DhikrScreen avec paramètres
   const handleCategoryPress = (category: any) => {
@@ -110,9 +168,52 @@ export default function DiscoverScreen() {
     });
   };
 
+  // Fonction pour gérer la sélection du comptage
+  const handleCountSelection = (option: any) => {
+    setSelectedCount(option.id);
+    if (option.id === 'custom') {
+      // Ouvrir automatiquement le clavier numérique sans montrer l'input
+      setTimeout(() => {
+        hiddenInputRef.current?.focus();
+      }, 100);
+    } else {
+      setCustomCount('');
+    }
+  };
+
+  // Fonction pour gérer les changements dans l'input caché
+  const handleCustomCountChange = (value: string) => {
+    setCustomCount(value);
+  };
+
+  // Fonction modifiée pour gérer les clics sur les boutons Tasbih
+  const handleTasbihPress = (item: any) => {
+    // Déterminer le count à utiliser
+    let finalCount = '33'; // Valeur par défaut
+
+    if (selectedCount === 'custom' && customCount && parseInt(customCount) > 0) {
+      finalCount = customCount;
+    } else if (selectedCount !== 'custom') {
+      // Extraire le nombre des options (33x, 100x, 500x)
+      finalCount = selectedCount.replace('x', '');
+    }
+
+    console.log('Navigating with count:', finalCount, 'for item:', item.id);
+
+    router.push({
+      pathname: '/(tabs)',
+      params: {
+        category: item.id,
+        categoryTitle: item.text,
+        tasbihType: item.id,
+        count: finalCount
+      }
+    });
+  };
+
+  // Filtrer les catégories selon la recherche - FONCTIONNALITÉ EXACTE
   const filteredCategories = categories.filter(category =>
-    category.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    category.subtitle.toLowerCase().includes(searchQuery.toLowerCase())
+    category.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -122,7 +223,7 @@ export default function DiscoverScreen() {
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Discover</Text>
           <Text style={styles.headerSubtitle}>
-            Discover categories, moods and playlists.
+            Your personal adhkar library
           </Text>
         </View>
 
@@ -140,29 +241,74 @@ export default function DiscoverScreen() {
           </View>
         </View>
 
-
-
         {/* ===== SECTION CATEGORIES - EXACT du design ===== */}
         <View style={styles.categoriesSection}>
           <ScrollView
             style={styles.categoriesContainer}
             showsVerticalScrollIndicator={false}
           >
-                    {/* ===== ONGLETS General/Favourites - EXACT du design ===== */}
-        <View style={styles.tabsContainer}>
+            {/* ===== ONGLETS General/Favourites - EXACT du design ===== */}
+            <View style={styles.tabsContainer}>
+              <TabButton
+                title="General"
+                onPress={() => handleCategoryPress({ id: 'General', title: 'General' })}
+              />
+              <TabButton
+                title="Favourites"
+                onPress={() => handleCategoryPress({ id: 'favourites', title: 'Favourites' })}
+              />
+            </View>
 
-          <TabButton
-            title="General"
-            onPress={() => handleCategoryPress({ id: 'General', title: 'General' })}
-          />
-          <TabButton
-            title="Favourites"
-            onPress={() => handleCategoryPress({ id: 'favourites', title: 'Favourites' })}
-          />
-        </View>
+            {/* ===== SECTION TASBIH - MISE À JOUR ===== */}
+            <View style={styles.tasbihSection}>
+              <Text style={styles.sectionTitle}>Tasbih</Text>
+              <Text style={styles.sectionSubtitle}>Custom dhikr sessions</Text>
+
+              {/* Section de sélection du nombre - MODIFIÉE */}
+              <View style={styles.countSection}>
+                <View style={styles.countRow}>
+
+                  <View style={styles.countOptionsContainer}>
+
+                    {countOptions.map((option) => (
+                      <CountButton
+                        key={option.id}
+                        option={option}
+                        isSelected={selectedCount === option.id}
+                        onPress={handleCountSelection}
+                        customCount={customCount}
+                      />
+                    ))}
+                  </View>
+                </View>
+
+                {/* Input caché pour capturer la saisie */}
+                <TextInput
+                  ref={hiddenInputRef}
+                  style={styles.hiddenInput}
+                  value={customCount}
+                  onChangeText={handleCustomCountChange}
+                  returnKeyType="done"
+                  autoFocus={false}
+                  keyboardType="number-pad"
+                  maxLength={3}
+                />
+              </View>
+
+              {/* Boutons Tasbih */}
+              <View style={styles.tasbihGrid}>
+                {tasbihItems.map((item, index) => (
+                  <TasbihButton
+                    key={item.id}
+                    item={item}
+                    onPress={handleTasbihPress}
+                  />
+                ))}
+              </View>
+            </View>
+
             <Text style={styles.sectionTitle}>Categories</Text>
-
-
+            <Text style={styles.sectionSubtitle}>Curated adhkar for every occasion</Text>
             {/* Grille de catégories 2x2 - EXACT du design */}
             <View style={styles.categoriesGrid}>
               {filteredCategories.map((category, index) => (
@@ -183,7 +329,7 @@ export default function DiscoverScreen() {
   );
 }
 
-// ===== STYLES MODIFIÉS POUR LES IMAGES =====
+// ===== STYLES COMPLETS =====
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -197,7 +343,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontFamily: 'Classico', // EXACT : Font cohérente
-    fontSize: 32, // EXACT : Taille du titre
+    fontSize: 30, // EXACT : Taille du titre
     color: '#181818', // EXACT : Noir foncé
     marginBottom: 8, // EXACT : Espacement sous le titre
   },
@@ -257,37 +403,136 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  // tabButtonActive: {
-  //   backgroundColor: '#7E0F3B', // Votre couleur exacte
-  //   shadowColor: '#7E0F3B',
-  //   shadowOffset: {
-  //     width: 0,
-  //     height: 4,
-  //   },
-  //   shadowOpacity: 0.3,
-  //   shadowRadius: 6,
-  //   elevation: 6,
-  // },
   tabButtonText: {
     fontFamily: 'Sofia-Pro',
     fontSize: 16,
     color: '#fff', // Couleur pour l'état inactif
     fontWeight: '500',
   },
-  // tabButtonTextActive: {
-  //   color: '#FFFFFF', // Blanc pour le texte actif sur fond #7E0F3B
-  //   fontWeight: '600',
-  // },
+
+  // ===== TASBIH SECTION STYLES - MODIFIÉS =====
+  tasbihSection: {
+    marginBottom: 22,
+  },
+  sectionTitle: {
+    fontFamily: 'Classico', // EXACT : Font du titre de section
+    fontSize: 26, // EXACT : Taille du titre
+    color: '#181818', // EXACT : Couleur du titre
+    marginBottom: 8,
+  },
+  sectionSubtitle: {
+    fontFamily: 'Sofia-Pro-Light',
+    fontSize: 16,
+    color: '#8C8F7B', // EXACT : Gris-vert du design
+    //    color: '#8C8F7B',
+    marginBottom: 20,
+  },
+
+  // ===== STYLES MODIFIÉS POUR LA SÉLECTION DE COMPTAGE =====
+  countSection: {
+    marginBottom: 20,
+  },
+  countRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+    justifyContent: 'space-between',
+    fontFamily: 'Sofia-Pro',
+  },
+  countLabel: {
+    fontFamily: 'Sofia-Pro',
+    fontSize: 16,
+    color: '#181818',
+    marginRight: 16, // Espacement entre le label et les boutons
+    maxWidth: 30, // Largeur minimale pour le label
+  },
+  countOptionsContainer: {
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'space-between',
+    fontFamily: 'Sofia-Pro',
+  },
+  countButton: {
+    flex: 1,
+    marginHorizontal: 4,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 28,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+  },
+  countButtonSelected: {
+    backgroundColor: '#8C8F7B',
+    //borderColor: '#7E0F3B',
+  },
+  countButtonText: {
+    fontFamily: 'Sofia-Pro',
+    fontSize: 14,
+    color: '#8C8F7B',
+    //    fontWeight: '500',
+  },
+  countButtonTextSelected: {
+    color: '#FFFFFF',
+  },
+  customInputContainer: {
+    marginTop: 8,
+  },
+  customInput: {
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    fontFamily: 'Sofia-Pro',
+    fontSize: 16,
+    color: '#181818',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    textAlign: 'center',
+  },
+  hiddenInput: {
+    position: 'absolute',
+    left: -1000,
+    opacity: 0,
+    height: 0,
+    width: 0,
+  },
+
+  // ===== TASBIH GRID STYLES =====
+  tasbihGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    //gap: 4,
+  },
+  tasbihButton: {
+    width: (width - 56) / 2, // Ajusté pour le gap et padding
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    backgroundColor: '#7E0F3B',
+    borderRadius: 12,
+    alignItems: 'center',
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  tasbihButtonText: {
+    fontFamily: 'Sofia-Pro',
+    fontSize: 16,
+    color: '#FFFFFF',
+    fontWeight: '500',
+  },
 
   // ===== CATEGORIES SECTION STYLES - EXACT du design =====
   categoriesSection: {
     flex: 1,
-  },
-  sectionTitle: {
-    fontFamily: 'Classico', // EXACT : Font du titre de section
-    fontSize: 24, // EXACT : Taille du titre
-    color: '#181818', // EXACT : Couleur du titre
-    paddingBottom: 20
   },
   categoriesContainer: {
     flex: 1,
@@ -307,12 +552,6 @@ const styles = StyleSheet.create({
     borderRadius: 16, // EXACT : Coins arrondis des cartes
     overflow: 'hidden',
     shadowColor: '#000', // EXACT : Couleur de l'ombre
-    //shadowOffset: {
-    // width: 0,
-    // height: 4, // EXACT : Offset de l'ombre
-    //},
-    //shadowOpacity: 0.15, // EXACT : Opacité de l'ombre
-    //shadowRadius: 6, // EXACT : Rayon de l'ombre
     elevation: 8, // EXACT : Élévation Android
   },
   // NOUVEAU : Style pour ImageBackground
@@ -331,7 +570,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    //backgroundColor: 'rgba(0, 0, 0, 0.4)', // Overlay sombre pour la lisibilité
   },
   categoryCardContent: {
     flex: 1,
@@ -352,9 +590,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF', // EXACT : Couleur blanche
     textAlign: 'center',
     marginBottom: 4, // EXACT : Espacement sous le titre
-    // RENFORCÉ : Text shadow pour meilleure lisibilité sur images
-    //textShadowColor: 'rgba(0, 0, 0, 0.8)',
-    //textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 4,
   },
   categorySubtitle: {
@@ -362,10 +597,6 @@ const styles = StyleSheet.create({
     fontSize: 12, // EXACT : Taille des sous-titres
     color: 'rgba(255, 255, 255, 0.95)', // LÉGÈREMENT MODIFIÉ : Plus opaque pour meilleure lisibilité
     textAlign: 'center',
-    // RENFORCÉ : Text shadow pour meilleure lisibilité sur images
-    //textShadowColor: 'rgba(0, 0, 0, 0.8)',
-    //textShadowOffset: { width: 0, height: 2 },
-    //textShadowRadius: 4,
   },
 
   // ===== SPACING - EXACT du design =====

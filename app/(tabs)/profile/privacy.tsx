@@ -22,7 +22,7 @@ export default function PrivacyScreen() {
       <ScreenBackground>
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
           <View style={styles.header}>
-            <Text style={[styles.title, { color: theme.colors.text.primary }]}>Privacy Policy</Text>
+            <Text style={[styles.title]}>Privacy Policy</Text>
           </View>
 
           <View style={styles.section}>
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Classico', // EXACT : Font cohérente
-    fontSize: 32, // EXACT : Taille du titre
+    fontSize: 30, // EXACT : Taille du titre
     color: '#181818', // EXACT : Noir foncé
     marginBottom: 8, // EXACT : Espacement sous le titre
   },
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   section: {
-    paddingVertical: 24,
+    paddingVertical: 10,
   },
   date: {
     fontFamily: 'Sofia-Pro-ExtraLight', // EXACT : Font cohérente

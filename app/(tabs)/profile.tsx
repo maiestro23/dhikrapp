@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   },
   greeting: {
     fontFamily: 'Classico',
-    fontSize: 24,
+    fontSize: 30,
     textAlign: 'center',
   },
   statsContainer: {

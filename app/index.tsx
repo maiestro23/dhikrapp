@@ -58,9 +58,9 @@ export default function SplashScreen() {
               { width: CONTENT_WIDTH }
             ]}>
               <View style={styles.quoteContainer}>
-                <Text style={styles.quote}>"Verily, in the</Text>
-                <Text style={styles.quote}>remembrance of Allah</Text>
-                <Text style={styles.quote}>do hearts find rest."</Text>
+                <Text style={styles.quote}>"Verily, in the remembrance of Allah do hearts find rest."</Text>
+                <Text style={styles.quote}></Text>
+                <Text style={styles.quote}></Text>
                 <View style={styles.referenceContainer}>
                   <Text style={styles.reference}>(13:28)</Text>
                 </View>

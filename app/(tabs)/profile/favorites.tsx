@@ -117,10 +117,13 @@ export default function SearchScreen() {
     >
       <ScreenBackground>
         <View style={styles.sectionHeader}>
-          <Text style={[styles.sectionTitle, { color: theme.colors.text.primary }]}>
+          <Text style={[styles.sectionTitle]}>
             Favourites
           </Text>
         </View>
+        <Text style={styles.headerSubtitle}>
+          View, add or remove favourites
+        </Text>
 
         <View style={styles.searchContainer}>
           <View style={styles.XsearchInputContainer}>
@@ -254,17 +257,27 @@ const styles = StyleSheet.create({
   },
   sectionHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     marginBottom: 16,
   },
   sectionTitle: {
     paddingLeft: 16,
-    marginTop: 28,
+    marginTop: 20,
     fontFamily: 'Classico',
-    fontSize: 32,
+    fontSize: 30,
     color: '#181818',
   },
+
+  headerSubtitle: {
+    fontFamily: 'Sofia-Pro-Light', // EXACT : Font cohérente
+    fontSize: 16, // EXACT : Taille du sous-titre
+    color: '#8C8F7B', // EXACT : Gris-vert du design
+    paddingLeft: 16,
+    marginTop: -10,
+    marginBottom: 14
+  },
+
   clearText: {
     fontFamily: 'Sans',
     fontSize: 14,

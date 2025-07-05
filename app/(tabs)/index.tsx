@@ -10,6 +10,7 @@ import { useDhikrStore } from '../../stores/dhikrStore';
 import { ScreenBackground } from '../../components/ScreenBackground';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Dhikr } from '@/config/dhikrs';
+import { CompletionNotification } from '../../components/CompletionNotification';
 
 const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme, positionIndex, categoryLength }: any) => (
   <View style={styles.dhikrCard}>
@@ -29,20 +30,39 @@ const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme, positionInde
       </TouchableOpacity>
 
       <Text style={styles.pageIndicator}>
-        {positionIndex}/{categoryLength}
+        {getDisplayIndex(positionIndex, categoryLength)}/{categoryLength}
       </Text>
     </View>
   </View>
 );
 
-import { CompletionNotification } from '../../components/CompletionNotification';
+
+
+// Ajoutez cette fonction helper avant votre composant principal :
+const getDisplayIndex = (currentIndex: number, totalLength: number) => {
+  // Si on est sur l'élément dupliqué du début (index 0), afficher le dernier
+  if (currentIndex === 0) {
+    return totalLength;
+  }
+  // Si on est sur l'élément dupliqué de la fin (index totalLength + 1), afficher le premier
+  if (currentIndex === totalLength + 1) {
+    return 1;
+  }
+  // Sinon, afficher l'index normal (en soustrayant 1 car on commence à l'index 1)
+  return currentIndex;
+};
+
 
 export default function DhikrScreen() {
   const { theme } = useTheme();
   const { start, stop } = useTimeTracking();
   const { incrementCount, goalProgress, totalCount, todayProgress } = useProgress();
   const dhikrs = useDhikrStore().getDhikrsByUrlCategory();
+
+
   const categoryLength = dhikrs.length;
+
+
   const { isFavorite, addFavorite, removeFavorite } = useFavoritesStore();
 
   const pagerRef = useRef<PagerView>(null);
@@ -146,11 +166,11 @@ export default function DhikrScreen() {
     return (
       <ScreenBackground>
         <View style={[styles.container, styles.loadingContainer]}>
-          <Text style={[styles.noFavouriteTitle, { color: theme.colors.text.primary }]}>
+          <Text style={[styles.noFavouriteTitle]}>
             No favourites yet?
           </Text>
           <Text style={styles.loadingText}>Tap the heart 🤍 on any adhkar to start</Text>
-          <Text style={styles.loadingText}>building your own custom playlist.</Text>
+          <Text style={styles.loadingText}>building your own custom playlist</Text>
           <TouchableOpacity
             style={styles.noFavbutton}
             onPress={handleCategoryPress}
@@ -206,12 +226,12 @@ export default function DhikrScreen() {
           <Text style={styles.categoryText}>{currentCategory}</Text>
         </TouchableOpacity>
 
-        <CompletionNotification 
-          visible={showNotification} 
+        <CompletionNotification
+          visible={showNotification}
           onClose={handleCloseNotification}
-          subtitle= {`+${categoryLength} Khairis earned ✨`}
-          categoryName = { currentCategory }
-          khairisAmount = {categoryLength}
+          subtitle={`+${categoryLength} Khairis earned ✨`}
+          categoryName={currentCategory}
+          khairisAmount={categoryLength}
         />
 
         <PagerView
@@ -260,23 +280,23 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     marginTop: 28,
     fontFamily: 'Classico',
-    fontSize: 32,
+    fontSize: 24,
     color: '#181818',
-    marginBottom: 22
+    marginBottom: 8
   },
   noFavbutton: {
-    width: '100%',
+    width: '50%',
     height: 42,
     maxWidth: 252,
     backgroundColor: '#7E0F3B',
     borderRadius: 52,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 80,
+    marginTop: 36,
   },
   noFavButtonText: {
     fontFamily: 'Sofia-Pro-Regular',
-    fontSize: 18,
+    fontSize: 16,
     lineHeight: 26,
     color: '#FFFFFF',
     textAlign: 'center',
@@ -300,7 +320,7 @@ const styles = StyleSheet.create({
   },
   date: {
     fontFamily: 'Sofia-Pro-Light',
-    fontSize: 13,
+    fontSize: 14,
     lineHeight: 14,
     color: '#6F7C50',
     opacity: 0.5,

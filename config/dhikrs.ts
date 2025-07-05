@@ -4,7 +4,7 @@ export interface Dhikr {
     arabicText: string;
     transliteration: string;
     translation: string;
-    category: 'General' | 'After Salah' | 'Evening Adhkar' | 'Morning Adhkar' | 'Istighfar';
+    category: string;
     count?: number;
     dhikrLength?: string;
     uuid: string;

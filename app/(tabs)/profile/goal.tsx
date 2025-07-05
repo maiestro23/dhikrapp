@@ -73,7 +73,7 @@ export default function GoalSelectionScreen() {
   };
 
   return (
-    <SwipeBackWrapper 
+    <SwipeBackWrapper
       onSwipeBack={handleBack}
       backgroundComponent={<ProfileBackground />}
     >
@@ -99,8 +99,9 @@ export default function GoalSelectionScreen() {
                 <Text style={styles.title}>
                   Daily Goal
                 </Text>
+
                 <Text style={styles.currentDailyGoal}>
-                  Your current goal is: {dailyGoal}
+                  Current Goal: {dailyGoal}
                 </Text>
               </View>
 
@@ -143,7 +144,7 @@ export default function GoalSelectionScreen() {
               </View>
 
               <View style={styles.customInputContainer}>
-                <Text style={styles.customInputLabel}>Enter Custom Adhkar</Text>
+                <Text style={styles.customInputLabel}>Enter Custom Goal</Text>
                 <View style={styles.inputWrapper}>
                   <TextInput
                     style={[
@@ -171,7 +172,7 @@ export default function GoalSelectionScreen() {
                 onPress={validateAndStart}
                 disabled={!selectedGoal && !customGoal}
               >
-                <Text style={styles.buttonText}>Bismillah</Text>
+                <Text style={styles.buttonText}>Update Goal</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
@@ -200,30 +201,31 @@ const styles = StyleSheet.create({
     paddingBottom: 34,
   },
   header: {
-    alignItems: 'center',
+    //   alignItems: "left",
     marginBottom: 10,
-    marginTop: 20,
+    //marginTop: 20,
   },
   title: {
-    fontFamily: 'Classico',
-    fontSize: 24,
-    color: '#1A1A1A',
-    textAlign: 'center',
-    marginBottom: 8,
-    padding: 20,
+    fontFamily: 'Classico', // EXACT : Font cohérente
+    fontSize: 30, // EXACT : Taille du titre
+    color: '#181818', // EXACT : Noir foncé
+    marginBottom: 8, // EXACT : Espacement sous le titre
   },
+
   currentDailyGoal: {
-    fontFamily: 'Sofia-Pro-ExtraLight',
-    fontSize: 16,
-    color: '#6F7C50',
-    opacity: 0.5,
-    textAlign: 'center',
-    paddingBottom: 10,
+
+        fontFamily: 'Sofia-Pro-Light', // EXACT : Font cohérente
+    fontSize: 16, // EXACT : Taille du sous-titre
+    color: '#8C8F7B', // EXACT : Gris-vert du design
+    opacity: 0.8, // EXACT : Légère transparence
+    marginBottom: 8,
+    paddingBottom: 20,
   },
   goalsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 16,
+    marginBottom: 20
   },
   goalCard: {
     width: '47%',
@@ -244,20 +246,21 @@ const styles = StyleSheet.create({
   },
   goalCount: {
     fontFamily: 'Sofia-Pro-Regular',
-    fontSize: 36,
+    fontSize: 42,
     color: '#8E1A3B',
     marginBottom: 4,
   },
   goalLabel: {
     fontFamily: 'Sofia-Pro-ExtraLight',
-    fontSize: 14,
-    color: '#666666',
+    fontSize: 16,
+    color: '#8C8F7B',
     marginBottom: 2,
   },
   goalTime: {
     fontFamily: 'Sofia-Pro-ExtraLight',
     fontSize: 12,
     color: '#999999',
+    paddingBottom: 15
   },
   selectedText: {
     color: '#8E1A3B',
@@ -267,8 +270,8 @@ const styles = StyleSheet.create({
   },
   customInputLabel: {
     fontFamily: 'Sofia-Pro-ExtraLight',
-    fontSize: 18,
-    color: '#666666',
+    fontSize: 16,
+    color: '#8C8F7B',
     marginBottom: 8,
     textAlign: 'center',
   },

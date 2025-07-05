@@ -23,16 +23,19 @@ export default function InstructionsScreen() {
       <SafeAreaView style={styles.safeArea}>
         <View style={[styles.content, { width: CONTENT_WIDTH }]}>
           <View style={styles.header}>
-            <Text style={styles.title}>Swipe up</Text>
+            <Text style={styles.title}>Swipeable adhkar</Text>
             <Text style={styles.subtitle}>
-              Swipe up through to read your daily adhkar
+              1 Swipe = 1 Khairi point ✨
+            </Text>
+            <Text style={styles.subtitle}>
+              Rewarding both here and in the Akhirah, insha'Allah
             </Text>
           </View>
 
           <View style={styles.cardContainer}>
             <View style={styles.card}>
               <View style={styles.cardContent}>
-                <Text style={styles.arabicText}>الحمد لله</Text>
+                <Text style={styles.arabicText}>ٱلْحَمْدُ ٱللّٰه</Text>
                 <Text style={styles.transliteration}>Alhamdulillah</Text>
                 <Text style={styles.translation}>(All praise is due to Allah)</Text>
               </View>
