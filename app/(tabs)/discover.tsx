@@ -124,8 +124,8 @@ const TasbihButton = ({ item, onPress }: any) => (
 // Nouveau composant pour les boutons de comptage
 const CountButton = ({ option, isSelected, onPress, customCount }: any) => {
   // Afficher le nombre custom au lieu de "Custom" si un nombre est entré
-  const displayText = option.id === 'custom' && customCount && parseInt(customCount) > 0 
-    ? customCount 
+  const displayText = option.id === 'custom' && customCount && parseInt(customCount) > 0
+    ? customCount
     : option.label;
 
   return (
@@ -151,7 +151,7 @@ export default function DiscoverScreen() {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState('General');
   const [searchQuery, setSearchQuery] = useState('');
-  
+
   // Nouveaux états pour la section Tasbih
   const [selectedCount, setSelectedCount] = useState('33x');
   const [customCount, setCustomCount] = useState('');
@@ -190,16 +190,16 @@ export default function DiscoverScreen() {
   const handleTasbihPress = (item: any) => {
     // Déterminer le count à utiliser
     let finalCount = '33'; // Valeur par défaut
-    
+
     if (selectedCount === 'custom' && customCount && parseInt(customCount) > 0) {
       finalCount = customCount;
     } else if (selectedCount !== 'custom') {
       // Extraire le nombre des options (33x, 100x, 500x)
       finalCount = selectedCount.replace('x', '');
     }
-    
+
     console.log('Navigating with count:', finalCount, 'for item:', item.id);
-    
+
     router.push({
       pathname: '/(tabs)',
       params: {
@@ -213,8 +213,7 @@ export default function DiscoverScreen() {
 
   // Filtrer les catégories selon la recherche - FONCTIONNALITÉ EXACTE
   const filteredCategories = categories.filter(category =>
-    category.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    category.subtitle.toLowerCase().includes(searchQuery.toLowerCase())
+    category.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -264,12 +263,13 @@ export default function DiscoverScreen() {
             <View style={styles.tasbihSection}>
               <Text style={styles.sectionTitle}>Tasbih</Text>
               <Text style={styles.sectionSubtitle}>Custom dhikr sessions</Text>
-              
+
               {/* Section de sélection du nombre - MODIFIÉE */}
               <View style={styles.countSection}>
                 <View style={styles.countRow}>
-                  <Text style={styles.countLabel}>Count:</Text>
+
                   <View style={styles.countOptionsContainer}>
+
                     {countOptions.map((option) => (
                       <CountButton
                         key={option.id}
@@ -281,19 +281,20 @@ export default function DiscoverScreen() {
                     ))}
                   </View>
                 </View>
-                
+
                 {/* Input caché pour capturer la saisie */}
                 <TextInput
                   ref={hiddenInputRef}
                   style={styles.hiddenInput}
                   value={customCount}
                   onChangeText={handleCustomCountChange}
-                  keyboardType="numeric"
                   returnKeyType="done"
                   autoFocus={false}
+                  keyboardType="number-pad"
+                  maxLength={3}
                 />
               </View>
-              
+
               {/* Boutons Tasbih */}
               <View style={styles.tasbihGrid}>
                 {tasbihItems.map((item, index) => (
@@ -307,7 +308,7 @@ export default function DiscoverScreen() {
             </View>
 
             <Text style={styles.sectionTitle}>Categories</Text>
-              <Text style={styles.sectionSubtitle}>Curated adhkar for every occasion</Text>
+            <Text style={styles.sectionSubtitle}>Curated adhkar for every occasion</Text>
             {/* Grille de catégories 2x2 - EXACT du design */}
             <View style={styles.categoriesGrid}>
               {filteredCategories.map((category, index) => (
@@ -422,8 +423,8 @@ const styles = StyleSheet.create({
   sectionSubtitle: {
     fontFamily: 'Sofia-Pro-Light',
     fontSize: 16,
-        color: '#8C8F7B', // EXACT : Gris-vert du design
-//    color: '#8C8F7B',
+    color: '#8C8F7B', // EXACT : Gris-vert du design
+    //    color: '#8C8F7B',
     marginBottom: 20,
   },
 
@@ -435,18 +436,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 12,
+    justifyContent: 'space-between',
+    fontFamily: 'Sofia-Pro',
   },
   countLabel: {
     fontFamily: 'Sofia-Pro',
     fontSize: 16,
     color: '#181818',
     marginRight: 16, // Espacement entre le label et les boutons
-    minWidth: 50, // Largeur minimale pour le label
+    maxWidth: 30, // Largeur minimale pour le label
   },
   countOptionsContainer: {
     flexDirection: 'row',
     flex: 1,
     justifyContent: 'space-between',
+    fontFamily: 'Sofia-Pro',
   },
   countButton: {
     flex: 1,
@@ -467,7 +471,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Sofia-Pro',
     fontSize: 14,
     color: '#8C8F7B',
-//    fontWeight: '500',
+    //    fontWeight: '500',
   },
   countButtonTextSelected: {
     color: '#FFFFFF',
