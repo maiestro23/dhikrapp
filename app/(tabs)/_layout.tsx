@@ -287,6 +287,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#5A5D4D',
     borderRadius: 2,
     zIndex: 10,
+    marginLeft: '14%'
   },
 });
 
