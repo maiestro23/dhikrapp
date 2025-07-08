@@ -1,12 +1,13 @@
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions, Platform, Switch } from 'react-native';
 import { router } from 'expo-router';
-import { Flag, Bookmark, ChevronRight } from 'lucide-react-native';
+import { Flag, Bookmark, ChevronRight, Moon } from 'lucide-react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { useProgress } from '../../hooks/useProgress';
 import { ScreenBackground } from '../../components/ScreenBackground';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PageTransitionWrapper } from '@/components/PageTransitionWrapper';
+import { DarkTheme } from '@react-navigation/native';
 
 const TAB_BAR_HEIGHT = 80;
 
@@ -17,7 +18,7 @@ const isTablet = () => {
 };
 
 export default function ProfileScreen() {
-  const { theme } = useTheme();
+  const { theme, isDarkBackground, toggleBackgroundTheme } = useTheme();
   const insets = useSafeAreaInsets();
   const {
     totalCount,
@@ -27,6 +28,7 @@ export default function ProfileScreen() {
     remainingToGoal,
     todayProgress
   } = useProgress();
+
 
   const handleNavigation = (route: string) => {
     router.replace(route);
@@ -132,6 +134,24 @@ export default function ProfileScreen() {
               <Text style={[styles.menuText, { color: theme.colors.text.primary }]}>Favourites</Text>
               <ChevronRight size={20} color={theme.colors.text.secondary} />
             </TouchableOpacity>
+
+            {/* Nouveau toggle pour le background */}
+            <TouchableOpacity
+              style={[styles.menuItem, { backgroundColor: theme.colors.card }]}
+              onPress={toggleBackgroundTheme}
+            >
+              <View style={[styles.menuIconContainer, { backgroundColor: theme.colors.background }]}>
+                <Moon size={20} color={theme.colors.accent} />
+              </View>
+              <Text style={[styles.menuText, { color: theme.colors.text.primary }]}>Dark Background</Text>
+              <Switch
+                value={isDarkBackground}
+                onValueChange={toggleBackgroundTheme}
+                trackColor={{ false: '#767577', true: '#7E0F3B' }}
+                thumbColor={isDarkBackground ? '#ffffff' : '#f4f3f4'}
+                ios_backgroundColor="#3e3e3e"
+              />
+            </TouchableOpacity>
           </View>
 
           <View style={[styles.footerMenu, { backgroundColor: theme.colors.card }]}>
@@ -143,7 +163,6 @@ export default function ProfileScreen() {
               <ChevronRight size={20} color={theme.colors.text.secondary} />
             </TouchableOpacity>
 
-            {/* You can repeat other footer menu items as needed */}
             <TouchableOpacity style={styles.footerMenuItem} onPress={() => handleNavigation('/profile/privacy')}>
               <Text style={[styles.footerMenuText, { color: theme.colors.text.primary }]}>Privacy policy</Text>
               <ChevronRight size={20} color={theme.colors.text.secondary} />

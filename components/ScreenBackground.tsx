@@ -2,6 +2,7 @@ import React from 'react';
 import { Platform, View, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTheme } from '../context/ThemeContext';
 
 interface ScreenBackgroundProps {
   children: React.ReactNode;
@@ -12,11 +13,26 @@ export const ScreenBackground: React.FC<ScreenBackgroundProps> = ({
   children, 
   withSafeArea = true 
 }) => {
-  const colors = [
+  const { isDarkBackground } = useTheme();
+
+  // Background clair (existant)
+  const lightColors = [
     'rgb(232,238,224)',
     'rgb(251,244,238)', 
     'rgb(251,235,232)'
   ];
+
+  // Nouveau background sombre (basé sur votre design exact)
+  const darkColors = [
+    '#43061C', // Couleur du haut
+    '#43061C', // Couleur du milieu
+    '#7E0F3B'  // Couleur du bas
+  ];
+
+  const colors = isDarkBackground ? darkColors : lightColors;
+  const locations = isDarkBackground 
+    ? [0, 0.5, 1] // Répartition pour le thème sombre
+    : [0.158, 0.5112, 0.8644]; // Répartition existante
 
   const Content = withSafeArea ? SafeAreaView : View;
 
@@ -31,7 +47,7 @@ export const ScreenBackground: React.FC<ScreenBackgroundProps> = ({
   return (
     <LinearGradient
       colors={colors}
-      locations={[0.158, 0.5112, 0.8644]}
+      locations={locations}
       start={{ x: 0., y: 0.2 }}
       end={{ x: 1, y: 0.7 }}
       style={styles.container}

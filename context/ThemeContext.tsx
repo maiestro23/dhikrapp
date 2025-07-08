@@ -35,25 +35,27 @@ const lightTheme: Theme = {
   isDark: false,
 };
 
-const darkTheme: Theme = {
+const darkBackgroundTheme: Theme = {
   colors: {
-    background: '#F0F4EA', // Using the start color of the gradient
-    card: '#FFFFFF',
+    background: 'rgba(255, 255, 255, 0.1)', // Background transparent pour les cartes
+    card: 'rgba(255, 255, 255, 0.15)', // Cartes semi-transparentes
     text: {
-      primary: '#8C8F7B',
-      secondary: '#181818',
+      primary: '#FFFFFF', // Texte principal en blanc
+      secondary: '#F5F5F5', // Texte secondaire en blanc cassé
     },
-    accent: '#8E1A3B',
-    border: '#EEEEEE',
-    progressBar: '#8E1A3B',
-    progressBackground: '#EEEEEE',
+    accent: '#FFB6C1', // Rose clair pour l'accent
+    border: 'rgba(255, 255, 255, 0.2)', // Bordures transparentes
+    progressBar: '#8E1A3B', // Barre de progression rose
+    progressBackground: 'rgba(255, 255, 255, 0.3)', // Background de la progress bar
   },
-  isDark: false,
+  isDark: true,
 };
 
 interface ThemeContextType {
   theme: Theme;
   toggleDarkMode: () => void;
+  isDarkBackground: boolean;
+  toggleBackgroundTheme: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -61,6 +63,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const colorScheme = useColorScheme();
   const [isDarkMode] = useState(colorScheme === 'dark');
+  const [isDarkBackground, setIsDarkBackground] = useState(false);
 
   useEffect(() => {
     //setIsDarkMode(colorScheme === 'dark');
@@ -70,9 +73,15 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     //setIsDarkMode(prev => !prev);
   };
 
+  const toggleBackgroundTheme = () => {
+    setIsDarkBackground(prev => !prev);
+  };
+
   const value = {
-    theme: isDarkMode ? lightTheme : lightTheme,
+    theme: isDarkBackground ? darkBackgroundTheme : lightTheme,
     toggleDarkMode,
+    isDarkBackground,
+    toggleBackgroundTheme,
   };
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
