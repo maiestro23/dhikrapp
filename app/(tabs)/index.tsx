@@ -16,9 +16,9 @@ import { PageTransitionWrapper } from '@/components/PageTransitionWrapper';
 const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme, positionIndex, categoryLength }: any) => (
   <View style={styles.dhikrCard}>
     <View style={styles.textWrapper}>
-      <Text style={styles.arabicText}>{dhikr.arabicText}</Text>
-      <Text style={styles.transliteration}>{dhikr.transliteration}</Text>
-      <Text style={styles.translation}>{dhikr.translation}</Text>
+      <Text style={[styles.arabicText, { color: theme.colors.text.secondary }]}>{dhikr.arabicText}</Text>
+      <Text style={[styles.transliteration, { color: theme.colors.text.secondary }]}>{dhikr.transliteration}</Text>
+      <Text style={[styles.translation, { color: theme.colors.text.secondary }]}>{dhikr.translation}</Text>
       <TouchableOpacity
         style={[styles.favoriteButton, isFavorite && styles.favoriteButtonActive]}
         onPress={() => onToggleFavorite(dhikr, isFavorite)}
@@ -30,7 +30,7 @@ const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme, positionInde
         />
       </TouchableOpacity>
 
-      <Text style={styles.pageIndicator}>
+      <Text style={[styles.pageIndicator, { color: theme.colors.text.secondary }]}>
         {getDisplayIndex(positionIndex, categoryLength)}/{categoryLength}
       </Text>
     </View>
@@ -205,8 +205,8 @@ export default function DhikrScreen() {
         <View style={styles.container}>
           <View style={styles.header}>
             <View style={styles.leftHeader}>
-              <Text style={styles.greeting}>Assalamu Alaikum</Text>
-              <Text style={styles.date}>
+              <Text style={[styles.greeting, { color: theme.colors.text.secondary }]}>Assalamu Alaikum</Text>
+              <Text style={[styles.date, { color: theme.colors.text.secondary }]}>
                 {new Date().toLocaleDateString('en-US', {
                   weekday: 'long',
                   month: 'long',
@@ -216,8 +216,8 @@ export default function DhikrScreen() {
             </View>
 
             <View style={styles.rightHeader}>
-              <Text style={styles.goalText}>Dhikr Goal: {Math.min(Math.round(goalProgress), 100)}%</Text>
-              <Text style={styles.khairisText}>Khairis: {todayProgress >= 1000 ? `${(todayProgress / 1000).toFixed(1)}k` : todayProgress}✨</Text>
+              <Text style={[styles.goalText, { color: theme.colors.text.secondary }]}>Dhikr Goal: {Math.min(Math.round(goalProgress), 100)}%</Text>
+              <Text style={[styles.khairisText, { color: theme.colors.text.secondary }]}>Khairis: {todayProgress >= 1000 ? `${(todayProgress / 1000).toFixed(1)}k` : todayProgress}✨</Text>
             </View>
           </View>
 

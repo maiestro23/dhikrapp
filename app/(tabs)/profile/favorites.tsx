@@ -117,11 +117,11 @@ export default function SearchScreen() {
     >
       <ScreenBackground>
         <View style={styles.sectionHeader}>
-          <Text style={[styles.sectionTitle]}>
+          <Text style={[styles.sectionTitle, { color: theme.colors.text.secondary }]}>
             Favourites
           </Text>
         </View>
-        <Text style={styles.headerSubtitle}>
+        <Text style={[styles.headerSubtitle, { color: theme.colors.text.secondary }]}>
           View, add or remove favourites
         </Text>
 

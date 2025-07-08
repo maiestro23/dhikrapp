@@ -16,6 +16,7 @@ import { useTheme } from '@/context/ThemeContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SwipeBackWrapper } from '@/components/SwipeBackWrapper';
 import { ProfileBackground } from '@/components/ProfileBackground'; // Nouveau composant
+import { ScreenBackground } from '@/components/ScreenBackground';
 
 const goalOptions = [
   { count: 100, time: '2 mins a day' },
@@ -77,11 +78,7 @@ export default function GoalSelectionScreen() {
       onSwipeBack={handleBack}
       backgroundComponent={<ProfileBackground />}
     >
-      <LinearGradient
-        colors={['rgb(240,244,234)', 'rgb(251,248,244)', 'rgb(251,240,238)']}
-        locations={[0.158, 0.5112, 0.8644]}
-        style={styles.container}
-      >
+      <ScreenBackground>
         <KeyboardAvoidingView
           style={styles.container}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -96,11 +93,11 @@ export default function GoalSelectionScreen() {
           >
             <View style={styles.content}>
               <View style={styles.header}>
-                <Text style={styles.title}>
+                <Text style={[styles.title, { color: theme.colors.text.secondary }]}>
                   Daily Goal
                 </Text>
 
-                <Text style={styles.currentDailyGoal}>
+                <Text style={[styles.currentDailyGoal, { color: theme.colors.text.secondary }]}>
                   Current Goal: {dailyGoal}
                 </Text>
               </View>
@@ -144,7 +141,7 @@ export default function GoalSelectionScreen() {
               </View>
 
               <View style={styles.customInputContainer}>
-                <Text style={styles.customInputLabel}>Enter Custom Goal</Text>
+                <Text style={[styles.customInputLabel, { color: theme.colors.text.secondary }]}>Enter Custom Goal</Text>
                 <View style={styles.inputWrapper}>
                   <TextInput
                     style={[
@@ -177,7 +174,7 @@ export default function GoalSelectionScreen() {
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
-      </LinearGradient>
+      </ScreenBackground>
     </SwipeBackWrapper>
   );
 }
@@ -197,7 +194,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: 'center',
     paddingHorizontal: 24,
-    paddingTop: 68,
+    paddingTop: 30,
     paddingBottom: 34,
   },
   header: {
@@ -214,7 +211,7 @@ const styles = StyleSheet.create({
 
   currentDailyGoal: {
 
-        fontFamily: 'Sofia-Pro-Light', // EXACT : Font cohérente
+    fontFamily: 'Sofia-Pro-Light', // EXACT : Font cohérente
     fontSize: 16, // EXACT : Taille du sous-titre
     color: '#8C8F7B', // EXACT : Gris-vert du design
     opacity: 0.8, // EXACT : Légère transparence

@@ -223,8 +223,8 @@ export default function DiscoverScreen() {
         <View style={styles.container}>
           {/* ===== HEADER - EXACT du design ===== */}
           <View style={styles.header}>
-            <Text style={styles.headerTitle}>Discover</Text>
-            <Text style={styles.headerSubtitle}>
+            <Text style={[styles.headerTitle, { color: theme.colors.text.secondary }]}>Discover</Text>
+            <Text style={[styles.headerSubtitle, { color: theme.colors.text.primary }]}>
               Your personal adhkar library
             </Text>
           </View>
@@ -263,8 +263,9 @@ export default function DiscoverScreen() {
 
               {/* ===== SECTION TASBIH - MISE À JOUR ===== */}
               <View style={styles.tasbihSection}>
-                <Text style={styles.sectionTitle}>Tasbih</Text>
-                <Text style={styles.sectionSubtitle}>Custom dhikr sessions</Text>
+                <Text style={[styles.sectionTitle, { color: theme.colors.text.secondary }]}>Tasbih</Text>
+                <Text style={[styles.sectionSubtitle, { color: theme.colors.text.primary }]}>Custom dhikr sessions</Text>
+
 
                 {/* Section de sélection du nombre - MODIFIÉE */}
                 <View style={styles.countSection}>
@@ -309,8 +310,8 @@ export default function DiscoverScreen() {
                 </View>
               </View>
 
-              <Text style={styles.sectionTitle}>Categories</Text>
-              <Text style={styles.sectionSubtitle}>Curated adhkar for every occasion</Text>
+              <Text style={[styles.sectionTitle, { color: theme.colors.text.secondary }]}>Categories</Text>
+              <Text style={[styles.sectionSubtitle, { color: theme.colors.text.primary }]}>Curated adhkar for every occasion</Text>
               {/* Grille de catégories 2x2 - EXACT du design */}
               <View style={styles.categoriesGrid}>
                 {filteredCategories.map((category, index) => (
