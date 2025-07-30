@@ -242,8 +242,9 @@ export default function TabLayout() {
         />
       </Tabs>
       
-      {/* Indicateur animé */}
+      {/* Indicateur animé 
       <AnimatedTabIndicator activeIndex={currentTabIndex} />
+      */}
     </View>
   );
 }
