@@ -272,7 +272,7 @@ export default function DiscoverScreen() {
                   <View style={styles.countRow}>
 
                     <View style={styles.countOptionsContainer}>
-
+                      <Text style={[styles.countLabelText, { color: theme.colors.text.primary }]}>Count: </Text>
                       {countOptions.map((option) => (
                         <CountButton
                           key={option.id}
@@ -427,9 +427,9 @@ const styles = StyleSheet.create({
   sectionSubtitle: {
     fontFamily: 'Sofia-Pro-Light',
     fontSize: 16,
-    color: '#8C8F7B', // EXACT : Gris-vert du design
-    //    color: '#8C8F7B',
+    color: '#8C8F7B',
     marginBottom: 20,
+    marginLeft: 8
   },
 
   // ===== STYLES MODIFIÉS POUR LA SÉLECTION DE COMPTAGE =====
@@ -456,11 +456,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     fontFamily: 'Sofia-Pro',
   },
+  countLabelText: {
+    paddingVertical: 10,
+    borderRadius: 28,
+    alignItems: 'center',
+    fontSize: 18,
+    fontFamily: 'Sofia-Pro-Light',
+  },
+
   countButton: {
     flex: 1,
     marginHorizontal: 4,
     paddingVertical: 10,
-    paddingHorizontal: 12,
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderRadius: 28,
     alignItems: 'center',
@@ -475,7 +482,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Sofia-Pro',
     fontSize: 14,
     color: '#8C8F7B',
-    //    fontWeight: '500',
   },
   countButtonTextSelected: {
     color: '#FFFFFF',

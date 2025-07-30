@@ -12,6 +12,28 @@ interface ThemeColors {
   border: string;
   progressBar: string;
   progressBackground: string;
+  dhikrReader: {
+    greetingColor: string;
+    dateColor: string;
+    khairisAndGoalColor: string;
+    categoryColor: string;
+    pageIndicatorColor: string;
+    arabicColor: string;
+    transliterationColor: string;
+    translationColor: string;
+  };
+  terms: {
+    titleColor: string;
+    subTitleColor: string;
+    sectionTitleColor: string;
+    sectionColor: string;
+  };
+  privacy: {
+    titleColor: string;
+    subTitleColor: string;
+    sectionTitleColor: string;
+    sectionColor: string;
+  };
 }
 
 export interface Theme {
@@ -31,6 +53,28 @@ const lightTheme: Theme = {
     border: '#EEEEEE',
     progressBar: '#8E1A3B',
     progressBackground: '#EEEEEE',
+    dhikrReader: {
+      greetingColor: '#8C8F7B',
+      dateColor: '#6F7C50',
+      khairisAndGoalColor: '#6F7C50',
+      categoryColor: '#8C8F7B',
+      pageIndicatorColor: '#8C8F7B',
+      arabicColor: '#8C8F7B',
+      transliterationColor: '#181818',
+      translationColor: '#8C8F7B',
+    },
+    terms: {
+      titleColor: "#fff",
+      subTitleColor: "#fff",
+      sectionTitleColor: "#fff",
+      sectionColor: "#fff",
+    },
+    privacy: {
+      titleColor: "#fff",
+      subTitleColor: "#fff",
+      sectionTitleColor: "#fff",
+      sectionColor: "#fff",
+    },
   },
   isDark: false,
 };
@@ -47,6 +91,28 @@ const darkBackgroundTheme: Theme = {
     border: 'rgba(255, 255, 255, 0.2)', // Bordures transparentes
     progressBar: '#8E1A3B', // Barre de progression rose
     progressBackground: 'rgba(255, 255, 255, 0.3)', // Background de la progress bar
+    dhikrReader: {
+      greetingColor: '#FFF',
+      dateColor: '#FFF',
+      khairisAndGoalColor: '#FFF',
+      categoryColor: '#FFF',
+      pageIndicatorColor: '#FFF',
+      arabicColor: '#FFF',
+      transliterationColor: '#FFF',
+      translationColor: '#FFF',
+    },
+    terms: {
+      titleColor: "#fff",
+      subTitleColor: "#fff",
+      sectionTitleColor: "#fff",
+      sectionColor: "#fff",
+    },
+    privacy: {
+      titleColor: "#fff",
+      subTitleColor: "#fff",
+      sectionTitleColor: "#fff",
+      sectionColor: "#fff",
+    },
   },
   isDark: true,
 };
