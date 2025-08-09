@@ -39,7 +39,7 @@ const AnimatedTabIndicator = ({ activeIndex }: { activeIndex: number }) => {
   useEffect(() => {
     // Animation de glissement avec spring
     indicatorPosition.value = withSpring(activeIndex, SPRING_CONFIG);
-    
+
     // Animation d'opacité pour un effet de fade
     indicatorOpacity.value = withTiming(0, { duration: 150 }, () => {
       indicatorOpacity.value = withTiming(1, { duration: 150 });
@@ -66,16 +66,16 @@ const AnimatedTabIndicator = ({ activeIndex }: { activeIndex: number }) => {
 };
 
 // Composant pour l'icône animée
-const AnimatedTabIcon = ({ 
-  children, 
-  focused, 
-  index, 
-  currentIndex 
-}: { 
-  children: React.ReactNode; 
-  focused: boolean; 
-  index: number; 
-  currentIndex: number; 
+const AnimatedTabIcon = ({
+  children,
+  focused,
+  index,
+  currentIndex
+}: {
+  children: React.ReactNode;
+  focused: boolean;
+  index: number;
+  currentIndex: number;
 }) => {
   const scale = useSharedValue(focused ? 1 : 0.9);
   const opacity = useSharedValue(focused ? 1 : 0.7);
@@ -130,7 +130,7 @@ export default function TabLayout() {
             {
               height: 71,
               paddingBottom: 0,
-              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              backgroundColor: 'rgba(255, 255, 255, 0.8)',
             }
           ],
           tabBarActiveTintColor: theme.colors.accent,
@@ -140,39 +140,39 @@ export default function TabLayout() {
           animation: 'shift',
           animationDuration: 300,
         }}>
-        
+
         <Tabs.Screen
           name="index"
           options={{
             title: 'Dhikr',
             tabBarIcon: ({ color, size, focused }) => (
               <AnimatedTabIcon focused={focused} index={0} currentIndex={currentTabIndex}>
-                <CustomQuotesIcon 
-                  color={focused ? '#5A5D4D' : '#8C8F7B'} 
-                  size={24} 
-                  fill={focused ? '#5A5D4D' : '#fff'} 
+                <CustomQuotesIcon
+                  color={focused ? '#560A27' : '#560A27'}
+                  size={24}
+                  fill={focused ? '#560A27' : 'rgba(255, 255, 255, 0.1)'}
                 />
               </AnimatedTabIcon>
             ),
           }}
         />
-        
+
         <Tabs.Screen
           name="discover"
           options={{
             title: 'Discover',
             tabBarIcon: ({ color, size, focused }) => (
               <AnimatedTabIcon focused={focused} index={1} currentIndex={currentTabIndex}>
-                <CustomDiscoverIcon 
-                  color={focused ? '#5A5D4D' : '#8C8F7B'} 
-                  size={24} 
-                  fill={focused ? '#5A5D4D' : '#fff'} 
+                <CustomDiscoverIcon
+                  color={focused ? '#560A27' : '#560A27'}
+                  size={24}
+                  fill={focused ? '#560A27' : 'rgba(255, 255, 255, 0.1)'}
                 />
               </AnimatedTabIcon>
             ),
           }}
         />
-        
+
         <Tabs.Screen
           name="profile"
           options={{
@@ -192,7 +192,11 @@ export default function TabLayout() {
             tabBarItemStyle: { display: 'none' },
             title: 'Search',
             tabBarIcon: ({ color, size, focused }) => (
-              <CustomDiscoverIcon color={'#5A5D4D'} size={24} fill={focused ? '#5A5D4D' : '#fff'} />
+              <CustomDiscoverIcon
+                color={focused ? '#560A27' : '#560A27'}
+                size={24}
+                fill={focused ? '#560A27' : 'rgba(255, 255, 255, 0.1)'}
+              />
             ),
           }}
         />
@@ -241,7 +245,7 @@ export default function TabLayout() {
           }}
         />
       </Tabs>
-      
+
       {/* Indicateur animé 
       <AnimatedTabIndicator activeIndex={currentTabIndex} />
       */}
@@ -269,26 +273,16 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 8,
     borderTopWidth: 0,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
     paddingTop: 6,
     // Amélioration visuelle pour les transitions
     backdropFilter: 'blur(10px)',
   },
   tabBarLabel: {
     fontFamily: 'Sofia-Pro-Light',
-    color: '#5A5D4D',
+    color: '#560A27',
     fontSize: 12,
     marginTop: 4,
-  },
-  tabIndicator: {
-    position: 'absolute',
-    bottom: 31 + 3, // Légèrement au-dessus de la tabBar
-    height: 3,
-    width: 30,
-    backgroundColor: '#5A5D4D',
-    borderRadius: 2,
-    zIndex: 10,
-    marginLeft: '13.5%'
   },
 });
 

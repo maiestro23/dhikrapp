@@ -143,13 +143,15 @@ export default function ProfileScreen() {
               <View style={[styles.menuIconContainer, { backgroundColor: theme.colors.background }]}>
                 <Moon size={20} color={theme.colors.accent} />
               </View>
-              <Text style={[styles.menuText, { color: theme.colors.text.primary }]}>Dark Background</Text>
+              <Text style={[styles.menuText, { color: theme.colors.text.primary }]}>Dark mode</Text>
               <Switch
+
                 value={isDarkBackground}
                 onValueChange={toggleBackgroundTheme}
-                trackColor={{ false: '#767577', true: '#7E0F3B' }}
-                thumbColor={isDarkBackground ? '#ffffff' : '#f4f3f4'}
-                ios_backgroundColor="#3e3e3e"
+                trackColor={{ false: theme.colors.background, true: '#7E0F3B' }}
+                thumbColor={isDarkBackground ? '#ffffff' : '#ffffff'}
+                ios_backgroundColor= {theme.colors.background}
+                style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
               />
             </TouchableOpacity>
           </View>
