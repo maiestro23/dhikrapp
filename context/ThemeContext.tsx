@@ -41,6 +41,8 @@ interface ThemeColors {
       textColor: string;
       selected: string;
       borderColor: string;
+      gradientStart: string;
+      gradientEnd: string;
     },
     tasbishButton: {
       backgroundColor: string;
@@ -94,9 +96,11 @@ const lightTheme: Theme = {
     discover: {
       tabButton: {
         backgroundColor: '#7E0F3B',
-        textColor: '',
+        textColor: '#7E0F3B',
         selected: '',
         borderColor: '#fff',
+        gradientStart: "#F2FFE5",
+        gradientEnd: "#FFD7DF",
       },
 
       tasbishButton: {
@@ -152,6 +156,8 @@ const darkBackgroundTheme: Theme = {
         textColor: '',
         selected: '',
         borderColor: '#9F1F52',
+        gradientStart: "#931748",
+        gradientEnd: "#43061C",
       },
       tasbishButton: {
         backgroundColor: '#340317',

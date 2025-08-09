@@ -14,6 +14,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { ScreenBackground } from '../../components/ScreenBackground';
 import { router } from 'expo-router';
 import { PageTransitionWrapper } from '@/components/PageTransitionWrapper';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const { width } = Dimensions.get('window');
 
@@ -68,7 +69,7 @@ const countOptions = [
   { id: '500x', label: '500x' },
   { id: 'custom', label: 'Custom' }
 ];
- //const { theme } = useTheme();
+//const { theme } = useTheme();
 
 
 // Composant pour une carte de catégorie - MODIFIÉ avec ImageBackground
@@ -108,7 +109,7 @@ const TasbihButton = ({ item, onPress }: any) => (
 );
 
 export default function DiscoverScreen() {
-  const { theme } = useTheme();
+  const { theme, isDarkBackground } = useTheme();
   const [activeTab, setActiveTab] = useState('General');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -177,58 +178,72 @@ export default function DiscoverScreen() {
   );
 
   // Composant pour les onglets General/Favourites - EXACT du design
-const TabButton = ({ title, onPress }: any) => (
+  const TabButton = ({ title, onPress }: any) => (
+    <LinearGradient
 
-  
-  <TouchableOpacity
-
-    style={[
-      styles.tabButton, { backgroundColor: theme.colors.discover.tabButton.backgroundColor, borderColor:theme.colors.discover.tabButton.borderColor  }
-    ]}
-    onPress={onPress}
-    activeOpacity={0.8}
-  >
-    <Text style={[
-      styles.tabButtonText,
-    ]}>
-      {title}
-    </Text>
-  </TouchableOpacity>
-);
-
-
-
-// Nouveau composant pour les boutons de comptage
-const CountButton = ({ option, isSelected, onPress, customCount }: any) => {
-  // Afficher le nombre custom au lieu de "Custom" si un nombre est entré
-  const displayText = option.id === 'custom' && customCount && parseInt(customCount) > 0
-    ? customCount
-    : option.label;
-
-  return (
-    <TouchableOpacity
+      colors={isDarkBackground ? 
+    [theme.colors.discover.tabButton.gradientStart, theme.colors.discover.tabButton.gradientEnd] : 
+    [theme.colors.discover.tabButton.gradientStart, theme.colors.discover.tabButton.gradientEnd]
+  }
+    
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
       style={[
-        styles.countButton,
-        { backgroundColor: theme.colors.discover.tasbishButton.backgroundColor,
-          borderColor: theme.colors.discover.tasbishButton.borderColor,
-          //color: theme.colors.discover.tasbishButton.textColor
-        },
-        isSelected && styles.countButtonSelected
+        styles.tabButton,
+        { borderColor: theme.colors.discover.tabButton.borderColor }
       ]}
-      onPress={() => onPress(option)}
-      activeOpacity={0.8}
     >
-      <Text style={[
-        styles.countButtonText,
-        { color: theme.colors.discover.tasbishButton.textColor },
-
-        isSelected && styles.countButtonTextSelected ,
-      ]}>
-        {displayText}
-      </Text>
-    </TouchableOpacity>
+      <TouchableOpacity
+        style={[
+          { borderColor: theme.colors.discover.tabButton.borderColor }
+        ]}
+        onPress={onPress}
+        activeOpacity={0.8}
+      >
+        <Text style={[
+          styles.tabButtonText,
+          { color: theme.colors.discover.tabButton.textColor }
+        ]}>
+          {title}
+        </Text>
+      </TouchableOpacity>
+    </LinearGradient>
   );
-};
+
+
+
+  // Nouveau composant pour les boutons de comptage
+  const CountButton = ({ option, isSelected, onPress, customCount }: any) => {
+    // Afficher le nombre custom au lieu de "Custom" si un nombre est entré
+    const displayText = option.id === 'custom' && customCount && parseInt(customCount) > 0
+      ? customCount
+      : option.label;
+
+    return (
+      <TouchableOpacity
+        style={[
+          styles.countButton,
+          {
+            backgroundColor: theme.colors.discover.tasbishButton.backgroundColor,
+            borderColor: theme.colors.discover.tasbishButton.borderColor,
+            //color: theme.colors.discover.tasbishButton.textColor
+          },
+          isSelected && styles.countButtonSelected
+        ]}
+        onPress={() => onPress(option)}
+        activeOpacity={0.8}
+      >
+        <Text style={[
+          styles.countButtonText,
+          { color: theme.colors.discover.tasbishButton.textColor },
+
+          isSelected && styles.countButtonTextSelected,
+        ]}>
+          {displayText}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
 
 
 
@@ -415,13 +430,13 @@ const styles = StyleSheet.create({
     paddingVertical: 26, // Plus de padding vertical
     paddingHorizontal: 24,
     borderRadius: 10, // Plus arrondi
-    backgroundColor: '#7E0F3B', // Background plus opaque pour l'état inactif
+    // backgroundColor: '#7E0F3B', // Background plus opaque pour l'état inactif
     borderWidth: 1, // Bordure de 2px
-    borderColor: '#9F1F52', // Bordure blanche
+    //borderColor: '#9F1F52', // Bordure blanche
     alignItems: 'center',
     shadowRadius: 4,
     elevation: 3,
-    
+
   },
   tabButtonText: {
     fontFamily: 'Sofia-Pro',
@@ -487,9 +502,9 @@ const styles = StyleSheet.create({
     //paddingVertical: 10,
     //backgroundColor: 'rgba(255, 255, 255, 0.9)',
 
-        backgroundColor: '#340317',
+    backgroundColor: '#340317',
 
-    
+
     borderRadius: 28,
     alignItems: 'center',
     //borderWidth: 0.5,
@@ -504,8 +519,8 @@ const styles = StyleSheet.create({
   countButtonText: {
     fontFamily: 'Sofia-Pro-ExtraLight',
     fontSize: 14,
-//    color: '#8C8F7B',
-        color: '#FFF',
+    //    color: '#8C8F7B',
+    color: '#FFF',
   },
   countButtonTextSelected: {
     color: '#FFFFFF',
