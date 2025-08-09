@@ -222,11 +222,11 @@ export default function DhikrScreen() {
           </View>
 
           <TouchableOpacity
-            style={styles.categoryTag}
+            style={[styles.categoryTag, { backgroundColor: theme.colors.dhikrReader.categoryColor}]}
             onPress={handleCategoryPress}
             activeOpacity={0.7}
           >
-            <Text style={styles.categoryText}>{currentCategory}</Text>
+            <Text style={[styles.categoryText, { color: theme.colors.dhikrReader.categoryText}]}>{currentCategory}</Text>
           </TouchableOpacity>
 
           <CompletionNotification
@@ -368,9 +368,9 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   categoryText: {
-    fontFamily: 'Sofia-Pro',
+    fontFamily: 'Sofia-Pro-Light',
     fontSize: 14,
-    color: '#8C8F7B',
+    color: '#FFF',
     textAlign: 'center',
   },
 

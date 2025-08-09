@@ -17,6 +17,7 @@ interface ThemeColors {
     dateColor: string;
     khairisAndGoalColor: string;
     categoryColor: string;
+          categoryText: string;
     pageIndicatorColor: string;
     arabicColor: string;
     transliterationColor: string;
@@ -74,7 +75,8 @@ const lightTheme: Theme = {
       greetingColor: '#8C8F7B',
       dateColor: '#6F7C50',
       khairisAndGoalColor: '#6F7C50',
-      categoryColor: '#8C8F7B',
+      categoryColor: '#FEFCFC',
+      categoryText: "#8C8F7B",
       pageIndicatorColor: '#8C8F7B',
       arabicColor: '#8C8F7B',
       transliterationColor: '#181818',
@@ -132,6 +134,7 @@ const darkBackgroundTheme: Theme = {
       dateColor: '#FFF',
       khairisAndGoalColor: '#FFF',
       categoryColor: '#7E0F3B',
+      categoryText: "#FFF",
       pageIndicatorColor: '#FFF',
       arabicColor: '#FFF',
       transliterationColor: '#FFF',
