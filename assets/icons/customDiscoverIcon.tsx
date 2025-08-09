@@ -10,7 +10,7 @@ const CustomDiscoverIcon = (props: any) => (
     {...props}
   >
     <Path
-      stroke="#5A5D4D"
+      stroke="#560A27"
       strokeLinecap="round"
       strokeLinejoin="round"
       d="m21 21-4.826-4.826m0 0a8.889 8.889 0 1 0-12.57-12.57 8.889 8.889 0 0 0 12.57 12.57Z"
