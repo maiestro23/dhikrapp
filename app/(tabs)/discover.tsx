@@ -294,9 +294,6 @@ export default function DiscoverScreen() {
               {/* ===== SECTION TASBIH - MISE À JOUR ===== */}
               <View style={styles.tasbihSection}>
                 <Text style={[styles.sectionTitle, { color: theme.colors.text.secondary }]}>Tasbih</Text>
-                <Text style={[styles.sectionSubtitle, { color: theme.colors.text.primary }]}>Custom dhikr sessions</Text>
-
-
                 {/* Section de sélection du nombre - MODIFIÉE */}
                 <View style={styles.countSection}>
                   <View style={styles.countRow}>
@@ -341,7 +338,6 @@ export default function DiscoverScreen() {
               </View>
 
               <Text style={[styles.sectionTitle, { color: theme.colors.text.secondary }]}>Categories</Text>
-              <Text style={[styles.sectionSubtitle, { color: theme.colors.text.primary }]}>Curated adhkar for every occasion</Text>
               {/* Grille de catégories 2x2 - EXACT du design */}
               <View style={styles.categoriesGrid}>
                 {filteredCategories.map((category, index) => (
@@ -453,7 +449,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Classico', // EXACT : Font du titre de section
     fontSize: 26, // EXACT : Taille du titre
     color: '#181818', // EXACT : Couleur du titre
-    marginBottom: 8,
+    paddingBottom: 10,
   },
   sectionSubtitle: {
     fontFamily: 'Sofia-Pro-Light',
@@ -465,7 +461,7 @@ const styles = StyleSheet.create({
 
   // ===== STYLES MODIFIÉS POUR LA SÉLECTION DE COMPTAGE =====
   countSection: {
-    marginBottom: 20,
+    marginBottom: 8,
   },
   countRow: {
     flexDirection: 'row',
@@ -554,7 +550,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    //gap: 4,
+    //gap: 2,
   },
   tasbihButton: {
     width: (width - 56) / 2, // Ajusté pour le gap et padding
