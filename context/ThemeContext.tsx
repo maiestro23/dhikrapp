@@ -34,6 +34,21 @@ interface ThemeColors {
     sectionTitleColor: string;
     sectionColor: string;
   };
+
+  discover: {
+    tabButton: {
+      backgroundColor: string;
+      textColor: string;
+      selected: string;
+      borderColor: string;
+    },
+    tasbishButton: {
+      backgroundColor: string;
+      textColor: string;
+      selected: string;
+      borderColor: string;
+    },
+  }
 }
 
 export interface Theme {
@@ -75,6 +90,23 @@ const lightTheme: Theme = {
       sectionTitleColor: "#fff",
       sectionColor: "#fff",
     },
+
+    discover: {
+      tabButton: {
+        backgroundColor: '#7E0F3B',
+        textColor: '',
+        selected: '',
+        borderColor: '#fff',
+      },
+
+      tasbishButton: {
+        backgroundColor: '#FEFEFD',
+        textColor: '#8C8F7B',
+        selected: '',
+        borderColor: '#9F1F52',
+      },
+    }
+
   },
   isDark: false,
 };
@@ -95,7 +127,7 @@ const darkBackgroundTheme: Theme = {
       greetingColor: '#FFF',
       dateColor: '#FFF',
       khairisAndGoalColor: '#FFF',
-      categoryColor: '#FFF',
+      categoryColor: '#7E0F3B',
       pageIndicatorColor: '#FFF',
       arabicColor: '#FFF',
       transliterationColor: '#FFF',
@@ -113,6 +145,22 @@ const darkBackgroundTheme: Theme = {
       sectionTitleColor: "#fff",
       sectionColor: "#fff",
     },
+
+    discover: {
+      tabButton: {
+        backgroundColor: '#7E0F3B',
+        textColor: '',
+        selected: '',
+        borderColor: '#9F1F52',
+      },
+      tasbishButton: {
+        backgroundColor: '#340317',
+        textColor: '',
+        selected: '',
+        borderColor: '#E0E0E0',
+      },
+    }
+
   },
   isDark: true,
 };

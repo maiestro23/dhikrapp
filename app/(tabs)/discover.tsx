@@ -68,23 +68,8 @@ const countOptions = [
   { id: '500x', label: '500x' },
   { id: 'custom', label: 'Custom' }
 ];
+ //const { theme } = useTheme();
 
-// Composant pour les onglets General/Favourites - EXACT du design
-const TabButton = ({ title, onPress }: any) => (
-  <TouchableOpacity
-    style={[
-      styles.tabButton,
-    ]}
-    onPress={onPress}
-    activeOpacity={0.8}
-  >
-    <Text style={[
-      styles.tabButtonText,
-    ]}>
-      {title}
-    </Text>
-  </TouchableOpacity>
-);
 
 // Composant pour une carte de catégorie - MODIFIÉ avec ImageBackground
 const CategoryCard = ({ category, onPress }: any) => (
@@ -121,32 +106,6 @@ const TasbihButton = ({ item, onPress }: any) => (
     <Text style={styles.tasbihButtonText}>{item.text}</Text>
   </TouchableOpacity>
 );
-
-// Nouveau composant pour les boutons de comptage
-const CountButton = ({ option, isSelected, onPress, customCount }: any) => {
-  // Afficher le nombre custom au lieu de "Custom" si un nombre est entré
-  const displayText = option.id === 'custom' && customCount && parseInt(customCount) > 0
-    ? customCount
-    : option.label;
-
-  return (
-    <TouchableOpacity
-      style={[
-        styles.countButton,
-        isSelected && styles.countButtonSelected
-      ]}
-      onPress={() => onPress(option)}
-      activeOpacity={0.8}
-    >
-      <Text style={[
-        styles.countButtonText,
-        isSelected && styles.countButtonTextSelected
-      ]}>
-        {displayText}
-      </Text>
-    </TouchableOpacity>
-  );
-};
 
 export default function DiscoverScreen() {
   const { theme } = useTheme();
@@ -216,6 +175,62 @@ export default function DiscoverScreen() {
   const filteredCategories = categories.filter(category =>
     category.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Composant pour les onglets General/Favourites - EXACT du design
+const TabButton = ({ title, onPress }: any) => (
+
+  
+  <TouchableOpacity
+
+    style={[
+      styles.tabButton, { backgroundColor: theme.colors.discover.tabButton.backgroundColor, borderColor:theme.colors.discover.tabButton.borderColor  }
+    ]}
+    onPress={onPress}
+    activeOpacity={0.8}
+  >
+    <Text style={[
+      styles.tabButtonText,
+    ]}>
+      {title}
+    </Text>
+  </TouchableOpacity>
+);
+
+
+
+// Nouveau composant pour les boutons de comptage
+const CountButton = ({ option, isSelected, onPress, customCount }: any) => {
+  // Afficher le nombre custom au lieu de "Custom" si un nombre est entré
+  const displayText = option.id === 'custom' && customCount && parseInt(customCount) > 0
+    ? customCount
+    : option.label;
+
+  return (
+    <TouchableOpacity
+      style={[
+        styles.countButton,
+        { backgroundColor: theme.colors.discover.tasbishButton.backgroundColor,
+          borderColor: theme.colors.discover.tasbishButton.borderColor,
+          //color: theme.colors.discover.tasbishButton.textColor
+        },
+        isSelected && styles.countButtonSelected
+      ]}
+      onPress={() => onPress(option)}
+      activeOpacity={0.8}
+    >
+      <Text style={[
+        styles.countButtonText,
+        { color: theme.colors.discover.tasbishButton.textColor },
+
+        isSelected && styles.countButtonTextSelected ,
+      ]}>
+        {displayText}
+      </Text>
+    </TouchableOpacity>
+  );
+};
+
+
 
   return (
     <PageTransitionWrapper animationType="fade" duration={350}>
@@ -401,11 +416,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     borderRadius: 10, // Plus arrondi
     backgroundColor: '#7E0F3B', // Background plus opaque pour l'état inactif
-    borderWidth: 2, // Bordure de 2px
-    borderColor: '#FFFFFF', // Bordure blanche
+    borderWidth: 1, // Bordure de 2px
+    borderColor: '#9F1F52', // Bordure blanche
     alignItems: 'center',
     shadowRadius: 4,
     elevation: 3,
+    
   },
   tabButtonText: {
     fontFamily: 'Sofia-Pro',
@@ -457,34 +473,43 @@ const styles = StyleSheet.create({
     fontFamily: 'Sofia-Pro',
   },
   countLabelText: {
-    paddingVertical: 10,
+    paddingVertical: 6,
     borderRadius: 28,
     alignItems: 'center',
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: 'Sofia-Pro-Light',
+    marginRight: 10
   },
 
   countButton: {
     flex: 1,
-    marginHorizontal: 4,
-    paddingVertical: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    marginHorizontal: 8,
+    //paddingVertical: 10,
+    //backgroundColor: 'rgba(255, 255, 255, 0.9)',
+
+        backgroundColor: '#340317',
+
+    
     borderRadius: 28,
     alignItems: 'center',
-    borderWidth: 1,
+    //borderWidth: 0.5,
     borderColor: '#E0E0E0',
+    height: 30,
+    justifyContent: "center"
   },
   countButtonSelected: {
-    backgroundColor: '#8C8F7B',
-    //borderColor: '#7E0F3B',
+    backgroundColor: '#931748',
+    borderWidth: 0.5,
   },
   countButtonText: {
-    fontFamily: 'Sofia-Pro',
+    fontFamily: 'Sofia-Pro-ExtraLight',
     fontSize: 14,
-    color: '#8C8F7B',
+//    color: '#8C8F7B',
+        color: '#FFF',
   },
   countButtonTextSelected: {
     color: '#FFFFFF',
+    fontFamily: 'Sofia-Pro'
   },
   customInputContainer: {
     marginTop: 8,
