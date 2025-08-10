@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions, Platform, Switch } from 'react-native';
 import { router } from 'expo-router';
-import { Flag, Bookmark, ChevronRight, Moon } from 'lucide-react-native';
+import { Flag, Bookmark, ChevronRight, Moon, Bell } from 'lucide-react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { useProgress } from '../../hooks/useProgress';
 import { ScreenBackground } from '../../components/ScreenBackground';
@@ -135,6 +135,20 @@ export default function ProfileScreen() {
               <ChevronRight size={20} color={theme.colors.text.secondary} />
             </TouchableOpacity>
 
+
+            {/* NOUVELLE ENTRÉE NOTIFICATIONS */}
+            <TouchableOpacity
+              style={[styles.menuItem, { backgroundColor: theme.colors.card }]}
+              onPress={() => handleNavigation('/profile/notifications')}
+            >
+              <View style={[styles.menuIconContainer, { backgroundColor: theme.colors.background }]}>
+                <Bell size={20} color={theme.colors.accent} />
+              </View>
+              <Text style={[styles.menuText, { color: theme.colors.text.primary }]}>Reminders</Text>
+              <ChevronRight size={20} color={theme.colors.text.secondary} />
+            </TouchableOpacity>
+
+
             {/* Nouveau toggle pour le background */}
             <TouchableOpacity
               style={[styles.menuItem, { backgroundColor: theme.colors.card }]}
@@ -150,7 +164,7 @@ export default function ProfileScreen() {
                 onValueChange={toggleBackgroundTheme}
                 trackColor={{ false: theme.colors.background, true: '#7E0F3B' }}
                 thumbColor={isDarkBackground ? '#ffffff' : '#ffffff'}
-                ios_backgroundColor= {theme.colors.background}
+                ios_backgroundColor={theme.colors.background}
                 style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
               />
             </TouchableOpacity>
@@ -169,6 +183,8 @@ export default function ProfileScreen() {
               <Text style={[styles.footerMenuText, { color: theme.colors.text.primary }]}>Privacy policy</Text>
               <ChevronRight size={20} color={theme.colors.text.secondary} />
             </TouchableOpacity>
+
+
 
           </View>
         </ScrollView>

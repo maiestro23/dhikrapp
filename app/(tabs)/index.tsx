@@ -59,11 +59,7 @@ export default function DhikrScreen() {
   const { start, stop } = useTimeTracking();
   const { incrementCount, goalProgress, totalCount, todayProgress } = useProgress();
   const dhikrs = useDhikrStore().getDhikrsByUrlCategory();
-
-
   const categoryLength = dhikrs.length;
-
-
   const { isFavorite, addFavorite, removeFavorite } = useFavoritesStore();
 
   const pagerRef = useRef<PagerView>(null);

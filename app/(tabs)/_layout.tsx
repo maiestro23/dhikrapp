@@ -244,6 +244,18 @@ export default function TabLayout() {
             ),
           }}
         />
+
+        <Tabs.Screen
+          name="profile/notifications"
+          options={{
+            tabBarItemStyle: { display: 'none' },
+            title: 'Notifications',
+            tabBarIcon: ({ color, size }) => (
+              <User color={color} size={24} />
+            ),
+          }}
+        />
+
       </Tabs>
 
       {/* Indicateur animé 
