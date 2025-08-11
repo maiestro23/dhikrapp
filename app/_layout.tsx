@@ -20,6 +20,9 @@ import Sofia_Pro_ExtraLight  from '../assets/fonts/SofiaProExtraLight.otf';
 import Sofia_Pro_Light  from '../assets/fonts/SofiaProLight.otf';
 import Sofia_Pro_Regular  from '../assets/fonts/SofiaProRegular.otf';
 
+// Import du gestionnaire de notifications
+import notificationsHandler  from '@/components/NotificationsHandler';
+import { router } from 'expo-router';
 
 // Only prevent auto hide on native platforms
 if (Platform.OS !== 'web') {
@@ -47,6 +50,39 @@ export default function RootLayout() {
           /* ignore errors */
         });
       }
+    }
+  }, [fontsLoaded, fontError]);
+
+  // Initialisation des notifications
+  useEffect(() => {
+    const initializeNotifications = async () => {
+      try {
+        // Initialiser le gestionnaire de notifications
+        await notificationsHandler.initialize();
+        
+        // Configurer la gestion des réponses aux notifications (quand l'utilisateur tape dessus)
+        const subscription = notificationsHandler.setupNotificationResponseHandler(
+          (route) => {
+            // Navigation vers la page appropriée selon le type de notification
+            router.push(route);
+          }
+        );
+
+        // Retourner la fonction de nettoyage
+        return () => subscription?.remove();
+      } catch (error) {
+        console.error('Erreur lors de l\'initialisation des notifications:', error);
+      }
+    };
+
+    // Lancer l'initialisation seulement si les polices sont chargées
+    if (fontsLoaded || fontError) {
+      const cleanup = initializeNotifications();
+      
+      // Nettoyage lors du démontage
+      return () => {
+        cleanup?.then(cleanupFn => cleanupFn?.());
+      };
     }
   }, [fontsLoaded, fontError]);
 

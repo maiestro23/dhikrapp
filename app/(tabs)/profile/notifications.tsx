@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -7,7 +7,8 @@ import {
     ScrollView,
     Switch,
     Dimensions,
-    Platform
+    Platform,
+    Alert
 } from 'react-native';
 import { router } from 'expo-router';
 import { ChevronLeft } from 'lucide-react-native';
@@ -15,48 +16,143 @@ import { useTheme } from '@/context/ThemeContext';
 import { ScreenBackground } from '@/components/ScreenBackground';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PageTransitionWrapper } from '@/components/PageTransitionWrapper';
+import { useProgressStore } from '@/stores/progressStore';
+import notificationsHandler, { 
+    initializeNotifications,
+    updateNotificationPreferences,
+    getNotificationPreferences 
+} from '@/components/NotificationsHandler';
 
 const { width } = Dimensions.get('window');
 
 export default function NotificationsScreen() {
     const { theme } = useTheme();
     const insets = useSafeAreaInsets();
+    const progressStore = useProgressStore();
 
     // États pour les toggles de notifications
     const [allNotifications, setAllNotifications] = useState(false);
     const [morningEvening, setMorningEvening] = useState(true);
     const [jummah, setJummah] = useState(false);
     const [dailyGoals, setDailyGoals] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
+
+    // Charger les préférences au montage du composant
+    useEffect(() => {
+        loadNotificationPreferences();
+    }, []);
+
+    const loadNotificationPreferences = async () => {
+        try {
+            setIsLoading(true);
+            
+            // Initialiser le gestionnaire de notifications
+            const initialized = await initializeNotifications();
+            
+            if (!initialized) {
+                Alert.alert(
+                    'Notifications désactivées',
+                    'Les notifications ne peuvent pas être activées. Veuillez vérifier les paramètres de votre appareil.',
+                    [{ text: 'OK' }]
+                );
+                return;
+            }
+
+            // Charger les préférences sauvegardées
+            const preferences = getNotificationPreferences();
+            setAllNotifications(preferences.allNotifications);
+            setMorningEvening(preferences.morningEvening);
+            setJummah(preferences.jummah);
+            setDailyGoals(preferences.dailyGoals);
+
+        } catch (error) {
+            console.error('Erreur lors du chargement des préférences:', error);
+            Alert.alert(
+                'Erreur',
+                'Impossible de charger les préférences de notifications.',
+                [{ text: 'OK' }]
+            );
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // Fonction pour sauvegarder et appliquer les préférences
+    const savePreferences = async (newPreferences: any) => {
+        try {
+            await updateNotificationPreferences(newPreferences, useProgressStore);
+        } catch (error) {
+            console.error('Erreur lors de la sauvegarde des préférences:', error);
+            Alert.alert(
+                'Erreur',
+                'Impossible de sauvegarder les préférences de notifications.',
+                [{ text: 'OK' }]
+            );
+        }
+    };
 
     // Fonction pour gérer le toggle "All notifications"
-    const handleAllNotificationsToggle = (value: boolean) => {
+    const handleAllNotificationsToggle = async (value: boolean) => {
         setAllNotifications(value);
+        
         // Mettre toutes les notifications au même état
         setMorningEvening(value);
         setJummah(value);
         setDailyGoals(value);
+
+        // Sauvegarder les préférences
+        await savePreferences({
+            allNotifications: value,
+            morningEvening: value,
+            jummah: value,
+            dailyGoals: value,
+        });
     };
 
     // Fonction pour gérer les toggles individuels
-    const handleIndividualToggle = (
+    const handleIndividualToggle = async (
         setter: React.Dispatch<React.SetStateAction<boolean>>,
-        value: boolean
+        value: boolean,
+        key: string
     ) => {
         setter(value);
 
-        // Vérifier si toutes les notifications individuelles sont activées
-        const newMorningEvening = setter === setMorningEvening ? value : morningEvening;
-        const newJummah = setter === setJummah ? value : jummah;
-        const newDailyGoals = setter === setDailyGoals ? value : dailyGoals;
+        // Calculer le nouvel état de toutes les notifications individuelles
+        const newMorningEvening = key === 'morningEvening' ? value : morningEvening;
+        const newJummah = key === 'jummah' ? value : jummah;
+        const newDailyGoals = key === 'dailyGoals' ? value : dailyGoals;
 
         // Mettre à jour "All notifications" selon l'état des notifications individuelles
         const allActive = newMorningEvening && newJummah && newDailyGoals;
         setAllNotifications(allActive);
+
+        // Sauvegarder les préférences
+        await savePreferences({
+            allNotifications: allActive,
+            morningEvening: newMorningEvening,
+            jummah: newJummah,
+            dailyGoals: newDailyGoals,
+        });
     };
 
     const handleGoBack = () => {
         router.replace('/profile');
     };
+
+    // Afficher un indicateur de chargement pendant l'initialisation
+    if (isLoading) {
+        return (
+            <PageTransitionWrapper animationType="slide" duration={300}>
+                <ScreenBackground>
+                    <View style={[styles.container, styles.loadingContainer]}>
+                        <Text style={[styles.loadingText, { color: theme.colors.text.primary }]}>
+                            Chargement des notifications...
+                        </Text>
+                    </View>
+                </ScreenBackground>
+            </PageTransitionWrapper>
+        );
+    }
 
     return (
         <PageTransitionWrapper animationType="slide" duration={300}>
@@ -117,10 +213,13 @@ export default function NotificationsScreen() {
                                     <Text style={[styles.notificationDescription, { color: theme.colors.text.primary }]}>
                                         Your daily shield of protection.{'\n'}We'll remind you when it's time.
                                     </Text>
+                                    <Text style={[styles.notificationTime, { color: theme.colors.text.primary }]}>
+                                        7:00 AM & 6:30 PM daily
+                                    </Text>
                                 </View>
                                 <Switch
                                     value={morningEvening}
-                                    onValueChange={(value) => handleIndividualToggle(setMorningEvening, value)}
+                                    onValueChange={(value) => handleIndividualToggle(setMorningEvening, value, 'morningEvening')}
                                     trackColor={{ false: '#E5E5E5', true: '#7E0F3B' }}
                                     thumbColor={morningEvening ? '#ffffff' : '#ffffff'}
                                     ios_backgroundColor="#E5E5E5"
@@ -143,10 +242,13 @@ export default function NotificationsScreen() {
                                     <Text style={[styles.notificationDescription, { color: theme.colors.text.primary }]}>
                                         A Friday nudge to send salawat{'\n'}and read Surah Al-Kahf.
                                     </Text>
+                                    <Text style={[styles.notificationTime, { color: theme.colors.text.primary }]}>
+                                        Fridays at 12:00 PM
+                                    </Text>
                                 </View>
                                 <Switch
                                     value={jummah}
-                                    onValueChange={(value) => handleIndividualToggle(setJummah, value)}
+                                    onValueChange={(value) => handleIndividualToggle(setJummah, value, 'jummah')}
                                     trackColor={{ false: '#E5E5E5', true: '#7E0F3B' }}
                                     thumbColor={jummah ? '#ffffff' : '#ffffff'}
                                     ios_backgroundColor="#E5E5E5"
@@ -169,10 +271,13 @@ export default function NotificationsScreen() {
                                     <Text style={[styles.notificationDescription, { color: theme.colors.text.primary }]}>
                                         A timely reminder to help you{'\n'}reach your spiritual goals.
                                     </Text>
+                                    <Text style={[styles.notificationTime, { color: theme.colors.text.primary }]}>
+                                        Daily at 8:00 PM
+                                    </Text>
                                 </View>
                                 <Switch
                                     value={dailyGoals}
-                                    onValueChange={(value) => handleIndividualToggle(setDailyGoals, value)}
+                                    onValueChange={(value) => handleIndividualToggle(setDailyGoals, value, 'dailyGoals')}
                                     trackColor={{ false: '#E5E5E5', true: '#7E0F3B' }}
                                     thumbColor={dailyGoals ? '#ffffff' : '#ffffff'}
                                     ios_backgroundColor="#E5E5E5"
@@ -207,6 +312,14 @@ export default function NotificationsScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    loadingContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    loadingText: {
+        fontSize: 16,
+        fontFamily: 'Sofia-Pro-Light',
     },
     header: {
         paddingHorizontal: 24,
@@ -288,6 +401,14 @@ const styles = StyleSheet.create({
         fontSize: 14,
         lineHeight: 20,
         marginLeft: 32, // Aligné avec le titre (emoji + margin)
+        marginBottom: 4,
+    },
+    notificationTime: {
+        fontFamily: 'Sofia-Pro-Light',
+        fontSize: 12,
+        marginLeft: 32,
+        opacity: 0.7,
+        fontStyle: 'italic',
     },
     switch: {
         transform: [{ scaleX: 0.9 }, { scaleY: 0.9 }],
