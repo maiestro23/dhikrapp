@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Share, Alert } from 'react-native';
 import PagerView from 'react-native-pager-view';
 import { Heart } from 'lucide-react-native';
 import { useTheme } from '../../context/ThemeContext';
@@ -12,6 +12,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { Dhikr } from '@/config/dhikrs';
 import { CompletionNotification } from '../../components/CompletionNotification';
 import { PageTransitionWrapper } from '@/components/PageTransitionWrapper';
+import GoalCompleteModal from '@/components/GoalCompleteModal';
 
 const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme, positionIndex, categoryLength }: any) => (
   <View style={styles.dhikrCard}>
@@ -37,8 +38,6 @@ const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme, positionInde
   </View>
 );
 
-
-
 // Ajoutez cette fonction helper avant votre composant principal :
 const getDisplayIndex = (currentIndex: number, totalLength: number) => {
   // Si on est sur l'élément dupliqué du début (index 0), afficher le dernier
@@ -52,7 +51,6 @@ const getDisplayIndex = (currentIndex: number, totalLength: number) => {
   // Sinon, afficher l'index normal (en soustrayant 1 car on commence à l'index 1)
   return currentIndex;
 };
-
 
 export default function DhikrScreen() {
   const { theme } = useTheme();
@@ -68,6 +66,8 @@ export default function DhikrScreen() {
   const [isAdjustingPosition, setIsAdjustingPosition] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [completedCycles, setCompletedCycles] = useState(0);
+  const [showGoalModal, setShowGoalModal] = useState(false);
+  const [hasShownGoalModal, setHasShownGoalModal] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -79,6 +79,17 @@ export default function DhikrScreen() {
       }
     };
   }, [start, stop]);
+
+  // Surveiller quand l'objectif quotidien est atteint
+  useEffect(() => {
+    if (goalProgress >= 100 && !hasShownGoalModal && !showGoalModal) {
+      // Petit délai pour une meilleure expérience utilisateur
+      setTimeout(() => {
+        setShowGoalModal(true);
+        setHasShownGoalModal(true);
+      }, 1000);
+    }
+  }, [goalProgress, hasShownGoalModal, showGoalModal]);
 
   const [pagerKey, setPagerKey] = useState(0);
 
@@ -159,6 +170,26 @@ export default function DhikrScreen() {
     setShowNotification(false);
   }, []);
 
+  const handleCloseGoalModal = useCallback(() => {
+    setShowGoalModal(false);
+  }, []);
+
+  const handleShareAchievement = useCallback(async () => {
+    try {
+      const result = await Share.share({
+        message: `🎉 I completed my daily dhikr goal! Alhamdulillah 🤲\n\n"Verily, in the remembrance of Allah do hearts find rest." (13:28)`,
+        title: 'Daily Dhikr Goal Completed!',
+      });
+
+      if (result.action === Share.sharedAction) {
+        // User shared successfully
+        handleCloseGoalModal();
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Unable to share at the moment.');
+    }
+  }, [handleCloseGoalModal]);
+
   if (!dhikrs || dhikrs.length === 0) {
     return (
       <ScreenBackground>
@@ -195,7 +226,6 @@ export default function DhikrScreen() {
   }
 
   return (
-
     <PageTransitionWrapper animationType="fade" duration={350}>
       <ScreenBackground>
         <View style={styles.container}>
@@ -256,6 +286,14 @@ export default function DhikrScreen() {
               </View>
             ))}
           </PagerView>
+
+          {/* Modal de félicitations pour objectif quotidien atteint */}
+          <GoalCompleteModal
+            visible={showGoalModal}
+            onClose={handleCloseGoalModal}
+            onShare={handleShareAchievement}
+            khairisEarned={3000}
+          />
         </View>
       </ScreenBackground>
     </PageTransitionWrapper>
