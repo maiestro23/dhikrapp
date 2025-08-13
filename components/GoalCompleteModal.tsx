@@ -28,7 +28,7 @@ const GoalCompleteModal: React.FC<GoalCompleteModalProps> = ({
   visible,
   onClose,
   onShare,
-  khairisEarned = 3000,
+  khairisEarned,
   decorationImage,
 }) => {
   const { theme, isDarkBackground } = useTheme();
@@ -73,15 +73,11 @@ const GoalCompleteModal: React.FC<GoalCompleteModalProps> = ({
 
             {/* Badge Khairis */}
             {isDarkBackground ? (
-              <LinearGradient
-                colors={["#F2FFE5", "#FFD7DF"]}
-                locations={[-0.3955, 1]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0.2 }}
+              <View
                 style={[styles.khairsBadge, { backgroundColor: '#FBF0EE' }]}
               >
                 <Text style={styles.khairsText}>+{khairisEarned} Khairis</Text>
-              </LinearGradient>
+              </View>
             ) : (
               <LinearGradient
                 colors={["#F2FFE5", "#FFD7DF"]}

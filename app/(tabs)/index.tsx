@@ -13,6 +13,7 @@ import { Dhikr } from '@/config/dhikrs';
 import { CompletionNotification } from '../../components/CompletionNotification';
 import { PageTransitionWrapper } from '@/components/PageTransitionWrapper';
 import GoalCompleteModal from '@/components/GoalCompleteModal';
+import { useProgressStore } from '@/stores/progressStore';
 
 const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme, positionIndex, categoryLength }: any) => (
   <View style={styles.dhikrCard}>
@@ -55,7 +56,8 @@ const getDisplayIndex = (currentIndex: number, totalLength: number) => {
 export default function DhikrScreen() {
   const { theme } = useTheme();
   const { start, stop } = useTimeTracking();
-  const { incrementCount, goalProgress, totalCount, todayProgress, dailyGoal } = useProgress();
+  const { incrementCount, goalProgress, totalCount, todayProgress } = useProgress();
+  const { setDailyGoal, dailyGoal } = useProgressStore();
   const dhikrs = useDhikrStore().getDhikrsByUrlCategory();
   const categoryLength = dhikrs.length;
   const { isFavorite, addFavorite, removeFavorite } = useFavoritesStore();
@@ -67,7 +69,7 @@ export default function DhikrScreen() {
   const [showNotification, setShowNotification] = useState(false);
   const [completedCycles, setCompletedCycles] = useState(0);
   const [showGoalModal, setShowGoalModal] = useState(false);
-  const [lastGoalAchieved, setLastGoalAchieved] = useState<number | null>(null);
+  const [goalCompletedForCurrentGoal, setGoalCompletedForCurrentGoal] = useState<number | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -82,19 +84,17 @@ export default function DhikrScreen() {
 
   // Surveiller quand l'objectif quotidien est atteint
   useEffect(() => {
-    if (goalProgress >= 100 && !showGoalModal) {
-      // Vérifier si c'est un nouvel objectif atteint
-      const currentGoalCount = Math.floor(goalProgress / 100);
-      
-      if (lastGoalAchieved !== currentGoalCount) {
+    const progressPercentage = (todayProgress / dailyGoal) * 100;
+    if (progressPercentage >= 100 && !showGoalModal) {
+      // Vérifier si on a déjà affiché la popup pour ce dailyGoal
+      if (goalCompletedForCurrentGoal !== dailyGoal) {
         // Petit délai pour une meilleure expérience utilisateur
-        setTimeout(() => {
+  
           setShowGoalModal(true);
-          setLastGoalAchieved(currentGoalCount);
-        }, 1000);
-      }
+          setGoalCompletedForCurrentGoal(dailyGoal);
+       }
     }
-  }, [goalProgress, showGoalModal, lastGoalAchieved]);
+  }, [goalProgress, showGoalModal, dailyGoal, goalCompletedForCurrentGoal]);
 
   const [pagerKey, setPagerKey] = useState(0);
 
@@ -182,16 +182,17 @@ export default function DhikrScreen() {
   const handleShareAchievement = useCallback(async () => {
     try {
       const result = await Share.share({
-        message: `🎉 J'ai complété mon objectif quotidien de dhikr ! Alhamdulillah 🤲\n\n"Verily, in the remembrance of Allah do hearts find rest." (13:28)`,
-        title: 'Objectif Dhikr Complété!',
+        url: 'https://apps.apple.com/app/khair-daily-adhkar/id6744126455',
+        message: `🎉 I completed my daily dhikr goal! Alhamdulillah 🤲\n\n"Verily, in the remembrance of Allah do hearts find rest." (13:28)`,
+        title: 'Daily Dhikr Goal Completed!',
       });
 
       if (result.action === Share.sharedAction) {
-        // L'utilisateur a partagé
+        // User shared successfully
         handleCloseGoalModal();
       }
     } catch (error) {
-      Alert.alert('Erreur', 'Impossible de partager en ce moment.');
+      Alert.alert('Error', 'Unable to share at the moment.');
     }
   }, [handleCloseGoalModal]);
 
@@ -297,7 +298,7 @@ export default function DhikrScreen() {
             visible={showGoalModal}
             onClose={handleCloseGoalModal}
             onShare={handleShareAchievement}
-            khairisEarned={dailyGoal}
+            khairisEarned={dailyGoal || undefined}
           />
         </View>
       </ScreenBackground>
