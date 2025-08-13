@@ -1,6 +1,6 @@
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions, Platform, Switch } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions, Platform, Switch, Share, Linking } from 'react-native';
 import { router } from 'expo-router';
-import { Flag, Bookmark, ChevronRight, Moon, Bell } from 'lucide-react-native';
+import { Flag, Bookmark, ChevronRight, Moon, Bell, Share2, Mail, Star } from 'lucide-react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { useProgress } from '../../hooks/useProgress';
 import { ScreenBackground } from '../../components/ScreenBackground';
@@ -29,9 +29,68 @@ export default function ProfileScreen() {
     todayProgress
   } = useProgress();
 
-
   const handleNavigation = (route: string) => {
     router.replace(route);
+  };
+
+  // Fonction pour partager l'app
+  const handleShareApp = async () => {
+    try {
+      const shareContent = {
+        message: `🤲 I've been using this amazing Dhikr app to build a daily remembrance habit!\n\nJoin me in earning Khairis and strengthening our connection with Allah. ✨\n\n"Verily, in the remembrance of Allah do hearts find rest." (13:28)`,
+        title: 'Khair - Daily Adhkar App',
+        url: 'https://apps.apple.com/app/khair-daily-adhkar/id6744126455',
+      };
+
+      const result = await Share.share(shareContent);
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          console.log('Shared via:', result.activityType);
+        } else {
+          console.log('Shared successfully');
+        }
+      }
+    } catch (error) {
+      console.error('Error sharing app:', error);
+    }
+  };
+
+  // Fonction pour ouvrir l'email de contact
+  const handleContactUs = async () => {
+    const email = 'contact@khair.app';
+    const subject = 'Khair App - Contact';
+    const body = 'Hello Khair team,\n\nI would like to get in touch regarding:\n\n';
+    
+    const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    
+    try {
+      const supported = await Linking.canOpenURL(mailtoUrl);
+      if (supported) {
+        await Linking.openURL(mailtoUrl);
+      } else {
+        console.log('Email client not available');
+        // Fallback: copier l'email dans le presse-papier ou afficher une alerte
+      }
+    } catch (error) {
+      console.error('Error opening email:', error);
+    }
+  };
+
+  // Fonction pour noter l'app
+  const handleRateApp = async () => {
+    const appStoreUrl = 'https://apps.apple.com/app/khair-daily-adhkar/id6744126455?action=write-review';
+    
+    try {
+      const supported = await Linking.canOpenURL(appStoreUrl);
+      if (supported) {
+        await Linking.openURL(appStoreUrl);
+      } else {
+        console.log('App Store not available');
+      }
+    } catch (error) {
+      console.error('Error opening App Store:', error);
+    }
   };
 
   const bottomPadding = isTablet()
@@ -135,7 +194,6 @@ export default function ProfileScreen() {
               <ChevronRight size={20} color={theme.colors.text.secondary} />
             </TouchableOpacity>
 
-
             {/* NOUVELLE ENTRÉE NOTIFICATIONS */}
             <TouchableOpacity
               style={[styles.menuItem, { backgroundColor: theme.colors.card }]}
@@ -148,7 +206,6 @@ export default function ProfileScreen() {
               <ChevronRight size={20} color={theme.colors.text.secondary} />
             </TouchableOpacity>
 
-
             {/* Nouveau toggle pour le background */}
             <TouchableOpacity
               style={[styles.menuItem, { backgroundColor: theme.colors.card }]}
@@ -159,7 +216,6 @@ export default function ProfileScreen() {
               </View>
               <Text style={[styles.menuText, { color: theme.colors.text.primary }]}>Dark mode</Text>
               <Switch
-
                 value={isDarkBackground}
                 onValueChange={toggleBackgroundTheme}
                 trackColor={{ false: theme.colors.background, true: '#7E0F3B' }}
@@ -167,6 +223,42 @@ export default function ProfileScreen() {
                 ios_backgroundColor={theme.colors.background}
                 style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
               />
+            </TouchableOpacity>
+          </View>
+
+          {/* NOUVELLE SECTION - Actions de l'app */}
+          <View style={styles.menuContainer}>
+            <TouchableOpacity
+              style={[styles.menuItem, { backgroundColor: theme.colors.card }]}
+              onPress={handleShareApp}
+            >
+              <View style={[styles.menuIconContainer, { backgroundColor: theme.colors.background }]}>
+                <Share2 size={20} color={theme.colors.accent} />
+              </View>
+              <Text style={[styles.menuText, { color: theme.colors.text.primary }]}>Share this app</Text>
+              <ChevronRight size={20} color={theme.colors.text.secondary} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.menuItem, { backgroundColor: theme.colors.card }]}
+              onPress={handleContactUs}
+            >
+              <View style={[styles.menuIconContainer, { backgroundColor: theme.colors.background }]}>
+                <Mail size={20} color={theme.colors.accent} />
+              </View>
+              <Text style={[styles.menuText, { color: theme.colors.text.primary }]}>Contact us</Text>
+              <ChevronRight size={20} color={theme.colors.text.secondary} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.menuItem, { backgroundColor: theme.colors.card }]}
+              onPress={handleRateApp}
+            >
+              <View style={[styles.menuIconContainer, { backgroundColor: theme.colors.background }]}>
+                <Star size={20} color={theme.colors.accent} />
+              </View>
+              <Text style={[styles.menuText, { color: theme.colors.text.primary }]}>Rate this app</Text>
+              <ChevronRight size={20} color={theme.colors.text.secondary} />
             </TouchableOpacity>
           </View>
 
@@ -183,9 +275,6 @@ export default function ProfileScreen() {
               <Text style={[styles.footerMenuText, { color: theme.colors.text.primary }]}>Privacy policy</Text>
               <ChevronRight size={20} color={theme.colors.text.secondary} />
             </TouchableOpacity>
-
-
-
           </View>
         </ScrollView>
       </ScreenBackground>
