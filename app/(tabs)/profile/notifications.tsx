@@ -17,16 +17,17 @@ import { ScreenBackground } from '@/components/ScreenBackground';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PageTransitionWrapper } from '@/components/PageTransitionWrapper';
 import { useProgressStore } from '@/stores/progressStore';
-import notificationsHandler, { 
+import notificationsHandler, {
     initializeNotifications,
     updateNotificationPreferences,
-    getNotificationPreferences 
+    getNotificationPreferences
 } from '@/components/NotificationsHandler';
+
 
 const { width } = Dimensions.get('window');
 
 export default function NotificationsScreen() {
-    const { theme } = useTheme();
+
     const insets = useSafeAreaInsets();
     const progressStore = useProgressStore();
 
@@ -36,6 +37,7 @@ export default function NotificationsScreen() {
     const [jummah, setJummah] = useState(false);
     const [dailyGoals, setDailyGoals] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
+    const { theme, isDarkBackground } = useTheme();
 
     // Charger les préférences au montage du composant
     useEffect(() => {
@@ -45,10 +47,10 @@ export default function NotificationsScreen() {
     const loadNotificationPreferences = async () => {
         try {
             setIsLoading(true);
-            
+
             // Initialiser le gestionnaire de notifications
             const initialized = await initializeNotifications();
-            
+
             if (!initialized) {
                 Alert.alert(
                     'Notifications désactivées',
@@ -94,7 +96,7 @@ export default function NotificationsScreen() {
     // Fonction pour gérer le toggle "All notifications"
     const handleAllNotificationsToggle = async (value: boolean) => {
         setAllNotifications(value);
-        
+
         // Mettre toutes les notifications au même état
         setMorningEvening(value);
         setJummah(value);
@@ -135,7 +137,7 @@ export default function NotificationsScreen() {
         });
     };
 
-    const handleGoBack = () => {
+    const handleBack = () => {
         router.replace('/profile');
     };
 
@@ -159,29 +161,25 @@ export default function NotificationsScreen() {
             <ScreenBackground>
                 <View style={[styles.container]}>
                     {/* Header avec bouton retour */}
-                    <View style={styles.header}>
-                        <TouchableOpacity
-                            style={styles.backButton}
-                            onPress={handleGoBack}
-                        >
-                            <ChevronLeft size={24} color={theme.colors.text.primary} />
+
+
+                    {/* Titre principal */}
+                    <View style={styles.headerContainer}>
+                        <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+                            <ChevronLeft size={24} color={isDarkBackground ? '#FFFFFF' : '#181818'} />
                         </TouchableOpacity>
+                        <Text style={[styles.headerTitle, { color: isDarkBackground ? '#FFFFFF' : '#181818' }]}>
+                            Customise reminders
+                        </Text>
+
+                        <View style={styles.headerSpacer} />
                     </View>
+
 
                     <ScrollView
                         style={styles.content}
                         showsVerticalScrollIndicator={false}
                     >
-                        {/* Titre principal */}
-                        <View style={styles.titleContainer}>
-                            <Text style={[styles.title, { color: theme.colors.text.secondary }]}>
-                                Customise reminders
-                            </Text>
-                            <Text style={[styles.subtitle, { color: theme.colors.text.primary }]}>
-                                Gentle nudges through the day to help you pause and reconnect.
-                            </Text>
-                        </View>
-
                         {/* All notifications - Séparé */}
                         <View style={[styles.allNotificationsContainer, { backgroundColor: theme.colors.card }]}>
                             <View style={styles.notificationContent}>
@@ -293,14 +291,6 @@ export default function NotificationsScreen() {
                             </Text>
                         </View>
 
-                        {/* Bouton Let's go */}
-                        <TouchableOpacity
-                            style={[styles.continueButton, { backgroundColor: '#7E0F3B' }]}
-                            onPress={handleGoBack}
-                        >
-                            <Text style={styles.continueButtonText}>Let's go</Text>
-                        </TouchableOpacity>
-
                         <View style={styles.bottomSpacing} />
                     </ScrollView>
                 </View>
@@ -321,24 +311,42 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: 'Sofia-Pro-Light',
     },
-    header: {
-        paddingHorizontal: 24,
-        //paddingVertical: 12,
+
+    headerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 20,
+        paddingTop: 16,
+        paddingBottom: 20,
     },
+
     backButton: {
         width: 40,
         height: 40,
         justifyContent: 'center',
         alignItems: 'center',
     },
+    headerTitle: {
+        fontFamily: 'Sofia-Pro-Regular',
+        fontSize: 22,
+        fontWeight: '600',
+        textAlign: 'center',
+    },
+    headerSpacer: {
+        width: 40,
+    },
+    
     content: {
         flex: 1,
         paddingHorizontal: 24,
     },
+    
     titleContainer: {
         marginBottom: 20,
         alignItems: 'center',
     },
+    
     title: {
         fontFamily: 'Classico',
         fontSize: 28,

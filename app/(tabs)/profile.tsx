@@ -7,7 +7,7 @@ import { ScreenBackground } from '../../components/ScreenBackground';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PageTransitionWrapper } from '@/components/PageTransitionWrapper';
-import { DarkTheme } from '@react-navigation/native';
+
 
 const TAB_BAR_HEIGHT = 80;
 
