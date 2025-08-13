@@ -67,7 +67,7 @@ export default function DhikrScreen() {
   const [showNotification, setShowNotification] = useState(false);
   const [completedCycles, setCompletedCycles] = useState(0);
   const [showGoalModal, setShowGoalModal] = useState(false);
-  const [hasShownGoalModal, setHasShownGoalModal] = useState(false);
+  const [lastGoalAchieved, setLastGoalAchieved] = useState<number | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -82,14 +82,19 @@ export default function DhikrScreen() {
 
   // Surveiller quand l'objectif quotidien est atteint
   useEffect(() => {
-    if (goalProgress >= 100 && !hasShownGoalModal && !showGoalModal) {
-      // Petit délai pour une meilleure expérience utilisateur
-      setTimeout(() => {
-        setShowGoalModal(true);
-        setHasShownGoalModal(true);
-      }, 1000);
+    if (goalProgress >= 100 && !showGoalModal) {
+      // Vérifier si c'est un nouvel objectif atteint
+      const currentGoalCount = Math.floor(goalProgress / 100);
+      
+      if (lastGoalAchieved !== currentGoalCount) {
+        // Petit délai pour une meilleure expérience utilisateur
+        setTimeout(() => {
+          setShowGoalModal(true);
+          setLastGoalAchieved(currentGoalCount);
+        }, 1000);
+      }
     }
-  }, [goalProgress, hasShownGoalModal, showGoalModal]);
+  }, [goalProgress, showGoalModal, lastGoalAchieved]);
 
   const [pagerKey, setPagerKey] = useState(0);
 
@@ -177,16 +182,16 @@ export default function DhikrScreen() {
   const handleShareAchievement = useCallback(async () => {
     try {
       const result = await Share.share({
-        message: `🎉 I completed my daily dhikr goal! Alhamdulillah 🤲\n\n"Verily, in the remembrance of Allah do hearts find rest." (13:28)`,
-        title: 'Daily Dhikr Goal Completed!',
+        message: `🎉 J'ai complété mon objectif quotidien de dhikr ! Alhamdulillah 🤲\n\n"Verily, in the remembrance of Allah do hearts find rest." (13:28)`,
+        title: 'Objectif Dhikr Complété!',
       });
 
       if (result.action === Share.sharedAction) {
-        // User shared successfully
+        // L'utilisateur a partagé
         handleCloseGoalModal();
       }
     } catch (error) {
-      Alert.alert('Error', 'Unable to share at the moment.');
+      Alert.alert('Erreur', 'Impossible de partager en ce moment.');
     }
   }, [handleCloseGoalModal]);
 

@@ -10,6 +10,7 @@ import {
   Image,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useTheme } from '@/context/ThemeContext';
 import CustomGoalCompleteImage from '@/assets/images/customGoalCompleteImage';
 
 interface GoalCompleteModalProps {
@@ -30,6 +31,22 @@ const GoalCompleteModal: React.FC<GoalCompleteModalProps> = ({
   khairisEarned = 3000,
   decorationImage,
 }) => {
+  const { theme, isDarkBackground } = useTheme();
+  
+  // Choisir le composant de background selon le mode
+  const BackgroundComponent = isDarkBackground ? LinearGradient : LinearGradient;
+  
+  // Props pour le LinearGradient selon le mode
+  const gradientProps = isDarkBackground ? {
+    colors: ['#F5F4E4', '#FFD7DF'],
+    locations: [0.1541, 0.829],
+    start: { x: 0, y: 0 },
+    end: { x: 0.8, y: 1 }
+  } : {
+    colors: ['#FFFFFF', '#F8F6F4'],
+    locations: [0, 1]
+  };
+
   decorationImage = require('@/assets/images/customGoalCompleteImage')
   return (
     <Modal
@@ -40,9 +57,8 @@ const GoalCompleteModal: React.FC<GoalCompleteModalProps> = ({
     >
       <View style={styles.overlay}>
         <View style={[styles.modalContainer, { width: modalWidth }]}>
-          <LinearGradient
-            colors={['#FFFFFF', '#F8F6F4']}
-            locations={[0, 1]}
+          <BackgroundComponent
+            {...gradientProps}
             style={styles.modalContent}
           >
             {/* Bouton fermer */}
@@ -56,24 +72,28 @@ const GoalCompleteModal: React.FC<GoalCompleteModalProps> = ({
             </View>
 
             {/* Badge Khairis */}
-
-            <LinearGradient
-              colors={
-                ["#F2FFE5", "#FFD7DF"]
-              }
-
-              start={{ x: 0, y: 0.2 }}
-              end={{ x: 0.8, y: 1 }}
-              style={styles.khairsBadge}
-            >
-
-              <View >
+            {isDarkBackground ? (
+              <LinearGradient
+                colors={["#F2FFE5", "#FFD7DF"]}
+                locations={[-0.3955, 1]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0.2 }}
+                style={[styles.khairsBadge, { backgroundColor: '#FBF0EE' }]}
+              >
                 <Text style={styles.khairsText}>+{khairisEarned} Khairis</Text>
-              </View>
-
-            </LinearGradient>
-
-
+              </LinearGradient>
+            ) : (
+              <LinearGradient
+                colors={["#F2FFE5", "#FFD7DF"]}
+                start={{ x: 0, y: 0.2 }}
+                end={{ x: 0.8, y: 1 }}
+                style={styles.khairsBadge}
+              >
+                <View>
+                  <Text style={styles.khairsText}>+{khairisEarned} Khairis</Text>
+                </View>
+              </LinearGradient>
+            )}
 
             {/* Titre principal */}
             <Text style={styles.title}>Goal Complete!</Text>
@@ -95,7 +115,7 @@ const GoalCompleteModal: React.FC<GoalCompleteModalProps> = ({
               </Text>
               <Text style={styles.quoteSource}>Sahih Muslim</Text>
             </View>
-          </LinearGradient>
+          </BackgroundComponent>
         </View>
       </View>
     </Modal>
@@ -124,15 +144,15 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     paddingHorizontal: 24,
-    paddingTop: 20,
+    //paddingTop: 20,
     paddingBottom: 32,
     alignItems: 'center',
     position: 'relative',
   },
   closeButton: {
     position: 'absolute',
-    top: 16,
-    right: 20,
+    top: 12,
+    right: 10,
     width: 32,
     height: 32,
     justifyContent: 'center',
