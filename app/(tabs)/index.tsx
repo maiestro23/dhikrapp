@@ -55,7 +55,7 @@ const getDisplayIndex = (currentIndex: number, totalLength: number) => {
 export default function DhikrScreen() {
   const { theme } = useTheme();
   const { start, stop } = useTimeTracking();
-  const { incrementCount, goalProgress, totalCount, todayProgress } = useProgress();
+  const { incrementCount, goalProgress, totalCount, todayProgress, dailyGoal } = useProgress();
   const dhikrs = useDhikrStore().getDhikrsByUrlCategory();
   const categoryLength = dhikrs.length;
   const { isFavorite, addFavorite, removeFavorite } = useFavoritesStore();
@@ -297,7 +297,7 @@ export default function DhikrScreen() {
             visible={showGoalModal}
             onClose={handleCloseGoalModal}
             onShare={handleShareAchievement}
-            khairisEarned={3000}
+            khairisEarned={dailyGoal}
           />
         </View>
       </ScreenBackground>
