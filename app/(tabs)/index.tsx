@@ -14,6 +14,7 @@ import { CompletionNotification } from '../../components/CompletionNotification'
 import { PageTransitionWrapper } from '@/components/PageTransitionWrapper';
 import GoalCompleteModal from '@/components/GoalCompleteModal';
 import { useProgressStore } from '@/stores/progressStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme, positionIndex, categoryLength }: any) => (
   <View style={styles.dhikrCard}>
@@ -69,11 +70,24 @@ export default function DhikrScreen() {
   const [showNotification, setShowNotification] = useState(false);
   const [completedCycles, setCompletedCycles] = useState(0);
   const [showGoalModal, setShowGoalModal] = useState(false);
-  const [goalCompletedForCurrentGoal, setGoalCompletedForCurrentGoal] = useState<number | null>(null);
+  const [goalCompletedToday, setGoalCompletedToday] = useState<string | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     start();
+    
+    // Charger la date de la dernière popup affichée
+    const loadGoalCompletedDate = async () => {
+      try {
+        const savedDate = await AsyncStorage.getItem('goalCompletedDate');
+        setGoalCompletedToday(savedDate);
+      } catch (error) {
+        console.log('Error loading goal completed date:', error);
+      }
+    };
+    
+    loadGoalCompletedDate();
+    
     return () => {
       stop();
       if (timeoutRef.current) {
@@ -85,16 +99,24 @@ export default function DhikrScreen() {
   // Surveiller quand l'objectif quotidien est atteint
   useEffect(() => {
     const progressPercentage = (todayProgress / dailyGoal) * 100;
+    
     if (progressPercentage >= 100 && !showGoalModal) {
-      // Vérifier si on a déjà affiché la popup pour ce dailyGoal
-      if (goalCompletedForCurrentGoal !== dailyGoal) {
-        // Petit délai pour une meilleure expérience utilisateur
-  
-          setShowGoalModal(true);
-          setGoalCompletedForCurrentGoal(dailyGoal);
-       }
+      // Obtenir la date d'aujourd'hui au format YYYY-MM-DD
+      const today = new Date().toISOString().split('T')[0];
+      
+      // Vérifier si on a déjà affiché la popup aujourd'hui
+      if (goalCompletedToday !== today) {
+        // Afficher la popup et sauvegarder la date
+        setShowGoalModal(true);
+        setGoalCompletedToday(today);
+        
+        // Sauvegarder dans AsyncStorage
+        AsyncStorage.setItem('goalCompletedDate', today).catch(error => {
+          console.log('Error saving goal completed date:', error);
+        });
+      }
     }
-  }, [goalProgress, showGoalModal, dailyGoal, goalCompletedForCurrentGoal]);
+  }, [todayProgress, dailyGoal, showGoalModal, goalCompletedToday]);
 
   const [pagerKey, setPagerKey] = useState(0);
 
@@ -181,17 +203,24 @@ export default function DhikrScreen() {
 
   const handleShareAchievement = useCallback(async () => {
     try {
-      const result = await Share.share({
+      const shareContent = {
+        message: `🎉 I completed my daily dhikr goal! Alhamdulillah 🤲\n\nJoin me in building a daily dhikr habit with this amazing app! 🤲\n\n"Verily, in the remembrance of Allah do hearts find rest." (13:28)`,
+        title: 'Dhikr App - Daily Goal Complete!',
         url: 'https://apps.apple.com/app/khair-daily-adhkar/id6744126455',
-        message: `🎉 I completed my daily dhikr goal! Alhamdulillah 🤲\n\n"Verily, in the remembrance of Allah do hearts find rest." (13:28)`,
-        title: 'Daily Dhikr Goal Completed!',
-      });
+      };
+
+      const result = await Share.share(shareContent);
 
       if (result.action === Share.sharedAction) {
-        // User shared successfully
+        if (result.activityType) {
+          console.log('Shared via:', result.activityType);
+        } else {
+          console.log('Shared successfully');
+        }
         handleCloseGoalModal();
       }
     } catch (error) {
+      console.error('Error sharing:', error);
       Alert.alert('Error', 'Unable to share at the moment.');
     }
   }, [handleCloseGoalModal]);
