@@ -20,6 +20,10 @@ const { width } = Dimensions.get('window');
 
 // Données des catégories avec leurs images DISTINCTES
 const categories = [
+
+
+
+
   {
     id: 'morning',
     title: 'Morning\nAdhkar',
@@ -51,7 +55,80 @@ const categories = [
     // Image de nuit étoilée
     backgroundImage: require('../../assets/images/Night_bg.png'), // Remplacez par votre chemin d'image
     icon: '🌙'
-  }
+  },
+
+  // NEW Categories
+  {
+    id: 'upon',
+    title: 'Upon\nWaking',
+    subtitle: 'Seek forgiveness and purification',
+    // Image spirituelle/mosque ou montagne
+    backgroundImage: require('../../assets/images/Upon_waking_bg.png'), // Remplacez par votre chemin d'image
+    icon: '🤲'
+  },
+
+  {
+    id: 'before',
+    title: 'Before\nSleeping',
+    subtitle: 'Seek forgiveness and purification',
+    // Image spirituelle/mosque ou montagne
+    backgroundImage: require('../../assets/images/Before_sleeping_bg.png'), // Remplacez par votre chemin d'image
+    icon: '🤲'
+  },
+
+  {
+    id: 'surahs',
+    title: 'Surahs of\nProtection',
+    subtitle: 'Seek forgiveness and purification',
+    // Image spirituelle/mosque ou montagne
+    backgroundImage: require('../../assets/images/Surahs_protection_bg.png'), // Remplacez par votre chemin d'image
+    icon: '🤲'
+  },
+
+  {
+    id: 'salawat',
+    title: 'Salawat',
+    subtitle: 'Seek forgiveness and purification',
+    // Image spirituelle/mosque ou montagne
+    backgroundImage: require('../../assets/images/Salawat_bg.png'), // Remplacez par votre chemin d'image
+    icon: '🤲'
+  },
+
+  {
+    id: 'travel',
+    title: 'Travel',
+    subtitle: 'Seek forgiveness and purification',
+    // Image spirituelle/mosque ou montagne
+    backgroundImage: require('../../assets/images/Travel_bg.png'), // Remplacez par votre chemin d'image
+    icon: '🤲'
+  },
+
+  {
+    id: 'anxiety',
+    title: 'Anxiety\nRelief',
+    subtitle: 'Seek forgiveness and purification',
+    // Image spirituelle/mosque ou montagne
+    backgroundImage: require('../../assets/images/Anxiety_bg.png'), // Remplacez par votre chemin d'image
+    icon: '🤲'
+  },
+
+    {
+    id: 'rizq',
+    title: 'Increase\nRizq',
+    subtitle: 'Seek forgiveness and purification',
+    // Image spirituelle/mosque ou montagne
+    backgroundImage: require('../../assets/images/Rizq_bg.png'), // Remplacez par votre chemin d'image
+    icon: '🤲'
+  },
+
+  {
+    id: 'evilEye',
+    title: 'Evil Eye',
+    subtitle: 'Seek forgiveness and purification',
+    // Image spirituelle/mosque ou montagne
+    backgroundImage: require('../../assets/images/Evil_eye_bg.png'), // Remplacez par votre chemin d'image
+    icon: '🤲'
+  },
 ];
 
 // Données pour la section Tasbih
@@ -181,11 +258,11 @@ export default function DiscoverScreen() {
   const TabButton = ({ title, onPress }: any) => (
     <LinearGradient
 
-      colors={isDarkBackground ? 
-    [theme.colors.discover.tabButton.gradientStart, theme.colors.discover.tabButton.gradientEnd] : 
-    [theme.colors.discover.tabButton.gradientStart, theme.colors.discover.tabButton.gradientEnd]
-  }
-    
+      colors={isDarkBackground ?
+        [theme.colors.discover.tabButton.gradientStart, theme.colors.discover.tabButton.gradientEnd] :
+        [theme.colors.discover.tabButton.gradientStart, theme.colors.discover.tabButton.gradientEnd]
+      }
+
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
       style={[

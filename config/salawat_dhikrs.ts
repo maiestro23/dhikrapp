@@ -1,5 +1,11 @@
 import { Dhikr } from "./dhikrs"
 
+export const salawatTransition = {
+    title: "Finish with Protection",
+    subtitle: "Follow the sunnah and add protection to your salawat",
+    nextCategories: ["surahs"]
+};
+
 export const SalawatDhikrs: Dhikr[] =
     [
         {

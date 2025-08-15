@@ -8,6 +8,14 @@ import { IstighfarDhikrs, IstighfarTransition } from '@/config/istighfar_dhikrs'
 import { FavoriteDhikr, useFavoritesStore } from './favoritesStore';
 import { AlhamdulillahDhikrs, AllahuAkbarDhikrs, AstaghfirullahDhikrs, SubhanallahDhikrs } from '@/config/tasbih_dhikrs';
 import { generateTasbihFromParams, generateTasbihSession } from '@/config/tasbihGenerator';
+import { SalawatDhikrs, salawatTransition } from '@/config/salawat_dhikrs';
+import { UponDhikrs, uponWakingTransition } from '@/config/upon_dhikrs';
+import { SurahsDhikrs, surahsTransition } from '@/config/surahs_dhikrs';
+import { RizqDhikrs, rizqTransition } from '@/config/rizq_dhikrs';
+import { TravelDhikrs, travelTransition } from '@/config/travel_dhikrs';
+import { BeforeSleepingDhikrs, beforeSleepTransition } from '@/config/before_dhikrs';
+import { EvilEyeDhikrs, evilEyeTransition } from '@/config/evilEye_dhikrs';
+import { AnxietyDhikrs, anxietyReliefTransition } from '@/config/anxiety_dhikrs';
 
 interface Dhikr {
   id: string;
@@ -24,7 +32,7 @@ interface DhikrState {
   getAllDhikrs: () => Dhikr[];
   addDhikr: (dhikr: Dhikr) => void;
   removeDhikr: (id: string) => void;
-  getDhikrsByCategory: (category: string) => Dhikr[];
+  getDhikrsByCategory: (category: string) => any;
 
 }
 
@@ -91,7 +99,56 @@ export const useDhikrStore = create<DhikrState>()((set, get) => ({
 
     switch (category) {
       //Categories
+      case 'anxiety':
+        return {
+          dhikrs: AnxietyDhikrs,
+          transition: anxietyReliefTransition
+        };
 
+
+      case 'evilEye':
+        return {
+          dhikrs: EvilEyeDhikrs,
+          transition: evilEyeTransition
+        };
+
+      case 'before':
+        return {
+          dhikrs: BeforeSleepingDhikrs,
+          transition: beforeSleepTransition
+        };
+
+      case 'travel':
+        return {
+          dhikrs: TravelDhikrs,
+          transition: travelTransition
+        };
+
+      case 'rizq':
+        return {
+          dhikrs: RizqDhikrs,
+          transition: rizqTransition
+        };
+
+      case 'surahs':
+        return {
+          dhikrs: SurahsDhikrs,
+          transition: surahsTransition
+        };
+
+      case 'upon':
+        return {
+          dhikrs: UponDhikrs,
+          transition: uponWakingTransition
+        };
+
+      case 'salawat':
+        return {
+          dhikrs: SalawatDhikrs,
+          transition: salawatTransition
+        };
+
+      // OLD CATEGORIES
       case 'morning':
         return {
           dhikrs: MorningDhikrs,
