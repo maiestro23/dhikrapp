@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Share, Alert } from 'react-native';
 import PagerView from 'react-native-pager-view';
 import { Heart } from 'lucide-react-native';
@@ -15,6 +15,7 @@ import { PageTransitionWrapper } from '@/components/PageTransitionWrapper';
 import GoalCompleteModal from '@/components/GoalCompleteModal';
 import { useProgressStore } from '@/stores/progressStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CategoryTransitionScreen } from '../../components/CategoryTransitionScreen';
 
 const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme, positionIndex, categoryLength }: any) => (
   <View style={styles.dhikrCard}>
@@ -40,17 +41,13 @@ const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme, positionInde
   </View>
 );
 
-// Ajoutez cette fonction helper avant votre composant principal :
 const getDisplayIndex = (currentIndex: number, totalLength: number) => {
-  // Si on est sur l'élément dupliqué du début (index 0), afficher le dernier
   if (currentIndex === 0) {
     return totalLength;
   }
-  // Si on est sur l'élément dupliqué de la fin (index totalLength + 1), afficher le premier
   if (currentIndex === totalLength + 1) {
     return 1;
   }
-  // Sinon, afficher l'index normal (en soustrayant 1 car on commence à l'index 1)
   return currentIndex;
 };
 
@@ -59,8 +56,9 @@ export default function DhikrScreen() {
   const { start, stop } = useTimeTracking();
   const { incrementCount, goalProgress, totalCount, todayProgress } = useProgress();
   const { setDailyGoal, dailyGoal } = useProgressStore();
-  const dhikrs = useDhikrStore().getDhikrsByUrlCategory();
-  const categoryLength = dhikrs.length;
+  const categoryData = useDhikrStore().getDhikrsByUrlCategory();
+  const { dhikrs, transition } = categoryData;
+  const categoryLength = dhikrs?.length || 0;
   const { isFavorite, addFavorite, removeFavorite } = useFavoritesStore();
 
   const pagerRef = useRef<PagerView>(null);
@@ -71,12 +69,36 @@ export default function DhikrScreen() {
   const [completedCycles, setCompletedCycles] = useState(0);
   const [showGoalModal, setShowGoalModal] = useState(false);
   const [goalCompletedToday, setGoalCompletedToday] = useState<string | null>(null);
+  const [showTransition, setShowTransition] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Générer les pages circulaires avec écran de transition si nécessaire
+  const circularPages = useMemo(() => {
+    if (!dhikrs || dhikrs.length === 0) return [];
+    
+    let pages = [
+      { ...dhikrs[dhikrs.length - 1], type: 'dhikr' },
+      ...dhikrs.map((d: any) => ({ ...d, type: 'dhikr' }))
+    ];
+
+    // Ajouter l'écran de transition si disponible et si la catégorie est complétée
+    if (transition && showTransition) {
+      pages.push({
+        type: 'transition',
+        title: transition.title,
+        subtitle: transition.subtitle,
+        nextCategories: transition.nextCategories,
+        id: 'transition-screen'
+      });
+    }
+
+    pages.push({ ...dhikrs[0], type: 'dhikr' });
+    return pages;
+  }, [dhikrs, transition, showTransition]);
 
   useEffect(() => {
     start();
     
-    // Charger la date de la dernière popup affichée
     const loadGoalCompletedDate = async () => {
       try {
         const savedDate = await AsyncStorage.getItem('goalCompletedDate');
@@ -101,16 +123,12 @@ export default function DhikrScreen() {
     const progressPercentage = (todayProgress / dailyGoal) * 100;
     
     if (progressPercentage >= 100 && !showGoalModal) {
-      // Obtenir la date d'aujourd'hui au format YYYY-MM-DD
       const today = new Date().toISOString().split('T')[0];
       
-      // Vérifier si on a déjà affiché la popup aujourd'hui
       if (goalCompletedToday !== today) {
-        // Afficher la popup et sauvegarder la date
         setShowGoalModal(true);
         setGoalCompletedToday(today);
         
-        // Sauvegarder dans AsyncStorage
         AsyncStorage.setItem('goalCompletedDate', today).catch(error => {
           console.log('Error saving goal completed date:', error);
         });
@@ -125,6 +143,7 @@ export default function DhikrScreen() {
       setPagerKey(prev => prev + 1);
       setCurrentIndex(1);
       setCompletedCycles(0);
+      setShowTransition(false);
     }
   }, [dhikrs]);
 
@@ -137,44 +156,66 @@ export default function DhikrScreen() {
     router.replace('/discover');
   }, []);
 
-  // Obtenir les paramètres au niveau du composant
   const params = useLocalSearchParams();
   const categoryUrl = params.category as string || 'General';
 
-  const handlePageSelected = useCallback((e: any) => {
-    const index = e.nativeEvent.position;
+  console.log('DhikrScreen - Current params:', params);
+  console.log('DhikrScreen - Category data:', { dhikrsLength: dhikrs?.length, hasTransition: !!transition });
 
+  const handlePageSelected = useCallback((e: any) => {
+    if (!dhikrs || dhikrs.length === 0) return;
+    
+    const index = e.nativeEvent.position;
     setCurrentIndex(index);
 
-    // Logique existante pour le comptage et l'ajustement circulaire
+    console.log('Page selected:', { 
+      index, 
+      dhikrsLength: dhikrs.length, 
+      showTransition, 
+      circularPagesLength: circularPages.length,
+      isAdjusting: isAdjustingPosition 
+    });
+
+    // Logique de comptage - ne compter que les vrais dhikrs
     if (!isAdjustingPosition && index >= 1 && index <= dhikrs.length) {
-      incrementCount();
+      const currentItem = circularPages[index];
+      if (currentItem && currentItem.type === 'dhikr') {
+        incrementCount();
+      }
     }
 
-    console.log('Page selected:', index, 'isAdjusting:', isAdjustingPosition, 'scrollState:', scrollState);
+    // Détecter la fin de catégorie pour afficher l'écran de transition
+    if (!isAdjustingPosition && index === dhikrs.length && transition && !showTransition) {
+      console.log('Activating transition screen');
+      setShowTransition(true);
+      setCompletedCycles(prev => prev + 1);
+      setShowNotification(true);
+    }
 
-    const lastRealIndex = dhikrs.length;
-    const lastFakeIndex = dhikrs.length + 1;
+    // Calculer les indices en fonction de si la transition est affichée
+    const actualDhikrsLength = dhikrs.length;
+    const hasTransition = showTransition && transition;
+    const lastRealIndex = hasTransition ? actualDhikrsLength + 1 : actualDhikrsLength;
+    const lastFakeIndex = hasTransition ? actualDhikrsLength + 2 : actualDhikrsLength + 1;
 
+    console.log('Circular bounds:', { lastRealIndex, lastFakeIndex, hasTransition });
+
+    // Gestion de la navigation circulaire
     if (!isAdjustingPosition && (index === 0 || index === lastFakeIndex)) {
-      console.log('Triggering immediate adjustment for index:', index);
+      console.log('Triggering circular adjustment for index:', index);
       setIsAdjustingPosition(true);
-
-      // Détecter le cycle complet et afficher la notification
-      if (index === 0 || index === lastFakeIndex) {
-        setCompletedCycles(prev => prev + 1);
-        setShowNotification(true);
-      }
 
       setTimeout(() => {
         if (pagerRef.current) {
           try {
             if (index === 0) {
+              // Si on est au début (élément dupliqué), aller à la vraie fin
+              console.log('Adjusting from start to:', lastRealIndex);
               pagerRef.current.setPageWithoutAnimation(lastRealIndex);
-              console.log('Adjusted from fake last (0) to real last (' + lastRealIndex + ')');
             } else if (index === lastFakeIndex) {
+              // Si on est à la fin (élément dupliqué), aller au vrai début
+              console.log('Adjusting from end to: 1');
               pagerRef.current.setPageWithoutAnimation(1);
-              console.log('Adjusted from fake first (' + lastFakeIndex + ') to real first (1)');
             }
           } catch (error) {
             console.warn('PagerView position adjustment failed:', error);
@@ -186,7 +227,7 @@ export default function DhikrScreen() {
         }, 50);
       }, 10);
     }
-  }, [dhikrs.length, incrementCount, isAdjustingPosition, scrollState]);
+  }, [dhikrs, incrementCount, isAdjustingPosition, circularPages, transition, showTransition]);
 
   const handleScrollStateChanged = useCallback((e: any) => {
     const state = e.nativeEvent.pageScrollState;
@@ -225,6 +266,22 @@ export default function DhikrScreen() {
     }
   }, [handleCloseGoalModal]);
 
+  const handleTransitionContinue = useCallback(() => {
+    // Naviguer vers une catégorie suggérée (première par défaut)
+    if (transition && transition.nextCategories.length > 0) {
+      const nextCategory = transition.nextCategories[0];
+      console.log('Navigating to category:', nextCategory);
+      
+      // Utiliser router.replace au lieu de router.push pour forcer le rechargement
+      router.replace({
+        pathname: '/(tabs)',
+        params: {
+          category: nextCategory,
+        }
+      });
+    }
+  }, [transition]);
+
   if (!dhikrs || dhikrs.length === 0) {
     return (
       <ScreenBackground>
@@ -244,14 +301,6 @@ export default function DhikrScreen() {
       </ScreenBackground>
     );
   }
-
-  const circularPages = [
-    dhikrs[dhikrs.length - 1],
-    ...dhikrs,
-    dhikrs[0],
-  ];
-
-  const barHeightPx = Math.max(0, Math.min((goalProgress / 100) * 500, 500));
 
   let currentCategory = 'General'
   if (categoryUrl && categoryUrl === 'favourites') {
@@ -308,21 +357,31 @@ export default function DhikrScreen() {
             onPageScrollStateChanged={handleScrollStateChanged}
             scrollEnabled={!isAdjustingPosition}
           >
-            {circularPages.map((dhikr: any, index: number) => (
-              <View key={`dhikr-${dhikr?.id || index}-${index}`}>
-                <DhikrContent
-                  dhikr={dhikr as Dhikr}
-                  isFavorite={isFavorite(dhikr?.uuid)}
-                  onToggleFavorite={toggleFavorite}
-                  theme={theme}
-                  positionIndex={index}
-                  categoryLength={categoryLength}
-                />
+            {circularPages.map((item: any, index: number) => (
+              <View key={`page-${item?.id || index}-${index}`}>
+                {item.type === 'transition' ? (
+                  <CategoryTransitionScreen
+                    title={item.title}
+                    subtitle={item.subtitle}
+                    nextCategories={item.nextCategories}
+                    categoryName={currentCategory}
+                    onContinue={handleTransitionContinue}
+                    onDismiss={() => {}} // Pas d'action spéciale, le swipe gère la navigation
+                  />
+                ) : (
+                  <DhikrContent
+                    dhikr={item as Dhikr}
+                    isFavorite={isFavorite(item?.uuid)}
+                    onToggleFavorite={toggleFavorite}
+                    theme={theme}
+                    positionIndex={index}
+                    categoryLength={categoryLength}
+                  />
+                )}
               </View>
             ))}
           </PagerView>
 
-          {/* Modal de félicitations pour objectif quotidien atteint */}
           <GoalCompleteModal
             visible={showGoalModal}
             onClose={handleCloseGoalModal}
@@ -335,7 +394,7 @@ export default function DhikrScreen() {
   );
 }
 
-// Les styles avec la notification ajoutée
+// Styles identiques à votre version précédente
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -442,7 +501,6 @@ const styles = StyleSheet.create({
     color: '#FFF',
     textAlign: 'center',
   },
-
   pageIndicator: {
     fontFamily: 'Sofia-Pro-ExtraLight',
     fontSize: 14,

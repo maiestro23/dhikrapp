@@ -1,10 +1,10 @@
 import { create } from 'zustand';
-import { dhikrs as initialDhikrs } from '../config/dhikrs';
+import { GeneralTransition, dhikrs as initialDhikrs } from '../config/dhikrs';
 import { MorningDhikrs } from '@/config/morning_dhikrs';
 import { EveningDhikrs } from '@/config/evening_dhikrs';
 import { useLocalSearchParams } from 'expo-router';
 import { AfterSalahDhikrs } from '@/config/afterSalah_dhikrs';
-import { IstighfarDhikrs } from '@/config/istighfar_dhikrs';
+import { IstighfarDhikrs, IstighfarTransition } from '@/config/istighfar_dhikrs';
 import { FavoriteDhikr, useFavoritesStore } from './favoritesStore';
 import { AlhamdulillahDhikrs, AllahuAkbarDhikrs, AstaghfirullahDhikrs, SubhanallahDhikrs } from '@/config/tasbih_dhikrs';
 import { generateTasbihFromParams, generateTasbihSession } from '@/config/tasbihGenerator';
@@ -41,28 +41,28 @@ export const useDhikrStore = create<DhikrState>()((set, get) => ({
       ...IstighfarDhikrs
     ];
 
-        // Optionnel : supprimer les doublons basés sur le texte de traduction
-    const uniqueDhikrs = allDhikrs.filter((dhikr, index, self) => 
+    // Optionnel : supprimer les doublons basés sur le texte de traduction
+    const uniqueDhikrs = allDhikrs.filter((dhikr, index, self) =>
       index === self.findIndex(d => d.arabicText === dhikr.arabicText)
     );
-    
+
     return uniqueDhikrs;
   },
 
-    // Méthode pour récupérer uniquement les dhikrs favoris
+  // Méthode pour récupérer uniquement les dhikrs favoris
   // getFavoriteDhikrs: () => {
   //   // Récupérer tous les dhikrs
   //   const allDhikrs = get().getAllDhikrs();
-    
+
   //   // Récupérer les favoris depuis le store des favoris
   //   const favorites = useFavoritesStore.getState().favorites;
-    
+
   //   // Filtrer les dhikrs qui sont dans les favoris
   //   // On utilise l'UUID du favori qui correspond à l'ID du dhikr
   //   const favoriteDhikrs = allDhikrs.filter(dhikr => 
   //     favorites.some(favorite => favorite.uuid === dhikr.id)
   //   );
-    
+
   //   return favoriteDhikrs;
   // },
 
@@ -76,33 +76,54 @@ export const useDhikrStore = create<DhikrState>()((set, get) => ({
     // Si c'est un type de tasbih avec un count spécifique
     if (tasbihType && count) {
       console.log('Generating tasbih session:', { tasbihType, count });
-      
+
       // Utiliser la nouvelle fonction pour éviter les boucles infinies
       const dhikrs = generateTasbihFromParams(tasbihType, count);
-      
+
       if (dhikrs.length === 0) {
         console.warn('Aucun dhikr généré, retour aux dhikrs par défaut');
         // Retourner une valeur par défaut ou une liste vide
         return [];
       }
-      
+
       return dhikrs;
     }
-    
+
     switch (category) {
       //Categories
+
       case 'morning':
-        return MorningDhikrs;
+        return {
+          dhikrs: MorningDhikrs,
+          transition: IstighfarTransition
+        };
+
       case 'evening':
-        return EveningDhikrs;
+        return {
+          dhikrs: EveningDhikrs,
+          transition: IstighfarTransition
+        };
+
       case 'afterSalah':
-        return AfterSalahDhikrs;
+        return {
+          dhikrs: AfterSalahDhikrs,
+          transition: IstighfarTransition
+        };
+
       case 'istighfar':
-        return IstighfarDhikrs;
+        return {
+          dhikrs: IstighfarDhikrs,
+          transition: IstighfarTransition
+        };
+
       case 'favourites':
-        return useFavoritesStore.getState().favorites;    
+        return useFavoritesStore.getState().favorites;
+
       default:
-        return initialDhikrs;
+        return {
+          dhikrs: initialDhikrs,
+          transition: GeneralTransition
+        };
     }
   },
 

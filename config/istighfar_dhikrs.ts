@@ -1,5 +1,12 @@
 import { Dhikr } from "./dhikrs"
 
+
+export const IstighfarTransition = {
+  title: "Finish with Protection",
+  subtitle: "Complete your adhkar with the Surahs of Protection Istighfar",
+  nextCategories: ["morning"]
+};
+
 export const IstighfarDhikrs: Dhikr[] = 
 [
   {
