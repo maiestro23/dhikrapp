@@ -4,6 +4,22 @@ import { useColorScheme } from 'react-native';
 interface ThemeColors {
   background: string;
   card: string;
+  statCard: string;
+  statCardText: string;
+  statCardTextSecondary: string;
+  quoteCardText: string;
+
+
+  profile: {
+    icons: string;
+    iconsPartTwo: string;
+    iconsInside: string;
+    toggleSwitch: string;
+    arrows: string;
+    menuEntries: string;
+  }
+
+
   text: {
     primary: string;
     secondary: string;
@@ -17,7 +33,7 @@ interface ThemeColors {
     dateColor: string;
     khairisAndGoalColor: string;
     categoryColor: string;
-          categoryText: string;
+    categoryText: string;
     pageIndicatorColor: string;
     arabicColor: string;
     transliterationColor: string;
@@ -51,6 +67,7 @@ interface ThemeColors {
       selected: string;
       borderColor: string;
     },
+
   }
 }
 
@@ -62,7 +79,23 @@ export interface Theme {
 const lightTheme: Theme = {
   colors: {
     background: '#F0F4EA', // Using the start color of the gradient
-    card: '#FFFFFF',
+    card: '#bye',
+    statCard: '#FFFBFA',
+    statCardText: "#181818",
+    statCardTextSecondary: "#8C8F7B",
+
+    quoteCardText: '#7E0F3B',
+
+    profile: {
+      icons: '#E5E8D6',
+      iconsPartTwo: '#E5E8D6',
+      iconsInside: '#746D6D', 
+      toggleSwitch: '#8C8F7B',
+      arrows: '#746D6D',
+      menuEntries: '#746D6D'
+    },
+
+
     text: {
       primary: '#8C8F7B',
       secondary: '#181818',
@@ -120,7 +153,23 @@ const lightTheme: Theme = {
 const darkBackgroundTheme: Theme = {
   colors: {
     background: 'rgba(255, 255, 255, 0.1)', // Background transparent pour les cartes
-    card: 'rgba(255, 255, 255, 0.15)', // Cartes semi-transparentes
+    card: '#bye', // Cartes semi-transparentes
+    statCard: '#F8E2DF',
+    
+    statCardText: "#3C041A",
+    statCardTextSecondary: "#181818",
+
+    quoteCardText: "#7F0A34",
+
+    profile: {
+      icons: '#3A0518',
+      iconsPartTwo: '#3A0518',
+      iconsInside: '#E5C7D3', 
+      toggleSwitch: '#3C041A',
+      arrows: '#fff',
+      menuEntries: '#fff'
+    },
+
     text: {
       primary: '#FFFFFF', // Texte principal en blanc
       secondary: '#F5F5F5', // Texte secondaire en blanc cassé

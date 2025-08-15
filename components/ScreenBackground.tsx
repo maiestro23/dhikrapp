@@ -22,11 +22,12 @@ export const ScreenBackground: React.FC<ScreenBackgroundProps> = ({
     'rgb(251,235,232)'
   ];
 
+
   // Nouveau background sombre (basé sur votre design exact)
   const darkColors = [
-    '#43061C', // Couleur du haut
-    '#43061C', // Couleur du milieu
-    '#7E0F3B'  // Couleur du bas
+    '#37041A', // Couleur du haut
+    '#4C0524', // Couleur du milieu
+    '#820738'  // Couleur du bas
   ];
 
   const colors = isDarkBackground ? darkColors : lightColors;

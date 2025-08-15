@@ -110,28 +110,28 @@ export default function ProfileScreen() {
           </View>
 
           <View style={styles.statsContainer}>
-            <View style={[styles.statCard, { backgroundColor: theme.colors.card }]}>
-              <Text style={[styles.statValue, { color: theme.colors.text.secondary }]}>
+            <View style={[styles.statCard, { backgroundColor: theme.colors.statCard }]}>
+              <Text style={[styles.statValue, { color: theme.colors.statCardText }]}>
                 {todayProgress >= 1000 ? `${(todayProgress / 1000).toFixed(1)}k` : todayProgress.toLocaleString()}
               </Text>
-              <Text style={[styles.statLabel, { color: theme.colors.text.primary }]}>
+              <Text style={[styles.statLabel, { color: theme.colors.statCardTextSecondary }]}>
                 daily khairis
               </Text>
             </View>
-            <View style={[styles.statCard, { backgroundColor: theme.colors.card }]}>
-              <Text style={[styles.statValue, { color: theme.colors.text.secondary }]}>
+            <View style={[styles.statCard, { backgroundColor: theme.colors.statCard }]}>
+              <Text style={[styles.statValue, { color: theme.colors.statCardText }]}>
                 {totalCount >= 1000 ? `${(totalCount / 1000).toFixed(1)}k` : totalCount.toLocaleString()}
               </Text>
-              <Text style={[styles.statLabel, { color: theme.colors.text.primary }]}>
+              <Text style={[styles.statLabel, { color: theme.colors.statCardTextSecondary }]}>
                 total khairis
               </Text>
             </View>
 
-            <View style={[styles.statCard, { backgroundColor: theme.colors.card }]}>
-              <Text style={[styles.statValue, { color: theme.colors.text.secondary }]}>
+            <View style={[styles.statCard, { backgroundColor: theme.colors.statCard }]}>
+              <Text style={[styles.statValue, { color: theme.colors.statCardText }]}>
                 {currentStreak}
               </Text>
-              <Text style={[styles.statLabel, { color: theme.colors.text.primary }]}>
+              <Text style={[styles.statLabel, { color: theme.colors.statCardTextSecondary }]}>
                 day streak
               </Text>
             </View>
@@ -164,10 +164,10 @@ export default function ProfileScreen() {
             style={styles.gradientStyle}
           >
             <View style={[styles.quoteCard]}>
-              <Text style={[styles.quoteText, { color: theme.colors.accent }]}>
+              <Text style={[styles.quoteText, { color: theme.colors.quoteCardText }]}>
                 "The most beloved deed to Allah is the most regular and constant even if it were little."
               </Text>
-              <Text style={[styles.quoteAuthor, { color: theme.colors.accent }]}>Sahih Al-Bukhari</Text>
+              <Text style={[styles.quoteAuthor, { color: theme.colors.quoteCardText }]}>Sahih Al-Bukhari</Text>
             </View>
           </LinearGradient>
 
@@ -176,22 +176,22 @@ export default function ProfileScreen() {
               style={[styles.menuItem, { backgroundColor: theme.colors.card }]}
               onPress={() => handleNavigation('/profile/goal')}
             >
-              <View style={[styles.menuIconContainer, { backgroundColor: theme.colors.background }]}>
-                <Flag size={20} color={theme.colors.accent} />
+              <View style={[styles.menuIconContainer, { backgroundColor: theme.colors.profile.icons }]}>
+                <Flag size={20} color={theme.colors.profile.iconsInside} />
               </View>
-              <Text style={[styles.menuText, { color: theme.colors.text.primary }]}>Goal</Text>
-              <ChevronRight size={20} color={theme.colors.text.secondary} />
+              <Text style={[styles.menuText, { color: theme.colors.profile.menuEntries }]}>Goal</Text>
+              <ChevronRight size={20} color={theme.colors.profile.arrows} />
             </TouchableOpacity>
 
             <TouchableOpacity
               style={[styles.menuItem, { backgroundColor: theme.colors.card }]}
               onPress={() => handleNavigation('/profile/favorites')}
             >
-              <View style={[styles.menuIconContainer, { backgroundColor: theme.colors.background }]}>
-                <Bookmark size={20} color={theme.colors.accent} />
+              <View style={[styles.menuIconContainer, { backgroundColor: theme.colors.profile.icons }]}>
+                <Bookmark size={20} color={theme.colors.profile.iconsInside} />
               </View>
-              <Text style={[styles.menuText, { color: theme.colors.text.primary }]}>Favourites</Text>
-              <ChevronRight size={20} color={theme.colors.text.secondary} />
+              <Text style={[styles.menuText, { color: theme.colors.profile.menuEntries }]}>Favourites</Text>
+              <ChevronRight size={20} color={theme.colors.profile.arrows} />
             </TouchableOpacity>
 
             {/* NOUVELLE ENTRÉE NOTIFICATIONS */}
@@ -199,11 +199,11 @@ export default function ProfileScreen() {
               style={[styles.menuItem, { backgroundColor: theme.colors.card }]}
               onPress={() => handleNavigation('/profile/notifications')}
             >
-              <View style={[styles.menuIconContainer, { backgroundColor: theme.colors.background }]}>
-                <Bell size={20} color={theme.colors.accent} />
+              <View style={[styles.menuIconContainer, { backgroundColor: theme.colors.profile.icons }]}>
+                <Bell size={20} color={theme.colors.profile.iconsInside} />
               </View>
-              <Text style={[styles.menuText, { color: theme.colors.text.primary }]}>Reminders</Text>
-              <ChevronRight size={20} color={theme.colors.text.secondary} />
+              <Text style={[styles.menuText, { color: theme.colors.profile.menuEntries }]}>Reminders</Text>
+              <ChevronRight size={20} color={theme.colors.profile.arrows} />
             </TouchableOpacity>
 
             {/* Nouveau toggle pour le background */}
@@ -211,16 +211,16 @@ export default function ProfileScreen() {
               style={[styles.menuItem, { backgroundColor: theme.colors.card }]}
               onPress={toggleBackgroundTheme}
             >
-              <View style={[styles.menuIconContainer, { backgroundColor: theme.colors.background }]}>
-                <Moon size={20} color={theme.colors.accent} />
+              <View style={[styles.menuIconContainer, { backgroundColor: theme.colors.profile.icons }]}>
+                <Moon size={20} color={theme.colors.profile.iconsInside} />
               </View>
-              <Text style={[styles.menuText, { color: theme.colors.text.primary }]}>Dark mode</Text>
+              <Text style={[styles.menuText, { color: theme.colors.profile.menuEntries }]}>Dark mode</Text>
               <Switch
                 value={isDarkBackground}
                 onValueChange={toggleBackgroundTheme}
-                trackColor={{ false: theme.colors.background, true: '#7E0F3B' }}
+                trackColor={{ false: theme.colors.background, true: '#3C041A' }}
                 thumbColor={isDarkBackground ? '#ffffff' : '#ffffff'}
-                ios_backgroundColor={theme.colors.background}
+                ios_backgroundColor={theme.colors.profile.toggleSwitch}
                 style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
               />
             </TouchableOpacity>
@@ -232,33 +232,33 @@ export default function ProfileScreen() {
               style={[styles.menuItem, { backgroundColor: theme.colors.card }]}
               onPress={handleShareApp}
             >
-              <View style={[styles.menuIconContainer, { backgroundColor: theme.colors.background }]}>
-                <Share2 size={20} color={theme.colors.accent} />
+              <View style={[styles.menuIconContainer, { backgroundColor: theme.colors.profile.iconsPartTwo }]}>
+                <Share2 size={20} color={theme.colors.profile.iconsInside} />
               </View>
-              <Text style={[styles.menuText, { color: theme.colors.text.primary }]}>Share this app</Text>
-              <ChevronRight size={20} color={theme.colors.text.secondary} />
+              <Text style={[styles.menuText, { color: theme.colors.profile.menuEntries }]}>Share this app</Text>
+              <ChevronRight size={20} color={theme.colors.profile.arrows} />
             </TouchableOpacity>
 
             <TouchableOpacity
               style={[styles.menuItem, { backgroundColor: theme.colors.card }]}
               onPress={handleContactUs}
             >
-              <View style={[styles.menuIconContainer, { backgroundColor: theme.colors.background }]}>
-                <Mail size={20} color={theme.colors.accent} />
+              <View style={[styles.menuIconContainer, { backgroundColor: theme.colors.profile.iconsPartTwo }]}>
+                <Mail size={20} color={theme.colors.profile.iconsInside} />
               </View>
-              <Text style={[styles.menuText, { color: theme.colors.text.primary }]}>Contact us</Text>
-              <ChevronRight size={20} color={theme.colors.text.secondary} />
+              <Text style={[styles.menuText, { color: theme.colors.profile.menuEntries }]}>Contact us</Text>
+              <ChevronRight size={20} color={theme.colors.profile.arrows} />
             </TouchableOpacity>
 
             <TouchableOpacity
               style={[styles.menuItem, { backgroundColor: theme.colors.card }]}
               onPress={handleRateApp}
             >
-              <View style={[styles.menuIconContainer, { backgroundColor: theme.colors.background }]}>
-                <Star size={20} color={theme.colors.accent} />
+              <View style={[styles.menuIconContainer, { backgroundColor: theme.colors.profile.iconsPartTwo }]}>
+                <Star size={20} color={theme.colors.profile.iconsInside} />
               </View>
-              <Text style={[styles.menuText, { color: theme.colors.text.primary }]}>Rate this app</Text>
-              <ChevronRight size={20} color={theme.colors.text.secondary} />
+              <Text style={[styles.menuText, { color: theme.colors.profile.menuEntries }]}>Rate this app</Text>
+              <ChevronRight size={20} color={theme.colors.profile.arrows} />
             </TouchableOpacity>
           </View>
 
@@ -267,13 +267,13 @@ export default function ProfileScreen() {
               style={[styles.footerMenuItem, { borderBottomColor: theme.colors.border, borderBottomWidth: 1 }]}
               onPress={() => handleNavigation('/profile/terms')}
             >
-              <Text style={[styles.footerMenuText, { color: theme.colors.text.primary }]}>Terms of service</Text>
-              <ChevronRight size={20} color={theme.colors.text.secondary} />
+              <Text style={[styles.footerMenuText, { color: theme.colors.profile.menuEntries }]}>Terms of service</Text>
+              <ChevronRight size={20} color={theme.colors.profile.arrows} />
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.footerMenuItem} onPress={() => handleNavigation('/profile/privacy')}>
-              <Text style={[styles.footerMenuText, { color: theme.colors.text.primary }]}>Privacy policy</Text>
-              <ChevronRight size={20} color={theme.colors.text.secondary} />
+              <Text style={[styles.footerMenuText, { color: theme.colors.profile.menuEntries }]}>Privacy policy</Text>
+              <ChevronRight size={20} color={theme.colors.profile.arrows} />
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     fontFamily: 'Sofia-Pro-Light',
-    fontSize: 12,
+    fontSize: 14,
   },
   progressContainer: {
     marginBottom: 32,
@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
   },
   progressText: {
     fontFamily: 'Sofia-Pro-ExtraLight',
-    fontSize: 14,
+    fontSize: 15,
     textAlign: 'center',
   },
   gradientStyle: {
