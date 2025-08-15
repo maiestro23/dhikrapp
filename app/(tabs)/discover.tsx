@@ -45,7 +45,7 @@ const categories = [
     title: 'After\nSalah',
     subtitle: 'Seek forgiveness and purification',
     // Image spirituelle/mosque ou montagne
-    backgroundImage: require('../../assets/images/Istighfar_bg.png'), // Remplacez par votre chemin d'image
+    backgroundImage: require('../../assets/images/After_salah_bg.png'), // Remplacez par votre chemin d'image
     icon: '🤲'
   },
   {
@@ -53,7 +53,7 @@ const categories = [
     title: 'Istighfar',
     subtitle: 'Protection through the night',
     // Image de nuit étoilée
-    backgroundImage: require('../../assets/images/Night_bg.png'), // Remplacez par votre chemin d'image
+    backgroundImage: require('../../assets/images/Istighfar_bg.png'), // Remplacez par votre chemin d'image
     icon: '🌙'
   },
 
