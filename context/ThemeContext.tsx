@@ -17,7 +17,11 @@ interface ThemeColors {
     toggleSwitch: string;
     arrows: string;
     menuEntries: string;
-  }
+  };
+
+  reminders: {
+    background: string;
+  };
 
 
   text: {
@@ -95,6 +99,10 @@ const lightTheme: Theme = {
       menuEntries: '#746D6D'
     },
 
+  reminders: {
+    background: '#FEFEFD'
+  },
+    
 
     text: {
       primary: '#8C8F7B',
@@ -169,6 +177,11 @@ const darkBackgroundTheme: Theme = {
       arrows: '#fff',
       menuEntries: '#fff'
     },
+
+  reminders: {
+    background: '#93174848'
+  },
+
 
     text: {
       primary: '#FFFFFF', // Texte principal en blanc

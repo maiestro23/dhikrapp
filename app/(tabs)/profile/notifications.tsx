@@ -181,7 +181,7 @@ export default function NotificationsScreen() {
                         showsVerticalScrollIndicator={false}
                     >
                         {/* All notifications - Séparé */}
-                        <View style={[styles.allNotificationsContainer, { backgroundColor: theme.colors.card }]}>
+                        <View style={[styles.allNotificationsContainer, { backgroundColor: theme.colors.reminders.background }]}>
                             <View style={styles.notificationContent}>
                                 <Text style={[styles.notificationTitle, { color: theme.colors.text.secondary }]}>
                                     All notifications
@@ -190,15 +190,14 @@ export default function NotificationsScreen() {
                             <Switch
                                 value={allNotifications}
                                 onValueChange={handleAllNotificationsToggle}
-                                trackColor={{ false: '#E5E5E5', true: '#7E0F3B' }}
-                                thumbColor={allNotifications ? '#ffffff' : '#ffffff'}
-                                ios_backgroundColor="#E5E5E5"
+                                trackColor={{ false: '#ffffff', true: isDarkBackground ? '#A92359' : '#7E0F3B' }}
+                                thumbColor={'#ffffff'}
                                 style={styles.switch}
                             />
                         </View>
 
                         {/* Bloc des autres notifications */}
-                        <View style={[styles.notificationsBlock, { backgroundColor: theme.colors.card }]}>
+                        <View style={[styles.notificationsBlock, { backgroundColor: theme.colors.reminders.background }]}>
                             {/* Morning & Evening Adhkar */}
                             <View style={styles.notificationBlockItem}>
                                 <View style={styles.notificationContent}>
@@ -218,9 +217,8 @@ export default function NotificationsScreen() {
                                 <Switch
                                     value={morningEvening}
                                     onValueChange={(value) => handleIndividualToggle(setMorningEvening, value, 'morningEvening')}
-                                    trackColor={{ false: '#E5E5E5', true: '#7E0F3B' }}
-                                    thumbColor={morningEvening ? '#ffffff' : '#ffffff'}
-                                    ios_backgroundColor="#E5E5E5"
+                                    trackColor={{ false: '#ffffff', true: isDarkBackground ? '#A92359' : '#7E0F3B' }}
+                                    thumbColor={'#ffffff'}
                                     style={styles.switch}
                                 />
                             </View>
@@ -247,9 +245,8 @@ export default function NotificationsScreen() {
                                 <Switch
                                     value={jummah}
                                     onValueChange={(value) => handleIndividualToggle(setJummah, value, 'jummah')}
-                                    trackColor={{ false: '#E5E5E5', true: '#7E0F3B' }}
-                                    thumbColor={jummah ? '#ffffff' : '#ffffff'}
-                                    ios_backgroundColor="#E5E5E5"
+                                    trackColor={{ false: '#ffffff', true: isDarkBackground ? '#A92359' : '#7E0F3B' }}
+                                    thumbColor={'#ffffff'}
                                     style={styles.switch}
                                 />
                             </View>
@@ -276,9 +273,8 @@ export default function NotificationsScreen() {
                                 <Switch
                                     value={dailyGoals}
                                     onValueChange={(value) => handleIndividualToggle(setDailyGoals, value, 'dailyGoals')}
-                                    trackColor={{ false: '#E5E5E5', true: '#7E0F3B' }}
-                                    thumbColor={dailyGoals ? '#ffffff' : '#ffffff'}
-                                    ios_backgroundColor="#E5E5E5"
+                                    trackColor={{ false: '#ffffff', true: isDarkBackground ? '#A92359' : '#7E0F3B' }}
+                                    thumbColor={'#ffffff'}
                                     style={styles.switch}
                                 />
                             </View>
@@ -336,17 +332,17 @@ const styles = StyleSheet.create({
     headerSpacer: {
         width: 40,
     },
-    
+
     content: {
         flex: 1,
         paddingHorizontal: 24,
     },
-    
+
     titleContainer: {
         marginBottom: 20,
         alignItems: 'center',
     },
-    
+
     title: {
         fontFamily: 'Classico',
         fontSize: 28,
