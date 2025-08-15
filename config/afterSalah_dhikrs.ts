@@ -4,7 +4,7 @@ export const AfterSalahDhikrs: Dhikr[] =
 [
   {
     "category": "After Salah",
-    "uuid": "0d31dd56-9475-49d4-83bf-49688bdab5fe",
+    "uuid": "c0ad1eba-0eb5-4c34-b211-b2cddbddf01b",
     "id": "1",
     "pageId": "1",
     "dhikrLength": "4",
@@ -14,7 +14,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "34f74e99-e75c-4b64-b770-6be6208354d0",
+    "uuid": "e7d500a0-ba29-4c41-9a21-97e1767a613b",
     "id": "1",
     "pageId": "2",
     "dhikrLength": "4",
@@ -24,7 +24,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "1ea40b02-3aba-4d0f-9e18-38b171e3cf65",
+    "uuid": "46f69c9a-d9d8-4f34-bb2e-76bb52663d63",
     "id": "1",
     "pageId": "3",
     "dhikrLength": "4",
@@ -34,17 +34,17 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "b5eae292-8b03-4af3-aced-6914ca54e5a8",
+    "uuid": "e87a3383-c8f4-41b6-b636-e115c62af29b",
     "id": "1",
     "pageId": "4",
     "dhikrLength": "4",
-    "transliteration": "Tabarakta ya dhal jalali wal 'ikram",
+    "transliteration": "Tabarakta ya dhal jalali wal ikram",
     "arabicText": "تَبَارَكْتَ يا ذا الْجَلَالِ وَالْإِكْرَامِ",
     "translation": "Blessed are You, full of Majesty and Honour"
   },
   {
     "category": "After Salah",
-    "uuid": "2724b7cf-220b-4351-8117-bd488daba130",
+    "uuid": "900a113d-2622-4463-8c87-1cf26fe271d9",
     "id": "2",
     "pageId": "1",
     "dhikrLength": "3",
@@ -54,7 +54,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "9194c598-0adc-4b94-bacc-70f873f43034",
+    "uuid": "70af9d79-8429-4865-9ad1-c6374d38b8d5",
     "id": "2",
     "pageId": "2",
     "dhikrLength": "3",
@@ -64,7 +64,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "3f15325c-c5bc-4acc-8926-eb99b06b5ad6",
+    "uuid": "6cffb73f-4ec0-442e-bc61-d0a9785c2a3d",
     "id": "2",
     "pageId": "3",
     "dhikrLength": "3",
@@ -74,7 +74,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "99dbbaeb-1457-49a3-a4a2-42471de57e40",
+    "uuid": "9ad76607-fe12-47d6-bc44-a87b5b80e15b",
     "id": "3",
     "pageId": "1",
     "dhikrLength": "6",
@@ -84,7 +84,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "dadaf0ed-1bb3-46dd-9471-669d6eb48451",
+    "uuid": "afa31508-54b9-4497-9dce-ff7b66af4146",
     "id": "3",
     "pageId": "2",
     "dhikrLength": "6",
@@ -94,7 +94,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "7cc4dfac-4116-452e-bfa2-f853c8a51120",
+    "uuid": "80407dc9-c97b-4aad-bb8c-cc9671022565",
     "id": "3",
     "pageId": "3",
     "dhikrLength": "6",
@@ -104,7 +104,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "7d2b2e84-5fe3-41e2-91d2-f7c44e83437d",
+    "uuid": "5602b162-76c1-4605-b93c-4539b47c37f0",
     "id": "3",
     "pageId": "4",
     "dhikrLength": "6",
@@ -114,7 +114,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "f1713f42-8992-4a6c-b75b-85deb40a6f2d",
+    "uuid": "075bac22-b33f-48a0-b5d8-da2aeaa02065",
     "id": "3",
     "pageId": "5",
     "dhikrLength": "6",
@@ -124,17 +124,17 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "86a5d8e1-4e40-48f1-ab15-705fff854577",
+    "uuid": "35ec5ebc-9857-4334-8313-ad0df8471550",
     "id": "3",
     "pageId": "6",
     "dhikrLength": "6",
-    "transliteration": "Wa huwa 'ala kulli shay'in qadir",
+    "transliteration": "Wa huwa 'ala kulli shay-in qadir",
     "arabicText": "وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيْرٌ",
     "translation": "and He is Able to do all things"
   },
   {
     "category": "After Salah",
-    "uuid": "45f27eaa-ee70-4a41-884e-78a5af455527",
+    "uuid": "62f6d033-a6cf-4c05-8762-dfdd4419c4b0",
     "id": "4",
     "pageId": "1",
     "dhikrLength": "14",
@@ -144,7 +144,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "1198bf85-267f-41e4-9bdc-d75e10b01fa7",
+    "uuid": "b68effca-3614-4c74-bca7-8740e200e2a7",
     "id": "4",
     "pageId": "2",
     "dhikrLength": "14",
@@ -154,7 +154,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "8baf03fa-9679-42f4-b998-7a7b88cb5b13",
+    "uuid": "0397bbe5-d95c-44bc-90ec-754a2829a2b7",
     "id": "4",
     "pageId": "3",
     "dhikrLength": "14",
@@ -164,17 +164,17 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "40990bc7-ce6d-4945-b594-987505cac6c9",
+    "uuid": "1183c97f-ad43-4b95-9fa6-49551e5fc5dd",
     "id": "4",
     "pageId": "4",
     "dhikrLength": "14",
-    "transliteration": "La ta' khu dhuhu sinatu wa la nawm",
+    "transliteration": "La ta khu dhuhu sinatun wa la nawm",
     "arabicText": "لَا تَأْخُذُهُ سِنَةٌ وَّلَا نَوْمٌ",
     "translation": "Drowsiness or sleep does not come upon Him"
   },
   {
     "category": "After Salah",
-    "uuid": "5c26bbcc-43ad-43a4-bc58-9c96ab1e5402",
+    "uuid": "ff5f55e1-7b44-4f63-898d-ab0aedf3c2fe",
     "id": "4",
     "pageId": "5",
     "dhikrLength": "14",
@@ -184,7 +184,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "c1e7e3f6-7fd3-4627-8276-e3974680b016",
+    "uuid": "a8660c3c-2265-43e8-88fa-84a111139e99",
     "id": "4",
     "pageId": "6",
     "dhikrLength": "14",
@@ -194,7 +194,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "b0413ed9-c90c-4b23-a600-886751ebde9c",
+    "uuid": "dac4468b-4f6f-44e9-aa8f-b9c8a7f3a182",
     "id": "4",
     "pageId": "7",
     "dhikrLength": "14",
@@ -204,7 +204,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "e272ea70-994c-42d7-bbb4-e6d7bed5db74",
+    "uuid": "be61645a-b363-45f8-959d-a98b83da67eb",
     "id": "4",
     "pageId": "8",
     "dhikrLength": "14",
@@ -214,7 +214,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "afa51712-2f6d-41e9-8a57-d9bce54bf985",
+    "uuid": "de258fc6-85d6-4788-bd3c-f192ee9f1eec",
     "id": "4",
     "pageId": "9",
     "dhikrLength": "14",
@@ -224,27 +224,27 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "2eacab0a-3511-4f45-a211-b09d22269ddf",
+    "uuid": "1adae33a-8d8c-4759-b25b-10b9db14d385",
     "id": "4",
     "pageId": "10",
     "dhikrLength": "14",
-    "transliteration": "Wa la yuhi tuna bi shay'i min 'ilmihi",
+    "transliteration": "Wa la yuhi tuna bi shay-im min 'ilmihi",
     "arabicText": "وَلَا يُحِيْطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ",
     "translation": "whilst the creation has no share of His knowledge"
   },
   {
     "category": "After Salah",
-    "uuid": "b8f094c4-bdd8-454d-b9b9-3cce8c660c52",
+    "uuid": "2dee650e-ca35-4deb-9d5c-06dab08acc5d",
     "id": "4",
     "pageId": "11",
     "dhikrLength": "14",
-    "transliteration": "Illa bi ma sha'",
+    "transliteration": "Illa bi ma sha",
     "arabicText": "إِلَّا بِمَا شَاءَ",
     "translation": "unless He wills to grant them some of it"
   },
   {
     "category": "After Salah",
-    "uuid": "15090b57-00f6-4112-8dc8-d99bf1f17dec",
+    "uuid": "34b9c5ca-9a7c-4807-947c-0f478e08fc6f",
     "id": "4",
     "pageId": "12",
     "dhikrLength": "14",
@@ -254,7 +254,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "19e9ccb9-18e3-4f4c-b8a6-355588e9660a",
+    "uuid": "bb41a3b9-837f-4c10-ac39-8c7992ef2ed8",
     "id": "4",
     "pageId": "13",
     "dhikrLength": "14",
@@ -264,7 +264,7 @@ export const AfterSalahDhikrs: Dhikr[] =
   },
   {
     "category": "After Salah",
-    "uuid": "2cf146b3-a756-4519-b4ce-391fa4e044dd",
+    "uuid": "b46b4963-359b-4fe9-bfa0-d62d31028975",
     "id": "4",
     "pageId": "14",
     "dhikrLength": "14",
