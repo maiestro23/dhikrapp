@@ -1,16 +1,11 @@
 import { Dhikr } from "./dhikrs"
 
-export const istighfarTransition = {
+export const IstighfarTransition = {
   title: "Open the Doors of Rizq",
   subtitle: "Istighfar opens the doors of wealth (Quran 71:10-11)",
   nextCategories: ["rizq"]
 };
 
-export const IstighfarTransition = {
-  title: "Finish with Protection",
-  subtitle: "Complete your adhkar with the Surahs of Protection Istighfar",
-  nextCategories: ["morning"]
-};
 
 export const IstighfarDhikrs: Dhikr[] =
   [

@@ -340,7 +340,7 @@ export default function DhikrScreen() {
           </TouchableOpacity>
 
           <CompletionNotification
-            visible={showNotification}
+            visible={showNotification && currentCategory !== 'General'}
             onClose={handleCloseNotification}
             subtitle={`+${categoryLength} Khairis earned ✨`}
             categoryName={currentCategory}
