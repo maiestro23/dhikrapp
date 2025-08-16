@@ -271,9 +271,6 @@ export default function DiscoverScreen() {
       ]}
     >
       <TouchableOpacity
-        style={[
-          { borderColor: theme.colors.discover.tabButton.borderColor }
-        ]}
         onPress={onPress}
         activeOpacity={0.8}
       >

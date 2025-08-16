@@ -79,22 +79,11 @@ export default function GoalSelectionScreen() {
   return (
     <PageTransitionWrapper animationType="slide" duration={300}>
       <ScreenBackground>
-        {isDarkBackground && (
-          <LinearGradient
-            colors={['#6B1A3A', '#4A1629', '#2D0E1A']}
-            locations={[0, 0.5, 1]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={StyleSheet.absoluteFillObject}
-          />
-        )}
-
         <KeyboardAvoidingView
           style={styles.container}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
           {/* Header avec bouton retour */}
-
 
           <View style={styles.headerContainer}>
             <TouchableOpacity style={styles.backButton} onPress={handleBack}>

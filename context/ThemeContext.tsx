@@ -156,7 +156,7 @@ const lightTheme: Theme = {
         textColor: '#7E0F3B',
         selected: '',
         borderColor: '#fff',
-        gradientStart: "#F2FFE5",
+        gradientStart: "#F5F4E4",
         gradientEnd: "#FFD7DF",
       },
 
@@ -239,11 +239,11 @@ const darkBackgroundTheme: Theme = {
     discover: {
       tabButton: {
         backgroundColor: '#7E0F3B',
-        textColor: '',
+        textColor: '#7E0F3B',
         selected: '',
-        borderColor: '#9F1F52',
-        gradientStart: "#931748",
-        gradientEnd: "#43061C",
+        borderColor: '#F9E9E6',
+        gradientStart: "#ECEAC4",
+        gradientEnd: "#E0A1AE",
       },
       tasbishButton: {
         backgroundColor: '#340317',
