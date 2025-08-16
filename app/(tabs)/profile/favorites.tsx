@@ -162,13 +162,13 @@ export default function SearchScreen() {
                       {favorites.map((item, index) => (
                         <View key={`favorite-${index}`} style={[styles.resultItem, { backgroundColor: theme.colors.card }]}>
                           <View style={styles.resultContent}>
-                            <Text style={[styles.arabicText, { color: theme.colors.text.primary }]}>
+                            <Text style={[styles.arabicText, { color: theme.colors.favourites.arabicText }]}>
                               {item.arabicText}
                             </Text>
-                            <Text style={[styles.transliteration]}>
+                            <Text style={[styles.transliteration, { color: theme.colors.favourites.transliteration }]}>
                               {item.transliteration}
                             </Text>
-                            <Text style={[styles.translation]}>
+                            <Text style={[styles.translation, { color: theme.colors.favourites.translation }]}>
                               {item.translation}
                             </Text>
                           </View>

@@ -23,6 +23,13 @@ interface ThemeColors {
     background: string;
   };
 
+  favourites: {
+    allColors: string;
+    background: string;
+    arabicText: string;
+    transliteration: string;
+    translation: string;
+  }
 
   text: {
     primary: string;
@@ -93,16 +100,23 @@ const lightTheme: Theme = {
     profile: {
       icons: '#E5E8D6',
       iconsPartTwo: '#E5E8D6',
-      iconsInside: '#746D6D', 
+      iconsInside: '#746D6D',
       toggleSwitch: '#8C8F7B',
       arrows: '#746D6D',
       menuEntries: '#746D6D'
     },
 
-  reminders: {
-    background: '#FEFEFD'
-  },
-    
+    reminders: {
+      background: '#FEFEFD'
+    },
+
+    favourites: {
+      allColors: '',
+      background: "",
+      arabicText: "#8C8F7B",
+      transliteration: "",
+      translation: "",
+    },
 
     text: {
       primary: '#8C8F7B',
@@ -163,7 +177,7 @@ const darkBackgroundTheme: Theme = {
     background: 'rgba(255, 255, 255, 0.1)', // Background transparent pour les cartes
     card: '#bye', // Cartes semi-transparentes
     statCard: '#F8E2DF',
-    
+
     statCardText: "#3C041A",
     statCardTextSecondary: "#181818",
 
@@ -172,16 +186,23 @@ const darkBackgroundTheme: Theme = {
     profile: {
       icons: '#3A0518',
       iconsPartTwo: '#3A0518',
-      iconsInside: '#E5C7D3', 
+      iconsInside: '#E5C7D3',
       toggleSwitch: '#3C041A',
       arrows: '#fff',
       menuEntries: '#fff'
     },
 
-  reminders: {
-    background: '#93174848'
-  },
+    reminders: {
+      background: '#93174848'
+    },
 
+    favourites: {
+      allColors: "#fff",
+      background: "#fff",
+      arabicText: "#fff",
+      transliteration: "#fff",
+      translation: "#fff",
+    },
 
     text: {
       primary: '#FFFFFF', // Texte principal en blanc
