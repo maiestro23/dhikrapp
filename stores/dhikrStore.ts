@@ -94,7 +94,10 @@ export const useDhikrStore = create<DhikrState>()((set, get) => ({
         return [];
       }
 
-      return dhikrs;
+      return  {
+          dhikrs: dhikrs,
+          transition: ''
+        };
     }
 
     switch (category) {
@@ -174,7 +177,11 @@ export const useDhikrStore = create<DhikrState>()((set, get) => ({
         };
 
       case 'favourites':
-        return useFavoritesStore.getState().favorites;
+        return {
+          dhikrs : useFavoritesStore.getState().favorites,
+          transition: ''
+        }
+        
 
       default:
         return {
