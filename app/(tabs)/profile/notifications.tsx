@@ -208,7 +208,7 @@ export default function NotificationsScreen() {
                                         </Text>
                                     </View>
                                     <Text style={[styles.notificationDescription, { color: theme.colors.text.primary }]}>
-                                        Your daily shield of protection.{'\n'}We'll remind you when it's time.
+                                        Your daily shield of protection. We'll remind you when it's time.
                                     </Text>
                                     <Text style={[styles.notificationTime, { color: theme.colors.text.primary }]}>
                                         7:00 AM & 6:30 PM daily
@@ -236,7 +236,7 @@ export default function NotificationsScreen() {
                                         </Text>
                                     </View>
                                     <Text style={[styles.notificationDescription, { color: theme.colors.text.primary }]}>
-                                        A Friday nudge to send salawat{'\n'}and read Surah Al-Kahf.
+                                        A Friday nudge to send salawat and read Surah Al-Kahf.
                                     </Text>
                                     <Text style={[styles.notificationTime, { color: theme.colors.text.primary }]}>
                                         Fridays at 12:00 PM
@@ -264,7 +264,7 @@ export default function NotificationsScreen() {
                                         </Text>
                                     </View>
                                     <Text style={[styles.notificationDescription, { color: theme.colors.text.primary }]}>
-                                        A timely reminder to help you{'\n'}reach your spiritual goals.
+                                        A timely reminder to help you reach your spiritual goals.
                                     </Text>
                                     <Text style={[styles.notificationTime, { color: theme.colors.text.primary }]}>
                                         Daily at 8:00 PM
