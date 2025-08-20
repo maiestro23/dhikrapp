@@ -149,11 +149,13 @@ export default function ProfileScreen() {
                 ]}
               />
             </View>
-            <Text style={[styles.progressText, { color: theme.colors.text.primary }]}>
+
+            <Text style={[styles.progressText, { color: theme.colors.profile.goalAway }]}>
               {remainingToGoal > 0
                 ? `You are ${Math.ceil(100 - goalProgress)}% away from your daily goal!`
                 : 'You have completed your daily goal!'}
             </Text>
+
           </View>
 
           <LinearGradient

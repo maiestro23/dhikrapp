@@ -590,7 +590,7 @@ const styles = StyleSheet.create({
   },
   translation: {
     fontFamily: 'Sofia-Pro-ExtraLight',
-    fontSize: 16,
+    fontSize: 18,
     textAlign: 'center',
     color: '#8C8F7B',
   },

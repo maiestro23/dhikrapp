@@ -18,6 +18,7 @@ interface ThemeColors {
     toggleSwitch: string;
     arrows: string;
     menuEntries: string;
+    goalAway: string;
   };
 
   reminders: {
@@ -35,7 +36,13 @@ interface ThemeColors {
   noFavourites: {
     titleColor: string;
     textColor: string;
-  }
+  };
+
+  goalModal: {
+    titleColor: string;
+    subTitleColor: string;
+    quote: string;
+  };
 
   text: {
     primary: string;
@@ -70,6 +77,9 @@ interface ThemeColors {
   };
 
   discover: {
+    hearderTitle: string;
+    hearderSubTitle: string;
+    countLabel: string;
     tabButton: {
       backgroundColor: string;
       textColor: string;
@@ -77,6 +87,7 @@ interface ThemeColors {
       borderColor: string;
       gradientStart: string;
       gradientEnd: string;
+
     },
     tasbishButton: {
       backgroundColor: string;
@@ -109,7 +120,8 @@ const lightTheme: Theme = {
       iconsInside: '#746D6D',
       toggleSwitch: '#8C8F7B',
       arrows: '#746D6D',
-      menuEntries: '#746D6D'
+      menuEntries: '#5A5D4D',
+      goalAway: '#5A5D4D'
     },
 
     reminders: {
@@ -127,6 +139,13 @@ const lightTheme: Theme = {
     noFavourites: {
       titleColor: "#181818",
       textColor: "#8C8F7B",
+
+    },
+
+    goalModal: {
+      titleColor: '#7E0F3B',
+      subTitleColor: '#8C8F7B',
+      quote: '#8C8F7B'
     },
 
     text: {
@@ -138,15 +157,15 @@ const lightTheme: Theme = {
     progressBar: '#8E1A3B',
     progressBackground: '#EEEEEE',
     dhikrReader: {
-      greetingColor: '#8C8F7B',
-      dateColor: '#6F7C50',
-      khairisAndGoalColor: '#6F7C50',
+      greetingColor: '#5A5D4D',
+      dateColor: '#5A5D4D',
+      khairisAndGoalColor: '#5A5D4D',
       categoryColor: '#FEFCFC',
       categoryText: "#8C8F7B",
       pageIndicatorColor: '#8C8F7B',
-      arabicColor: '#8C8F7B',
+      arabicColor: '#5A5D4D',
       transliterationColor: '#181818',
-      translationColor: '#8C8F7B',
+      translationColor: '#5A5D4D',
     },
     terms: {
       titleColor: "#fff",
@@ -162,6 +181,10 @@ const lightTheme: Theme = {
     },
 
     discover: {
+      hearderTitle: '#181818',
+      hearderSubTitle: '#5A5D4D',
+
+      countLabel: '#5A5D4D',
       tabButton: {
         backgroundColor: '#7E0F3B',
         textColor: '#7E0F3B',
@@ -169,12 +192,13 @@ const lightTheme: Theme = {
         borderColor: '#fff',
         gradientStart: "#F5F4E4",
         gradientEnd: "#FFD7DF",
+
       },
 
       tasbishButton: {
-        backgroundColor: '#FEFEFD',
+        backgroundColor: '#5A5D4D',
         textColor: '#8C8F7B',
-        selected: '',
+        selected: '#8C8F7B',
         borderColor: '#9F1F52',
       },
     }
@@ -200,7 +224,8 @@ const darkBackgroundTheme: Theme = {
       iconsInside: '#E5C7D3',
       toggleSwitch: '#3C041A',
       arrows: '#fff',
-      menuEntries: '#fff'
+      menuEntries: '#fff',
+      goalAway: '#FFFFFF'
     },
 
     reminders: {
@@ -220,6 +245,11 @@ const darkBackgroundTheme: Theme = {
       textColor: "#fff",
     },
 
+    goalModal: {
+      titleColor: '#7E0F3B',
+      subTitleColor: '#7E0F3B',
+      quote: '#7E0F3B'
+    },
 
     text: {
       primary: '#FFFFFF', // Texte principal en blanc
@@ -254,6 +284,9 @@ const darkBackgroundTheme: Theme = {
     },
 
     discover: {
+      countLabel: '#FFFFFF',
+      hearderTitle: '#F5F5F5',
+      hearderSubTitle: '#FFFFFF',
       tabButton: {
         backgroundColor: '#7E0F3B',
         textColor: '#7E0F3B',
@@ -261,6 +294,7 @@ const darkBackgroundTheme: Theme = {
         borderColor: '#F9E9E6',
         gradientStart: "#ECEAC4",
         gradientEnd: "#E0A1AE",
+
       },
       tasbishButton: {
         backgroundColor: '#340317',

@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Modal,
   TouchableOpacity,
+  Pressable,
   Dimensions,
   Platform,
   Image,
@@ -32,10 +33,10 @@ const GoalCompleteModal: React.FC<GoalCompleteModalProps> = ({
   decorationImage,
 }) => {
   const { theme, isDarkBackground } = useTheme();
-  
+
   // Choisir le composant de background selon le mode
   const BackgroundComponent = isDarkBackground ? LinearGradient : LinearGradient;
-  
+
   // Props pour le LinearGradient selon le mode
   const gradientProps = isDarkBackground ? {
     colors: ['#F5F4E4', '#FFD7DF'],
@@ -48,6 +49,7 @@ const GoalCompleteModal: React.FC<GoalCompleteModalProps> = ({
   };
 
   decorationImage = require('@/assets/images/customGoalCompleteImage')
+
   return (
     <Modal
       visible={visible}
@@ -55,65 +57,78 @@ const GoalCompleteModal: React.FC<GoalCompleteModalProps> = ({
       animationType="fade"
       onRequestClose={onClose}
     >
-      <View style={styles.overlay}>
-        <View style={[styles.modalContainer, { width: modalWidth }]}>
-          <BackgroundComponent
-            {...gradientProps}
-            style={styles.modalContent}
-          >
-            {/* Bouton fermer */}
-            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-              <Text style={styles.closeText}>×</Text>
-            </TouchableOpacity>
+      {/* Pressable sur tout l'overlay pour fermer la modal */}
+      <Pressable style={styles.overlay} onPress={onClose}>
+        {/* Pressable avec onPress vide pour empêcher la fermeture quand on clique sur le contenu */}
+        <Pressable onPress={() => { }}>
+          <View style={[styles.modalContainer, { width: modalWidth }]}>
+            <BackgroundComponent
+              {...gradientProps}
+              style={styles.modalContent}
+            >
+              {/* Bouton fermer */}
+              <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+                <Text style={styles.closeText}>×</Text>
+              </TouchableOpacity>
 
-            {/* Image décorative */}
-            <View style={styles.decorationContainer}>
-              <CustomGoalCompleteImage />
-            </View>
-
-            {/* Badge Khairis */}
-            {isDarkBackground ? (
-              <View
-                style={[styles.khairsBadge, { backgroundColor: '#FBF0EE' }]}
-              >
-                <Text style={styles.khairsText}>+{khairisEarned} Khairis</Text>
+              {/* Image décorative */}
+              <View style={styles.decorationContainer}>
+                <CustomGoalCompleteImage />
               </View>
-            ) : (
-              <LinearGradient
-                colors={["#F2FFE5", "#FFD7DF"]}
-                start={{ x: 0, y: 0.2 }}
-                end={{ x: 0.8, y: 1 }}
-                style={styles.khairsBadge}
-              >
-                <View>
+
+              {/* Badge Khairis */}
+              {isDarkBackground ? (
+                <View
+                  style={[styles.khairsBadge, { backgroundColor: '#FBF0EE' }]}
+                >
                   <Text style={styles.khairsText}>+{khairisEarned} Khairis</Text>
                 </View>
-              </LinearGradient>
-            )}
+              ) : (
+                <LinearGradient
+                  colors={["#F5F4E4", "#FFD7DF"]}
+                  start={{ x: 0, y: 0.2 }}
+                  end={{ x: 0.8, y: 1 }}
+                  style={styles.khairsBadge}
+                >
+                  <View>
+                    <Text style={styles.khairsText}>+{khairisEarned} Khairis</Text>
+                  </View>
+                </LinearGradient>
+              )}
 
-            {/* Titre principal */}
-            <Text style={styles.title}>Goal Complete!</Text>
+              {/* Titre principal */}
 
-            {/* Sous-titre */}
-            <Text style={styles.subtitle}>
-              You completed your daily adhkar!
-            </Text>
+              <Text style={[styles.title, { color: theme.colors.goalModal.titleColor }]}>Goal Complete!</Text>
 
-            {/* Bouton partager */}
-            <TouchableOpacity style={styles.shareButton} onPress={onShare}>
-              <Text style={styles.shareButtonText}>Share Achievement</Text>
-            </TouchableOpacity>
-
-            {/* Citation */}
-            <View style={styles.quoteContainer}>
-              <Text style={styles.quote}>
-                "Whoever guides to a good deed will get the same reward as the doer of that deed."
+              {/* Sous-titre */}
+              <Text style={[styles.subtitle, { color: theme.colors.goalModal.subTitleColor }]}>
+                You completed your daily adhkar!
               </Text>
-              <Text style={styles.quoteSource}>Sahih Muslim</Text>
-            </View>
-          </BackgroundComponent>
-        </View>
-      </View>
+
+              {/* Bouton partager */}
+              <LinearGradient
+
+                colors={["#A21245", "#5D0424"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.shareButton}
+              >
+                <TouchableOpacity onPress={onShare}>
+                  <Text style={styles.shareButtonText}>Share Achievement</Text>
+                </TouchableOpacity>
+              </LinearGradient>
+
+              {/* Citation */}
+              <View style={styles.quoteContainer}>
+                <Text style={[styles.quote, { color: theme.colors.goalModal.quote }]}>
+                  "Whoever guides to a good deed will get the same reward as the doer of that deed."
+                </Text>
+                <Text style={[styles.quoteSource, { color: theme.colors.goalModal.quote }]}>Sahih Muslim</Text>
+              </View>
+            </BackgroundComponent>
+          </View>
+        </Pressable>
+      </Pressable>
     </Modal>
   );
 };
@@ -121,7 +136,7 @@ const GoalCompleteModal: React.FC<GoalCompleteModalProps> = ({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    //backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
@@ -202,7 +217,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   subtitle: {
-    fontFamily: 'Sofia-Pro-Regular',
+    fontFamily: 'Sofia-Pro-ExtraLight',
     fontSize: 18,
     lineHeight: 24,
     color: '#8C8F7B',

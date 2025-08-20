@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
+import { LinearGradient } from 'expo-linear-gradient';
 
 interface CategoryTransitionScreenProps {
   title: string;
@@ -36,14 +37,21 @@ export const CategoryTransitionScreen: React.FC<CategoryTransitionScreenProps> =
           {subtitle}
         </Text>
 
-        {/* Bouton Continue */}
-        <TouchableOpacity 
-          style={[styles.continueButton, { backgroundColor: theme.colors.accent }]}
-          onPress={onContinue}
-          activeOpacity={0.8}
+        {/* Bouton partager */}
+        <LinearGradient
+          colors={["#A21245", "#5D0424"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={styles.continueButton}
         >
-          <Text style={styles.continueButtonText}>Continue</Text>
-        </TouchableOpacity>
+          {/* Bouton Continue */}
+          <TouchableOpacity
+            onPress={onContinue}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.continueButtonText}>Continue</Text>
+          </TouchableOpacity>
+        </LinearGradient>
 
         {/* Texte "Swipe to dismiss" - informatif seulement */}
         <Text style={[styles.dismissText, { color: theme.colors.text.primary }]}>
@@ -87,7 +95,7 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: 44,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

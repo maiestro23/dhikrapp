@@ -327,8 +327,8 @@ export default function DiscoverScreen() {
         <View style={styles.container}>
           {/* ===== HEADER - EXACT du design ===== */}
           <View style={styles.header}>
-            <Text style={[styles.headerTitle, { color: theme.colors.text.secondary }]}>Discover</Text>
-            <Text style={[styles.headerSubtitle, { color: theme.colors.text.primary }]}>
+            <Text style={[styles.headerTitle, { color: theme.colors.discover.hearderTitle }]}>Discover</Text>
+            <Text style={[styles.headerSubtitle, { color: theme.colors.discover.hearderSubTitle }]}>
               Your personal adhkar library
             </Text>
           </View>
@@ -373,7 +373,7 @@ export default function DiscoverScreen() {
                   <View style={styles.countRow}>
 
                     <View style={styles.countOptionsContainer}>
-                      <Text style={[styles.countLabelText, { color: theme.colors.text.primary }]}>Count: </Text>
+                      <Text style={[styles.countLabelText, { color: theme.colors.discover.countLabel }]}>Count: </Text>
                       {countOptions.map((option) => (
                         <CountButton
                           key={option.id}
