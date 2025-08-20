@@ -75,7 +75,7 @@ export default function DhikrScreen() {
   // Générer les pages circulaires avec écran de transition si nécessaire
   const circularPages = useMemo(() => {
     if (!dhikrs || dhikrs.length === 0) return [];
-    
+
     let pages = [
       { ...dhikrs[dhikrs.length - 1], type: 'dhikr' },
       ...dhikrs.map((d: any) => ({ ...d, type: 'dhikr' }))
@@ -98,7 +98,7 @@ export default function DhikrScreen() {
 
   useEffect(() => {
     start();
-    
+
     const loadGoalCompletedDate = async () => {
       try {
         const savedDate = await AsyncStorage.getItem('goalCompletedDate');
@@ -107,9 +107,9 @@ export default function DhikrScreen() {
         console.log('Error loading goal completed date:', error);
       }
     };
-    
+
     loadGoalCompletedDate();
-    
+
     return () => {
       stop();
       if (timeoutRef.current) {
@@ -121,14 +121,14 @@ export default function DhikrScreen() {
   // Surveiller quand l'objectif quotidien est atteint
   useEffect(() => {
     const progressPercentage = (todayProgress / dailyGoal) * 100;
-    
+
     if (progressPercentage >= 100 && !showGoalModal) {
       const today = new Date().toISOString().split('T')[0];
-      
+
       if (goalCompletedToday !== today) {
         setShowGoalModal(true);
         setGoalCompletedToday(today);
-        
+
         AsyncStorage.setItem('goalCompletedDate', today).catch(error => {
           console.log('Error saving goal completed date:', error);
         });
@@ -164,16 +164,16 @@ export default function DhikrScreen() {
 
   const handlePageSelected = useCallback((e: any) => {
     if (!dhikrs || dhikrs.length === 0) return;
-    
+
     const index = e.nativeEvent.position;
     setCurrentIndex(index);
 
-    console.log('Page selected:', { 
-      index, 
-      dhikrsLength: dhikrs.length, 
-      showTransition, 
+    console.log('Page selected:', {
+      index,
+      dhikrsLength: dhikrs.length,
+      showTransition,
       circularPagesLength: circularPages.length,
-      isAdjusting: isAdjustingPosition 
+      isAdjusting: isAdjustingPosition
     });
 
     // Logique de comptage - ne compter que les vrais dhikrs
@@ -271,7 +271,7 @@ export default function DhikrScreen() {
     if (transition && transition.nextCategories.length > 0) {
       const nextCategory = transition.nextCategories[0];
       console.log('Navigating to category:', nextCategory);
-      
+
       // Utiliser router.replace au lieu de router.push pour forcer le rechargement
       router.replace({
         pathname: '/(tabs)',
@@ -286,11 +286,21 @@ export default function DhikrScreen() {
     return (
       <ScreenBackground>
         <View style={[styles.container, styles.loadingContainer]}>
-          <Text style={[styles.noFavouriteTitle]}>
+          <Text style={[
+            styles.noFavouriteTitle,
+            { color: theme.colors.noFavourites.titleColor }
+          ]}>
             No favourites yet?
           </Text>
-          <Text style={styles.loadingText}>Tap the heart 🤍 on any adhkar to start</Text>
-          <Text style={styles.loadingText}>building your own custom playlist</Text>
+          <Text style={[
+            styles.loadingText,
+            { color: theme.colors.noFavourites.textColor }
+          ]}>Tap the heart 🤍 on any adhkar to start</Text>
+          <Text style={[
+            styles.loadingText,
+            { color: theme.colors.noFavourites.textColor }
+          ]}>building your own custom playlist</Text>
+
           <TouchableOpacity
             style={styles.noFavbutton}
             onPress={handleCategoryPress}
@@ -332,11 +342,11 @@ export default function DhikrScreen() {
           </View>
 
           <TouchableOpacity
-            style={[styles.categoryTag, { backgroundColor: theme.colors.dhikrReader.categoryColor}]}
+            style={[styles.categoryTag, { backgroundColor: theme.colors.dhikrReader.categoryColor }]}
             onPress={handleCategoryPress}
             activeOpacity={0.7}
           >
-            <Text style={[styles.categoryText, { color: theme.colors.dhikrReader.categoryText}]}>{currentCategory}</Text>
+            <Text style={[styles.categoryText, { color: theme.colors.dhikrReader.categoryText }]}>{currentCategory}</Text>
           </TouchableOpacity>
 
           <CompletionNotification
@@ -366,7 +376,7 @@ export default function DhikrScreen() {
                     nextCategories={item.nextCategories}
                     categoryName={currentCategory}
                     onContinue={handleTransitionContinue}
-                    onDismiss={() => {}} // Pas d'action spéciale, le swipe gère la navigation
+                    onDismiss={() => { }} // Pas d'action spéciale, le swipe gère la navigation
                   />
                 ) : (
                   <DhikrContent

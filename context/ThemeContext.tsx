@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { useColorScheme } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface ThemeColors {
   background: string;
@@ -29,6 +30,11 @@ interface ThemeColors {
     arabicText: string;
     transliteration: string;
     translation: string;
+  }
+
+  noFavourites: {
+    titleColor: string;
+    textColor: string;
   }
 
   text: {
@@ -118,6 +124,11 @@ const lightTheme: Theme = {
       translation: "",
     },
 
+    noFavourites: {
+      titleColor: "#181818",
+      textColor: "#8C8F7B",
+    },
+
     text: {
       primary: '#8C8F7B',
       secondary: '#181818',
@@ -204,9 +215,15 @@ const darkBackgroundTheme: Theme = {
       translation: "#fff",
     },
 
+    noFavourites: {
+      titleColor: "#fff",
+      textColor: "#fff",
+    },
+
+
     text: {
       primary: '#FFFFFF', // Texte principal en blanc
-      secondary: '#F5F5F5', // Texte secondaire en blanc cassé
+      secondary: '#F5F5F5', // Texte secondaire en blanc cassÃ©
     },
     accent: '#FFB6C1', // Rose clair pour l'accent
     border: 'rgba(255, 255, 255, 0.2)', // Bordures transparentes
@@ -262,14 +279,36 @@ interface ThemeContextType {
   toggleDarkMode: () => void;
   isDarkBackground: boolean;
   toggleBackgroundTheme: () => void;
+  isLoading: boolean;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+
+const THEME_STORAGE_KEY = '@theme_preference';
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const colorScheme = useColorScheme();
   const [isDarkMode] = useState(colorScheme === 'dark');
   const [isDarkBackground, setIsDarkBackground] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Charger la préférence sauvegardée au démarrage
+  useEffect(() => {
+    const loadThemePreference = async () => {
+      try {
+        const savedTheme = await AsyncStorage.getItem(THEME_STORAGE_KEY);
+        if (savedTheme !== null) {
+          setIsDarkBackground(JSON.parse(savedTheme));
+        }
+      } catch (error) {
+        console.log('Error loading theme preference:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadThemePreference();
+  }, []);
 
   useEffect(() => {
     //setIsDarkMode(colorScheme === 'dark');
@@ -279,8 +318,16 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     //setIsDarkMode(prev => !prev);
   };
 
-  const toggleBackgroundTheme = () => {
-    setIsDarkBackground(prev => !prev);
+  const toggleBackgroundTheme = async () => {
+    const newTheme = !isDarkBackground;
+    setIsDarkBackground(newTheme);
+
+    // Sauvegarder la nouvelle préférence
+    try {
+      await AsyncStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(newTheme));
+    } catch (error) {
+      console.log('Error saving theme preference:', error);
+    }
   };
 
   const value = {
@@ -288,6 +335,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     toggleDarkMode,
     isDarkBackground,
     toggleBackgroundTheme,
+    isLoading,
   };
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

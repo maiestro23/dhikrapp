@@ -16,8 +16,6 @@ interface CompletionNotificationProps {
     khairisAmount: number;
 }
 
-
-
 export const CompletionNotification: React.FC<CompletionNotificationProps> = ({
     visible,
     onClose,
@@ -153,7 +151,7 @@ const styles = StyleSheet.create({
     },
     modalContainer: {
         width: width * 0.9,
-        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
         borderRadius: 16,
         paddingVertical: 16,
         paddingHorizontal: 16,

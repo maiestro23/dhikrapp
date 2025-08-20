@@ -6,9 +6,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // Configuration des notifications
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: false,
+    shouldShowAlert: true,
     shouldPlaySound: true,
-    shouldSetBadge: false,
+    shouldSetBadge: true,
   }),
 });
 
