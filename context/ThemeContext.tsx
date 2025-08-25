@@ -196,8 +196,8 @@ const lightTheme: Theme = {
       },
 
       tasbishButton: {
-        backgroundColor: '#5A5D4D',
-        textColor: '#8C8F7B',
+        backgroundColor: '#FEFEFD',
+        textColor: '#5A5D4D',
         selected: '#8C8F7B',
         borderColor: '#9F1F52',
       },
@@ -298,7 +298,7 @@ const darkBackgroundTheme: Theme = {
       },
       tasbishButton: {
         backgroundColor: '#340317',
-        textColor: '',
+        textColor: '#FFFFFF',
         selected: '',
         borderColor: '#E0E0E0',
       },
