@@ -70,6 +70,7 @@ export default function DhikrScreen() {
   const [showGoalModal, setShowGoalModal] = useState(false);
   const [goalCompletedToday, setGoalCompletedToday] = useState<string | null>(null);
   const [showTransition, setShowTransition] = useState(false);
+  const [isOnTransitionScreen, setIsOnTransitionScreen] = useState(false); // Nouvel état
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Générer les pages circulaires avec écran de transition si nécessaire
@@ -144,6 +145,7 @@ export default function DhikrScreen() {
       setCurrentIndex(1);
       setCompletedCycles(0);
       setShowTransition(false);
+      setIsOnTransitionScreen(false); // Reset de l'état
     }
   }, [dhikrs]);
 
@@ -176,19 +178,29 @@ export default function DhikrScreen() {
       isAdjusting: isAdjustingPosition
     });
 
+    // Vérifier si on est sur l'écran de transition
+    const currentItem = circularPages[index];
+    const isTransitionScreen = currentItem && currentItem.type === 'transition';
+    setIsOnTransitionScreen(isTransitionScreen);
+
     // Logique de comptage - ne compter que les vrais dhikrs
     if (!isAdjustingPosition && index >= 1 && index <= dhikrs.length) {
-      const currentItem = circularPages[index];
       if (currentItem && currentItem.type === 'dhikr') {
         incrementCount();
       }
     }
 
-    // Détecter la fin de catégorie pour afficher l'écran de transition
+    // Détecter la fin de catégorie pour activer l'écran de transition
     if (!isAdjustingPosition && index === dhikrs.length && transition && !showTransition) {
       console.log('Activating transition screen');
       setShowTransition(true);
       setCompletedCycles(prev => prev + 1);
+      // Ne pas afficher la notification tout de suite, attendre d'être sur l'écran de transition
+    }
+
+    // Afficher la notification quand on arrive sur l'écran de transition
+    if (!isAdjustingPosition && isTransitionScreen && !showNotification) {
+      console.log('Showing notification on transition screen');
       setShowNotification(true);
     }
 
@@ -227,7 +239,7 @@ export default function DhikrScreen() {
         }, 50);
       }, 10);
     }
-  }, [dhikrs, incrementCount, isAdjustingPosition, circularPages, transition, showTransition]);
+  }, [dhikrs, incrementCount, isAdjustingPosition, circularPages, transition, showTransition, showNotification]);
 
   const handleScrollStateChanged = useCallback((e: any) => {
     const state = e.nativeEvent.pageScrollState;
@@ -349,8 +361,9 @@ export default function DhikrScreen() {
             <Text style={[styles.categoryText, { color: theme.colors.dhikrReader.categoryText }]}>{currentCategory}</Text>
           </TouchableOpacity>
 
+          {/* CompletionNotification - Affichée seulement sur l'écran de transition */}
           <CompletionNotification
-            visible={showNotification && currentCategory !== 'General'}
+            visible={showNotification && currentCategory !== 'General' && isOnTransitionScreen}
             onClose={handleCloseNotification}
             subtitle={`+${categoryLength} Khairis earned ✨`}
             categoryName={currentCategory}
