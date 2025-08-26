@@ -28,16 +28,42 @@ interface Dhikr {
 
 interface DhikrState {
   dhikrs: Dhikr[];
+  shuffledGeneralDhikrs: Dhikr[] | null; // Cache pour les dhikrs General mélangés
+  lastShuffleTimestamp: number; // Pour forcer un nouveau mélange si nécessaire
   getDhikrsByUrlCategory: () => Dhikr[] | FavoriteDhikr[];
   getAllDhikrs: () => Dhikr[];
   addDhikr: (dhikr: Dhikr) => void;
   removeDhikr: (id: string) => void;
   getDhikrsByCategory: (category: string) => any;
-
+  shuffleGeneralDhikrs: () => void; // Méthode pour forcer un nouveau mélange
 }
+
+// Fonction pour mélanger un tableau (algorithme Fisher-Yates)
+const shuffleArray = <T>(array: T[]): T[] => {
+  // Créer une copie pour éviter de modifier le tableau original
+  const shuffled = [...array];
+  
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  
+  return shuffled;
+};
 
 export const useDhikrStore = create<DhikrState>()((set, get) => ({
   dhikrs: initialDhikrs,
+  shuffledGeneralDhikrs: null,
+  lastShuffleTimestamp: 0,
+
+  // Méthode pour forcer un nouveau mélange des dhikrs General
+  shuffleGeneralDhikrs: () => {
+    console.log('Shuffling General dhikrs - creating new shuffle');
+    set({
+      shuffledGeneralDhikrs: shuffleArray(initialDhikrs),
+      lastShuffleTimestamp: Date.now()
+    });
+  },
 
   // Nouvelle méthode pour récupérer TOUS les dhikrs concatenés
   getAllDhikrs: () => {
@@ -56,23 +82,6 @@ export const useDhikrStore = create<DhikrState>()((set, get) => ({
 
     return uniqueDhikrs;
   },
-
-  // Méthode pour récupérer uniquement les dhikrs favoris
-  // getFavoriteDhikrs: () => {
-  //   // Récupérer tous les dhikrs
-  //   const allDhikrs = get().getAllDhikrs();
-
-  //   // Récupérer les favoris depuis le store des favoris
-  //   const favorites = useFavoritesStore.getState().favorites;
-
-  //   // Filtrer les dhikrs qui sont dans les favoris
-  //   // On utilise l'UUID du favori qui correspond à l'ID du dhikr
-  //   const favoriteDhikrs = allDhikrs.filter(dhikr => 
-  //     favorites.some(favorite => favorite.uuid === dhikr.id)
-  //   );
-
-  //   return favoriteDhikrs;
-  // },
 
   getDhikrsByUrlCategory: () => {
     // Get URL params inside the store
@@ -94,10 +103,10 @@ export const useDhikrStore = create<DhikrState>()((set, get) => ({
         return [];
       }
 
-      return  {
-          dhikrs: dhikrs,
-          transition: ''
-        };
+      return {
+        dhikrs: dhikrs,
+        transition: ''
+      };
     }
 
     switch (category) {
@@ -107,7 +116,6 @@ export const useDhikrStore = create<DhikrState>()((set, get) => ({
           dhikrs: AnxietyDhikrs,
           transition: anxietyReliefTransition
         };
-
 
       case 'evilEye':
         return {
@@ -178,14 +186,32 @@ export const useDhikrStore = create<DhikrState>()((set, get) => ({
 
       case 'favourites':
         return {
-          dhikrs : useFavoritesStore.getState().favorites,
+          dhikrs: useFavoritesStore.getState().favorites,
           transition: ''
-        }
-        
+        };
 
       default:
+        // Pour la catégorie General, utiliser le cache ou créer un nouveau mélange
+        const state = get();
+        
+        // Si pas de cache, créer le mélange initial
+        if (!state.shuffledGeneralDhikrs) {
+          console.log('No cached shuffled dhikrs, creating initial shuffle');
+          const shuffled = shuffleArray(initialDhikrs);
+          set({ 
+            shuffledGeneralDhikrs: shuffled,
+            lastShuffleTimestamp: Date.now()
+          });
+          return {
+            dhikrs: shuffled,
+            transition: GeneralTransition
+          };
+        }
+        
+        // Utiliser le cache existant
+        console.log('Using cached shuffled dhikrs');
         return {
-          dhikrs: initialDhikrs,
+          dhikrs: state.shuffledGeneralDhikrs,
           transition: GeneralTransition
         };
     }
@@ -204,5 +230,4 @@ export const useDhikrStore = create<DhikrState>()((set, get) => ({
   getDhikrsByCategory: (category) => {
     return get().dhikrs.filter((d) => d.category === category);
   },
-
 }));

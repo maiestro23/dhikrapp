@@ -56,7 +56,22 @@ export default function DhikrScreen() {
   const { start, stop } = useTimeTracking();
   const { incrementCount, goalProgress, totalCount, todayProgress } = useProgress();
   const { setDailyGoal, dailyGoal } = useProgressStore();
-  const categoryData = useDhikrStore().getDhikrsByUrlCategory();
+  
+  // Modification pour gérer le mélange des dhikrs General
+  const dhikrStore = useDhikrStore();
+  const shuffleGeneralDhikrs = useDhikrStore(state => state.shuffleGeneralDhikrs);
+  const params = useLocalSearchParams();
+  const categoryUrl = params.category as string || 'General';
+
+  // Effet pour déclencher le mélange quand on arrive sur General
+  useEffect(() => {
+    if (categoryUrl === 'General') {
+      console.log('Navigating to General category - shuffling dhikrs');
+      shuffleGeneralDhikrs();
+    }
+  }, [categoryUrl, shuffleGeneralDhikrs]);
+
+  const categoryData = dhikrStore.getDhikrsByUrlCategory();
   const { dhikrs, transition } = categoryData;
   const categoryLength = dhikrs?.length || 0;
   const { isFavorite, addFavorite, removeFavorite } = useFavoritesStore();
@@ -70,7 +85,7 @@ export default function DhikrScreen() {
   const [showGoalModal, setShowGoalModal] = useState(false);
   const [goalCompletedToday, setGoalCompletedToday] = useState<string | null>(null);
   const [showTransition, setShowTransition] = useState(false);
-  const [isOnTransitionScreen, setIsOnTransitionScreen] = useState(false); // Nouvel état
+  const [isOnTransitionScreen, setIsOnTransitionScreen] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Générer les pages circulaires avec écran de transition si nécessaire
@@ -145,7 +160,7 @@ export default function DhikrScreen() {
       setCurrentIndex(1);
       setCompletedCycles(0);
       setShowTransition(false);
-      setIsOnTransitionScreen(false); // Reset de l'état
+      setIsOnTransitionScreen(false);
     }
   }, [dhikrs]);
 
@@ -157,9 +172,6 @@ export default function DhikrScreen() {
   const handleCategoryPress = useCallback(() => {
     router.replace('/discover');
   }, []);
-
-  const params = useLocalSearchParams();
-  const categoryUrl = params.category as string || 'General';
 
   console.log('DhikrScreen - Current params:', params);
   console.log('DhikrScreen - Category data:', { dhikrsLength: dhikrs?.length, hasTransition: !!transition });
@@ -195,7 +207,6 @@ export default function DhikrScreen() {
       console.log('Activating transition screen');
       setShowTransition(true);
       setCompletedCycles(prev => prev + 1);
-      // Ne pas afficher la notification tout de suite, attendre d'être sur l'écran de transition
     }
 
     // Afficher la notification quand on arrive sur l'écran de transition
@@ -221,11 +232,9 @@ export default function DhikrScreen() {
         if (pagerRef.current) {
           try {
             if (index === 0) {
-              // Si on est au début (élément dupliqué), aller à la vraie fin
               console.log('Adjusting from start to:', lastRealIndex);
               pagerRef.current.setPageWithoutAnimation(lastRealIndex);
             } else if (index === lastFakeIndex) {
-              // Si on est à la fin (élément dupliqué), aller au vrai début
               console.log('Adjusting from end to: 1');
               pagerRef.current.setPageWithoutAnimation(1);
             }
