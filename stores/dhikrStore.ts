@@ -1,9 +1,9 @@
 import { create } from 'zustand';
 import { GeneralTransition, dhikrs as initialDhikrs } from '../config/dhikrs';
 import { MorningDhikrs } from '@/config/morning_dhikrs';
-import { EveningDhikrs } from '@/config/evening_dhikrs';
+import { eveningAdhkarTransition, EveningDhikrs } from '@/config/evening_dhikrs';
 import { useLocalSearchParams } from 'expo-router';
-import { AfterSalahDhikrs } from '@/config/afterSalah_dhikrs';
+import { AfterSalahDhikrs, afterSalahTransition } from '@/config/afterSalah_dhikrs';
 import { IstighfarDhikrs, IstighfarTransition } from '@/config/istighfar_dhikrs';
 import { FavoriteDhikr, useFavoritesStore } from './favoritesStore';
 import { AlhamdulillahDhikrs, AllahuAkbarDhikrs, AstaghfirullahDhikrs, SubhanallahDhikrs } from '@/config/tasbih_dhikrs';
@@ -30,7 +30,7 @@ interface DhikrState {
   dhikrs: Dhikr[];
   shuffledGeneralDhikrs: Dhikr[] | null; // Cache pour les dhikrs General mélangés
   lastShuffleTimestamp: number; // Pour forcer un nouveau mélange si nécessaire
-  getDhikrsByUrlCategory: () => Dhikr[] | FavoriteDhikr[];
+  getDhikrsByUrlCategory: () => void;
   getAllDhikrs: () => Dhikr[];
   addDhikr: (dhikr: Dhikr) => void;
   removeDhikr: (id: string) => void;
@@ -169,13 +169,13 @@ export const useDhikrStore = create<DhikrState>()((set, get) => ({
       case 'evening':
         return {
           dhikrs: EveningDhikrs,
-          transition: IstighfarTransition
+          transition: eveningAdhkarTransition
         };
 
       case 'afterSalah':
         return {
           dhikrs: AfterSalahDhikrs,
-          transition: IstighfarTransition
+          transition: afterSalahTransition
         };
 
       case 'istighfar':

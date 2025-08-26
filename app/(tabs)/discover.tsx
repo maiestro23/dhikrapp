@@ -275,45 +275,78 @@ export default function DiscoverScreen() {
     setIsSearching(false);
   };
 
-  // Filtrer les catégories selon la recherche - FONCTIONNALITÉ EXACTE
+  // Filtrer les catÃ©gories selon la recherche - FONCTIONNALITÃ‰ EXACTE
   const filteredCategories = categories.filter(category =>
     category.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Composant pour les onglets General/Favourites - EXACT du design
-  const TabButton = ({ title, onPress }: any) => (
-    <TouchableOpacity
-      onPress={onPress}
-      activeOpacity={0.8}
-      style={styles.tabButton}
-    >
-      <LinearGradient
-        colors={isDarkBackground ?
-          [theme.colors.discover.tabButton.gradientStart, theme.colors.discover.tabButton.gradientEnd] :
-          [theme.colors.discover.tabButton.gradientStart, theme.colors.discover.tabButton.gradientEnd]
-        }
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        style={[
-          styles.tabButtonGradient,
-          { borderColor: theme.colors.discover.tabButton.borderColor }
-        ]}
-      >
-        <Text style={[
-          styles.tabButtonText,
-          { color: theme.colors.discover.tabButton.textColor }
-        ]}>
-          {title}
-        </Text>
-      </LinearGradient>
-    </TouchableOpacity>
-  );
+  // Composant pour les onglets General/Favourites - MODIFIÉ pour différencier les boutons
+  const TabButton = ({ title, onPress }: any) => {
+    const isGeneral = title === 'General';
+    
+    if (isGeneral) {
+      // Bouton General avec background uni
+      return (
+        <TouchableOpacity
+          onPress={onPress}
+          activeOpacity={0.8}
+          style={styles.tabButton}
+        >
+          <View
+            style={[
+              styles.tabButtonSolid,
+              { 
+                backgroundColor: theme.colors.discover.tabButton.generalBackground,
+                borderColor: theme.colors.discover.tabButton.borderColor 
+              }
+            ]}
+          >
+            <Text style={[
+              styles.tabButtonText,
+              { color: theme.colors.discover.tabButton.textColor }
+            ]}>
+              {title}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      );
+    } else {
+      // Bouton Favourites avec gradient (code existant)
+      return (
+        <TouchableOpacity
+          onPress={onPress}
+          activeOpacity={0.8}
+          style={styles.tabButton}
+        >
+          <LinearGradient
+            colors={isDarkBackground ?
+              [theme.colors.discover.tabButton.gradientStart, theme.colors.discover.tabButton.gradientEnd] :
+              [theme.colors.discover.tabButton.gradientStart, theme.colors.discover.tabButton.gradientEnd]
+            }
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={[
+              styles.tabButtonGradient,
+              { borderColor: theme.colors.discover.tabButton.borderColor }
+            ]}
+          >
+            <Text style={[
+              styles.tabButtonText,
+              { color: theme.colors.discover.tabButton.textColor }
+            ]}>
+              {title}
+            </Text>
+          </LinearGradient>
+        </TouchableOpacity>
+      );
+    }
+  };
 
 
 
   // Nouveau composant pour les boutons de comptage
   const CountButton = ({ option, isSelected, onPress, customCount }: any) => {
-    // Afficher le nombre custom au lieu de "Custom" si un nombre est entré
+    // Afficher le nombre custom au lieu de "Custom" si un nombre est entrÃ©
     const displayText = option.id === 'custom' && customCount && parseInt(customCount) > 0
       ? customCount
       : option.label;
@@ -565,14 +598,22 @@ const styles = StyleSheet.create({
     borderWidth: 1, // Bordure de 2px
     alignItems: 'center',
   },
+  // NOUVEAU : Style pour le bouton avec background uni
+  tabButtonSolid: {
+    paddingVertical: 26,
+    paddingHorizontal: 24,
+    borderRadius: 10,
+    borderWidth: 1,
+    alignItems: 'center',
+  },
   tabButtonText: {
     fontFamily: 'Sofia-Pro',
     fontSize: 16,
-    color: '#fff', // Couleur pour l'état inactif
+    color: '#fff', // Couleur pour l'Ã©tat inactif
     fontWeight: '500',
   },
 
-  // ===== TASBIH SECTION STYLES - MODIFIÉS =====
+  // ===== TASBIH SECTION STYLES - MODIFIÃ‰S =====
   tasbihSection: {
     marginBottom: 22,
   },
@@ -590,7 +631,7 @@ const styles = StyleSheet.create({
     marginLeft: 8
   },
 
-  // ===== STYLES MODIFIÉS POUR LA SÉLECTION DE COMPTAGE =====
+  // ===== STYLES MODIFIÃ‰S POUR LA SÃ‰LECTION DE COMPTAGE =====
   countSection: {
     marginBottom: 8,
   },
@@ -684,7 +725,7 @@ const styles = StyleSheet.create({
     //gap: 2,
   },
   tasbihButton: {
-    width: (width - 56) / 2, // Ajusté pour le gap et padding
+    width: (width - 56) / 2, // AjustÃ© pour le gap et padding
     paddingVertical: 12,
     paddingHorizontal: 20,
     backgroundColor: '#7E0F3B',
@@ -721,7 +762,7 @@ const styles = StyleSheet.create({
     gap: 16, // EXACT : Espace entre les cartes
   },
 
-  // ===== CATEGORY CARD STYLES - MODIFIÉS POUR LES IMAGES =====
+  // ===== CATEGORY CARD STYLES - MODIFIÃ‰S POUR LES IMAGES =====
   categoryCard: {
     width: (width - 56) / 2, // EXACT : 56 = 20*2 (padding) + 16 (gap)
     height: (width - 56) / 2, // EXACT : Hauteur des cartes
@@ -729,18 +770,18 @@ const styles = StyleSheet.create({
     borderRadius: 16, // EXACT : Coins arrondis des cartes
     overflow: 'hidden',
     shadowColor: '#000', // EXACT : Couleur de l'ombre
-    elevation: 8, // EXACT : Élévation Android
+    elevation: 8, // EXACT : Ã‰lÃ©vation Android
   },
   // NOUVEAU : Style pour ImageBackground
   categoryCardBackground: {
     flex: 1,
     position: 'relative',
   },
-  // NOUVEAU : Style pour l'image elle-même
+  // NOUVEAU : Style pour l'image elle-mÃªme
   categoryCardImage: {
     borderRadius: 16, // Assure que l'image respecte les coins arrondis
   },
-  // MODIFIÉ : Overlay plus sombre pour améliorer la lisibilité
+  // MODIFIÃ‰ : Overlay plus sombre pour amÃ©liorer la lisibilitÃ©
   categoryCardOverlay: {
     position: 'absolute',
     top: 0,
@@ -772,7 +813,7 @@ const styles = StyleSheet.create({
   categorySubtitle: {
     fontFamily: 'Sofia-Pro-Light', // EXACT : Font des sous-titres
     fontSize: 12, // EXACT : Taille des sous-titres
-    color: 'rgba(255, 255, 255, 0.95)', // LÉGÈREMENT MODIFIÉ : Plus opaque pour meilleure lisibilité
+    color: 'rgba(255, 255, 255, 0.95)', // LÃ‰GÃˆREMENT MODIFIÃ‰ : Plus opaque pour meilleure lisibilitÃ©
     textAlign: 'center',
   },
 
