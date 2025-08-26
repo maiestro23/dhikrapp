@@ -80,6 +80,7 @@ interface ThemeColors {
     hearderTitle: string;
     hearderSubTitle: string;
     countLabel: string;
+    cancel: string;
     tabButton: {
       backgroundColor: string;
       textColor: string;
@@ -181,10 +182,10 @@ const lightTheme: Theme = {
     },
 
     discover: {
+      cancel: "#8C8F7B",
+      countLabel: '#5A5D4D',
       hearderTitle: '#181818',
       hearderSubTitle: '#5A5D4D',
-
-      countLabel: '#5A5D4D',
       tabButton: {
         backgroundColor: '#7E0F3B',
         textColor: '#7E0F3B',
@@ -284,6 +285,7 @@ const darkBackgroundTheme: Theme = {
     },
 
     discover: {
+      cancel: "#fff",
       countLabel: '#FFFFFF',
       hearderTitle: '#F5F5F5',
       hearderSubTitle: '#FFFFFF',

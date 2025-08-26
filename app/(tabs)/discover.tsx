@@ -351,15 +351,13 @@ export default function DiscoverScreen() {
     <PageTransitionWrapper animationType="fade" duration={350}>
       <ScreenBackground>
         <View style={styles.container}>
-          {/* ===== HEADER - Masqué pendant la recherche ===== */}
-          {!isSearching && (
-            <View style={styles.header}>
-              <Text style={[styles.headerTitle, { color: theme.colors.discover.hearderTitle }]}>Discover</Text>
-              <Text style={[styles.headerSubtitle, { color: theme.colors.discover.hearderSubTitle }]}>
-                Your personal adhkar library
-              </Text>
-            </View>
-          )}
+          {/* ===== HEADER - Toujours visible ===== */}
+          <View style={styles.header}>
+            <Text style={[styles.headerTitle, { color: theme.colors.discover.hearderTitle }]}>Discover</Text>
+            <Text style={[styles.headerSubtitle, { color: theme.colors.discover.hearderSubTitle }]}>
+              Your personal adhkar library
+            </Text>
+          </View>
 
           {/* ===== BARRE DE RECHERCHE - Modifiée pour inclure le bouton Cancel ===== */}
           <View style={styles.searchContainer}>
@@ -379,7 +377,7 @@ export default function DiscoverScreen() {
                 onPress={handleCancelSearch}
                 activeOpacity={0.7}
               >
-                <Text style={[styles.cancelButtonText, { color: theme.colors.discover.hearderTitle }]}>
+                <Text style={[styles.cancelButtonText, { color: theme.colors.discover.cancel }]}>
                   Cancel
                 </Text>
               </TouchableOpacity>
@@ -515,9 +513,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.9)', // EXACT : Background blanc semi-transparent
-    borderRadius: 12, // EXACT : Coins arrondis
+    borderRadius: 22, // EXACT : Coins arrondis
     paddingHorizontal: 16, // EXACT : Padding horizontal
-    paddingVertical: 12, // EXACT : Padding vertical
+    paddingVertical: 14, // EXACT : Padding vertical
     shadowColor: '#000', // EXACT : Couleur de l'ombre
     shadowOffset: {
       width: 0,
@@ -543,7 +541,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   cancelButtonText: {
-    fontFamily: 'Sofia-Pro',
+    fontFamily: 'Sofia-Pro-Light',
     fontSize: 16,
     color: '#181818',
   },
