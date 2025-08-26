@@ -282,23 +282,22 @@ export default function DiscoverScreen() {
 
   // Composant pour les onglets General/Favourites - EXACT du design
   const TabButton = ({ title, onPress }: any) => (
-    <LinearGradient
-
-      colors={isDarkBackground ?
-        [theme.colors.discover.tabButton.gradientStart, theme.colors.discover.tabButton.gradientEnd] :
-        [theme.colors.discover.tabButton.gradientStart, theme.colors.discover.tabButton.gradientEnd]
-      }
-
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 0 }}
-      style={[
-        styles.tabButton,
-        { borderColor: theme.colors.discover.tabButton.borderColor }
-      ]}
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={0.8}
+      style={styles.tabButton}
     >
-      <TouchableOpacity
-        onPress={onPress}
-        activeOpacity={0.8}
+      <LinearGradient
+        colors={isDarkBackground ?
+          [theme.colors.discover.tabButton.gradientStart, theme.colors.discover.tabButton.gradientEnd] :
+          [theme.colors.discover.tabButton.gradientStart, theme.colors.discover.tabButton.gradientEnd]
+        }
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={[
+          styles.tabButtonGradient,
+          { borderColor: theme.colors.discover.tabButton.borderColor }
+        ]}
       >
         <Text style={[
           styles.tabButtonText,
@@ -306,8 +305,8 @@ export default function DiscoverScreen() {
         ]}>
           {title}
         </Text>
-      </TouchableOpacity>
-    </LinearGradient>
+      </LinearGradient>
+    </TouchableOpacity>
   );
 
 
@@ -555,16 +554,16 @@ const styles = StyleSheet.create({
   tabButton: {
     flex: 1,
     marginTop: 12,
+    borderRadius: 10, // Plus arrondi
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  tabButtonGradient: {
     paddingVertical: 26, // Plus de padding vertical
     paddingHorizontal: 24,
     borderRadius: 10, // Plus arrondi
-    // backgroundColor: '#7E0F3B', // Background plus opaque pour l'état inactif
     borderWidth: 1, // Bordure de 2px
-    //borderColor: '#9F1F52', // Bordure blanche
     alignItems: 'center',
-    shadowRadius: 4,
-    elevation: 3,
-
   },
   tabButtonText: {
     fontFamily: 'Sofia-Pro',
