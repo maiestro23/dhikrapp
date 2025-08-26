@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -15,15 +15,12 @@ import { ScreenBackground } from '../../components/ScreenBackground';
 import { router } from 'expo-router';
 import { PageTransitionWrapper } from '@/components/PageTransitionWrapper';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useFocusEffect } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
 // Données des catégories avec leurs images DISTINCTES
 const categories = [
-
-
-
-
   {
     id: 'morning',
     title: 'Morning\nAdhkar',
@@ -189,14 +186,31 @@ export default function DiscoverScreen() {
   const { theme, isDarkBackground } = useTheme();
   const [activeTab, setActiveTab] = useState('General');
   const [searchQuery, setSearchQuery] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
 
   // Nouveaux états pour la section Tasbih
   const [selectedCount, setSelectedCount] = useState('33x');
   const [customCount, setCustomCount] = useState('');
   const hiddenInputRef = useRef<TextInput>(null);
 
+  // Réinitialiser l'état quand on revient sur l'écran
+  useFocusEffect(
+    React.useCallback(() => {
+      setSearchQuery('');
+      setIsSearching(false);
+      setSelectedCount('33x');
+      setCustomCount('');
+    }, [])
+  );
+
   // ✅ FONCTION NAVIGATION CORRIGÉE - Navigation vers DhikrScreen avec paramètres
   const handleCategoryPress = (category: any) => {
+    // Réinitialiser l'état de recherche avant la navigation
+    if (isSearching) {
+      setSearchQuery('');
+      setIsSearching(false);
+    }
+    
     router.push({
       pathname: '/(tabs)',
       params: {
@@ -247,6 +261,18 @@ export default function DiscoverScreen() {
         count: finalCount
       }
     });
+  };
+
+  // Fonction pour gérer les changements dans la recherche
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+    setIsSearching(value.length > 0);
+  };
+
+  // Fonction pour annuler la recherche
+  const handleCancelSearch = () => {
+    setSearchQuery('');
+    setIsSearching(false);
   };
 
   // Filtrer les catégories selon la recherche - FONCTIONNALITÉ EXACTE
@@ -325,15 +351,17 @@ export default function DiscoverScreen() {
     <PageTransitionWrapper animationType="fade" duration={350}>
       <ScreenBackground>
         <View style={styles.container}>
-          {/* ===== HEADER - EXACT du design ===== */}
-          <View style={styles.header}>
-            <Text style={[styles.headerTitle, { color: theme.colors.discover.hearderTitle }]}>Discover</Text>
-            <Text style={[styles.headerSubtitle, { color: theme.colors.discover.hearderSubTitle }]}>
-              Your personal adhkar library
-            </Text>
-          </View>
+          {/* ===== HEADER - Masqué pendant la recherche ===== */}
+          {!isSearching && (
+            <View style={styles.header}>
+              <Text style={[styles.headerTitle, { color: theme.colors.discover.hearderTitle }]}>Discover</Text>
+              <Text style={[styles.headerSubtitle, { color: theme.colors.discover.hearderSubTitle }]}>
+                Your personal adhkar library
+              </Text>
+            </View>
+          )}
 
-          {/* ===== BARRE DE RECHERCHE - EXACT du design ===== */}
+          {/* ===== BARRE DE RECHERCHE - Modifiée pour inclure le bouton Cancel ===== */}
           <View style={styles.searchContainer}>
             <View style={styles.searchInputContainer}>
               <Search size={20} color="#8C8F7B" style={styles.searchIcon} />
@@ -342,9 +370,20 @@ export default function DiscoverScreen() {
                 placeholder="Search"
                 placeholderTextColor="#8C8F7B"
                 value={searchQuery}
-                onChangeText={setSearchQuery}
+                onChangeText={handleSearchChange}
               />
             </View>
+            {isSearching && (
+              <TouchableOpacity 
+                style={styles.cancelButton} 
+                onPress={handleCancelSearch}
+                activeOpacity={0.7}
+              >
+                <Text style={[styles.cancelButtonText, { color: theme.colors.discover.hearderTitle }]}>
+                  Cancel
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
 
           {/* ===== SECTION CATEGORIES - EXACT du design ===== */}
@@ -353,66 +392,73 @@ export default function DiscoverScreen() {
               style={styles.categoriesContainer}
               showsVerticalScrollIndicator={false}
             >
-              {/* ===== ONGLETS General/Favourites - EXACT du design ===== */}
-              <View style={styles.tabsContainer}>
-                <TabButton
-                  title="General"
-                  onPress={() => handleCategoryPress({ id: 'General', title: 'General' })}
-                />
-                <TabButton
-                  title="Favourites"
-                  onPress={() => handleCategoryPress({ id: 'favourites', title: 'Favourites' })}
-                />
-              </View>
-
-              {/* ===== SECTION TASBIH - MISE À JOUR ===== */}
-              <View style={styles.tasbihSection}>
-                <Text style={[styles.sectionTitle, { color: theme.colors.text.secondary }]}>Tasbih</Text>
-                {/* Section de sélection du nombre - MODIFIÉE */}
-                <View style={styles.countSection}>
-                  <View style={styles.countRow}>
-
-                    <View style={styles.countOptionsContainer}>
-                      <Text style={[styles.countLabelText, { color: theme.colors.discover.countLabel }]}>Count: </Text>
-                      {countOptions.map((option) => (
-                        <CountButton
-                          key={option.id}
-                          option={option}
-                          isSelected={selectedCount === option.id}
-                          onPress={handleCountSelection}
-                          customCount={customCount}
-                        />
-                      ))}
-                    </View>
-                  </View>
-
-                  {/* Input caché pour capturer la saisie */}
-                  <TextInput
-                    ref={hiddenInputRef}
-                    style={styles.hiddenInput}
-                    value={customCount}
-                    onChangeText={handleCustomCountChange}
-                    returnKeyType="done"
-                    autoFocus={false}
-                    keyboardType="number-pad"
-                    maxLength={3}
+              {/* ===== ONGLETS General/Favourites - Masqués pendant la recherche ===== */}
+              {!isSearching && (
+                <View style={styles.tabsContainer}>
+                  <TabButton
+                    title="General"
+                    onPress={() => handleCategoryPress({ id: 'General', title: 'General' })}
+                  />
+                  <TabButton
+                    title="Favourites"
+                    onPress={() => handleCategoryPress({ id: 'favourites', title: 'Favourites' })}
                   />
                 </View>
+              )}
 
-                {/* Boutons Tasbih */}
-                <View style={styles.tasbihGrid}>
-                  {tasbihItems.map((item, index) => (
-                    <TasbihButton
-                      key={item.id}
-                      item={item}
-                      onPress={handleTasbihPress}
+              {/* ===== SECTION TASBIH - Masquée pendant la recherche ===== */}
+              {!isSearching && (
+                <View style={styles.tasbihSection}>
+                  <Text style={[styles.sectionTitle, { color: theme.colors.text.secondary }]}>Tasbih</Text>
+                  {/* Section de sélection du nombre - MODIFIÉE */}
+                  <View style={styles.countSection}>
+                    <View style={styles.countRow}>
+
+                      <View style={styles.countOptionsContainer}>
+                        <Text style={[styles.countLabelText, { color: theme.colors.discover.countLabel }]}>Count: </Text>
+                        {countOptions.map((option) => (
+                          <CountButton
+                            key={option.id}
+                            option={option}
+                            isSelected={selectedCount === option.id}
+                            onPress={handleCountSelection}
+                            customCount={customCount}
+                          />
+                        ))}
+                      </View>
+                    </View>
+
+                    {/* Input caché pour capturer la saisie */}
+                    <TextInput
+                      ref={hiddenInputRef}
+                      style={styles.hiddenInput}
+                      value={customCount}
+                      onChangeText={handleCustomCountChange}
+                      returnKeyType="done"
+                      autoFocus={false}
+                      keyboardType="number-pad"
+                      maxLength={3}
                     />
-                  ))}
-                </View>
-              </View>
+                  </View>
 
-              <Text style={[styles.sectionTitle, { color: theme.colors.text.secondary }]}>Categories</Text>
-              {/* Grille de catégories 2x2 - EXACT du design */}
+                  {/* Boutons Tasbih */}
+                  <View style={styles.tasbihGrid}>
+                    {tasbihItems.map((item, index) => (
+                      <TasbihButton
+                        key={item.id}
+                        item={item}
+                        onPress={handleTasbihPress}
+                      />
+                    ))}
+                  </View>
+                </View>
+              )}
+
+              {!isSearching && (
+                <Text style={[styles.sectionTitle, { color: theme.colors.text.secondary }]}>Categories</Text>
+              )}
+              
+              {/* Grille de catégories 2x2 - Toujours visible mais filtrée */}
               <View style={styles.categoriesGrid}>
                 {filteredCategories.map((category, index) => (
                   <CategoryCard
@@ -458,11 +504,14 @@ const styles = StyleSheet.create({
     opacity: 0.8, // EXACT : Légère transparence
   },
 
-  // ===== SEARCH BAR STYLES - EXACT du design =====
+  // ===== SEARCH BAR STYLES - Modifiés pour le bouton Cancel =====
   searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 14, // EXACT : Espacement sous la barre de recherche
   },
   searchInputContainer: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.9)', // EXACT : Background blanc semi-transparent
@@ -486,6 +535,17 @@ const styles = StyleSheet.create({
     fontFamily: 'Sofia-Pro-ExtraLight', // EXACT : Font cohérente
     fontSize: 16, // EXACT : Taille du texte
     color: '#181818', // EXACT : Couleur du texte
+  },
+  // Nouveaux styles pour le bouton Cancel
+  cancelButton: {
+    marginLeft: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  cancelButtonText: {
+    fontFamily: 'Sofia-Pro',
+    fontSize: 16,
+    color: '#181818',
   },
 
   // ===== TABS STYLES - MODIFIÉS SELON LE DESIGN =====
