@@ -1,13 +1,10 @@
 import { Dhikr } from "./dhikrs"
 
-
 export const afterSalahTransition = {
   title: "Finish with Protection",
   subtitle: "The Prophet ﷺ used to recite the 3 Quls after Fajr and Maghrib prayers for protection",
   nextCategories: ["surahs"]
 };
-
-
 
 export const AfterSalahDhikrs: Dhikr[] =
   [
