@@ -165,9 +165,9 @@ const lightTheme: Theme = {
       categoryColor: '#FEFCFC',
       categoryText: "#8C8F7B",
       pageIndicatorColor: '#8C8F7B',
-      arabicColor: '#5A5D4D',
+      arabicColor: '#8C8F7B',
       transliterationColor: '#181818',
-      translationColor: '#5A5D4D',
+      translationColor: '#8C8F7B',
     },
     terms: {
       titleColor: "#fff",

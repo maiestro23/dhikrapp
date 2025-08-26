@@ -204,7 +204,7 @@ export const useDhikrStore = create<DhikrState>()((set, get) => ({
           });
           return {
             dhikrs: shuffled,
-            transition: GeneralTransition
+            transition: ''
           };
         }
         
@@ -212,7 +212,7 @@ export const useDhikrStore = create<DhikrState>()((set, get) => ({
         console.log('Using cached shuffled dhikrs');
         return {
           dhikrs: state.shuffledGeneralDhikrs,
-          transition: GeneralTransition
+          transition: ''
         };
     }
   },
