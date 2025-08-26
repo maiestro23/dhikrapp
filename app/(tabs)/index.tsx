@@ -17,29 +17,40 @@ import { useProgressStore } from '@/stores/progressStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CategoryTransitionScreen } from '../../components/CategoryTransitionScreen';
 
-const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme, positionIndex, categoryLength }: any) => (
-  <View style={styles.dhikrCard}>
-    <View style={styles.textWrapper}>
-      <Text style={[styles.arabicText, { color: theme.colors.dhikrReader.arabicColor }]}>{dhikr.arabicText}</Text>
-      <Text style={[styles.transliteration, { color: theme.colors.dhikrReader.transliterationColor }]}>{dhikr.transliteration}</Text>
-      <Text style={[styles.translation, { color: theme.colors.dhikrReader.translationColor }]}>{dhikr.translation}</Text>
-      <TouchableOpacity
-        style={[styles.favoriteButton, isFavorite && styles.favoriteButtonActive]}
-        onPress={() => onToggleFavorite(dhikr, isFavorite)}
-      >
-        <Heart
-          size={24}
-          color={theme.colors.accent}
-          fill={!isFavorite ? 'transparent' : theme.colors.accent}
-        />
-      </TouchableOpacity>
+const DhikrContent = ({ dhikr, isFavorite, onToggleFavorite, theme, positionIndex, categoryLength, categoryUrl }: any) => {
+  // Liste des IDs des catégories tasbih
+  const tasbihCategories = ['subhanallah', 'alhamdulillah', 'allahuakbar', 'astaghfirullah'];
+  
+  // Vérifier si la catégorie actuelle est une catégorie tasbih
+  const isTasbihCategory = tasbihCategories.includes(categoryUrl);
 
-      <Text style={[styles.pageIndicator, { color: theme.colors.dhikrReader.pageIndicatorColor }]}>
-        {getDisplayIndex(positionIndex, categoryLength)}/{categoryLength}
-      </Text>
+  return (
+    <View style={styles.dhikrCard}>
+      <View style={styles.textWrapper}>
+        <Text style={[styles.arabicText, { color: theme.colors.dhikrReader.arabicColor }]}>{dhikr.arabicText}</Text>
+        <Text style={[styles.transliteration, { color: theme.colors.dhikrReader.transliterationColor }]}>{dhikr.transliteration}</Text>
+        <Text style={[styles.translation, { color: theme.colors.dhikrReader.translationColor }]}>{dhikr.translation}</Text>
+        <TouchableOpacity
+          style={[styles.favoriteButton, isFavorite && styles.favoriteButtonActive]}
+          onPress={() => onToggleFavorite(dhikr, isFavorite)}
+        >
+          <Heart
+            size={24}
+            color={theme.colors.accent}
+            fill={!isFavorite ? 'transparent' : theme.colors.accent}
+          />
+        </TouchableOpacity>
+
+        {/* Afficher le page indicator seulement pour les catégories tasbih */}
+        {isTasbihCategory && (
+          <Text style={[styles.pageIndicator, { color: theme.colors.dhikrReader.pageIndicatorColor }]}>
+            {getDisplayIndex(positionIndex, categoryLength)}/{categoryLength}
+          </Text>
+        )}
+      </View>
     </View>
-  </View>
-);
+  );
+};
 
 const getDisplayIndex = (currentIndex: number, totalLength: number) => {
   if (currentIndex === 0) {
@@ -408,6 +419,7 @@ export default function DhikrScreen() {
                     theme={theme}
                     positionIndex={index}
                     categoryLength={categoryLength}
+                    categoryUrl={categoryUrl}
                   />
                 )}
               </View>
