@@ -137,10 +137,10 @@ export default function DhikrScreen() {
   // Surveiller quand l'objectif quotidien est atteint
   useEffect(() => {
     const progressPercentage = (todayProgress / dailyGoal) * 100;
+    const today = new Date().toISOString().split('T')[0];
 
-    if (progressPercentage >= 100 && !showGoalModal) {
-      const today = new Date().toISOString().split('T')[0];
-
+    // Vérifier seulement si goalCompletedToday a été chargé (n'est plus null)
+    if (progressPercentage >= 100 && !showGoalModal && goalCompletedToday !== null) {
       if (goalCompletedToday !== today) {
         setShowGoalModal(true);
         setGoalCompletedToday(today);
