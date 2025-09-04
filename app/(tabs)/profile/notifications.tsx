@@ -2,296 +2,334 @@ import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
-    StyleSheet,
     TouchableOpacity,
     ScrollView,
     Switch,
-    Dimensions,
-    Platform,
-    Alert
+    StyleSheet,
+    Alert,
 } from 'react-native';
-import { router } from 'expo-router';
 import { ChevronLeft } from 'lucide-react-native';
-import { useTheme } from '@/context/ThemeContext';
-import { ScreenBackground } from '@/components/ScreenBackground';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { PageTransitionWrapper } from '@/components/PageTransitionWrapper';
-import { useProgressStore } from '@/stores/progressStore';
-import notificationsHandler, {
-    initializeNotifications,
-    updateNotificationPreferences,
-    getNotificationPreferences
-} from '@/components/NotificationsHandler';
+import NotificationService from '@/app/services/NotificationService';
+import NotificationStorage, { NotificationPreferences } from '@/stores/NotificationStorage';
 
 
-const { width } = Dimensions.get('window');
 
-export default function NotificationsScreen() {
 
-    const insets = useSafeAreaInsets();
-    const progressStore = useProgressStore();
+interface NotificationsScreenProps {
+    onBack?: () => void;
+    // Ajoutez d'autres props si nécessaire
+}
 
-    // États pour les toggles de notifications
-    const [allNotifications, setAllNotifications] = useState(false);
-    const [morningEvening, setMorningEvening] = useState(true);
-    const [jummah, setJummah] = useState(false);
-    const [dailyGoals, setDailyGoals] = useState(true);
+export default function NotificationsScreen({ onBack }: NotificationsScreenProps) {
+    // États pour les préférences de notifications
+    const [preferences, setPreferences] = useState<NotificationPreferences>({
+        allNotifications: false,
+        morningEvening: false,
+        jummah: false,
+        dailyGoals: false,
+    });
+    
     const [isLoading, setIsLoading] = useState(true);
-    const { theme, isDarkBackground } = useTheme();
+    const [permissionGranted, setPermissionGranted] = useState(false);
 
-    // Charger les préférences au montage du composant
+    // Remplacez par votre logique de thème
+    const theme = {
+        colors: {
+            reminders: { background: '#F5F5F5' },
+            text: { primary: '#333333', secondary: '#666666' },
+            border: '#E0E0E0'
+        }
+    };
+    const isDarkBackground = false; // Remplacez par votre logique
+
     useEffect(() => {
-        loadNotificationPreferences();
+        initializeNotifications();
     }, []);
 
-    const loadNotificationPreferences = async () => {
+    const initializeNotifications = async () => {
         try {
-            setIsLoading(true);
+            // Charger les préférences sauvegardées
+            const savedPreferences = await NotificationStorage.loadPreferences();
+            setPreferences(savedPreferences);
 
-            // Initialiser le gestionnaire de notifications
-            const initialized = await initializeNotifications();
+            // Vérifier les permissions
+            const hasPermission = await NotificationService.requestPermissions();
+            setPermissionGranted(hasPermission);
 
-            if (!initialized) {
+            if (!hasPermission) {
                 Alert.alert(
-                    'Notifications désactivées',
-                    'Les notifications ne peuvent pas être activées. Veuillez vérifier les paramètres de votre appareil.',
+                    'Permissions requises',
+                    'Pour recevoir des rappels, veuillez autoriser les notifications dans les paramètres de votre appareil.',
                     [{ text: 'OK' }]
                 );
-                return;
             }
-
-            // Charger les préférences sauvegardées
-            const preferences = getNotificationPreferences();
-            setAllNotifications(preferences.allNotifications);
-            setMorningEvening(preferences.morningEvening);
-            setJummah(preferences.jummah);
-            setDailyGoals(preferences.dailyGoals);
-
         } catch (error) {
-            console.error('Erreur lors du chargement des préférences:', error);
-            Alert.alert(
-                'Erreur',
-                'Impossible de charger les préférences de notifications.',
-                [{ text: 'OK' }]
-            );
+            console.error('Error initializing notifications:', error);
+            Alert.alert('Erreur', 'Impossible de charger les préférences de notifications.');
         } finally {
             setIsLoading(false);
         }
     };
 
-    // Fonction pour sauvegarder et appliquer les préférences
-    const savePreferences = async (newPreferences: any) => {
+    const handleBack = () => {
+        if (onBack) {
+            onBack();
+        }
+        // Ou votre logique de navigation
+    };
+
+    const handleAllNotificationsToggle = async (value: boolean) => {
         try {
-            await updateNotificationPreferences(newPreferences, useProgressStore);
+            if (!permissionGranted && value) {
+                const permission = await NotificationService.requestPermissions();
+                if (!permission) {
+                    Alert.alert(
+                        'Permissions refusées',
+                        'Impossible d\'activer les notifications sans autorisation.'
+                    );
+                    return;
+                }
+                setPermissionGranted(true);
+            }
+
+            const updatedPreferences = await NotificationStorage.setAllNotifications(value);
+            setPreferences(updatedPreferences);
+
+            if (value) {
+                // Activer toutes les notifications
+                await NotificationService.scheduleNotificationsForType('morningEvening');
+                await NotificationService.scheduleNotificationsForType('jummah');
+                await NotificationService.scheduleNotificationsForType('dailyGoals');
+            } else {
+                // Désactiver toutes les notifications
+                await NotificationService.cancelAllScheduledNotifications();
+            }
         } catch (error) {
-            console.error('Erreur lors de la sauvegarde des préférences:', error);
-            Alert.alert(
-                'Erreur',
-                'Impossible de sauvegarder les préférences de notifications.',
-                [{ text: 'OK' }]
-            );
+            console.error('Error toggling all notifications:', error);
+            Alert.alert('Erreur', 'Impossible de modifier les préférences de notifications.');
         }
     };
 
-    // Fonction pour gérer le toggle "All notifications"
-    const handleAllNotificationsToggle = async (value: boolean) => {
-        setAllNotifications(value);
-
-        // Mettre toutes les notifications au même état
-        setMorningEvening(value);
-        setJummah(value);
-        setDailyGoals(value);
-
-        // Sauvegarder les préférences
-        await savePreferences({
-            allNotifications: value,
-            morningEvening: value,
-            jummah: value,
-            dailyGoals: value,
-        });
-    };
-
-    // Fonction pour gérer les toggles individuels
     const handleIndividualToggle = async (
-        setter: React.Dispatch<React.SetStateAction<boolean>>,
-        value: boolean,
-        key: string
+        key: keyof Omit<NotificationPreferences, 'allNotifications'>,
+        value: boolean
     ) => {
-        setter(value);
+        try {
+            if (!permissionGranted && value) {
+                const permission = await NotificationService.requestPermissions();
+                if (!permission) {
+                    Alert.alert(
+                        'Permissions refusées',
+                        'Impossible d\'activer les notifications sans autorisation.'
+                    );
+                    return;
+                }
+                setPermissionGranted(true);
+            }
 
-        // Calculer le nouvel état de toutes les notifications individuelles
-        const newMorningEvening = key === 'morningEvening' ? value : morningEvening;
-        const newJummah = key === 'jummah' ? value : jummah;
-        const newDailyGoals = key === 'dailyGoals' ? value : dailyGoals;
+            const updatedPreferences = await NotificationStorage.updatePreference(key, value);
+            
+            // Mettre à jour le switch "All notifications" en fonction des préférences individuelles
+            const allIndividualEnabled = NotificationStorage.areAllIndividualNotificationsEnabled(updatedPreferences);
+            const allIndividualDisabled = NotificationStorage.areAllIndividualNotificationsDisabled(updatedPreferences);
+            
+            if (allIndividualEnabled && !updatedPreferences.allNotifications) {
+                updatedPreferences.allNotifications = true;
+                await NotificationStorage.updatePreference('allNotifications', true);
+            } else if (allIndividualDisabled && updatedPreferences.allNotifications) {
+                updatedPreferences.allNotifications = false;
+                await NotificationStorage.updatePreference('allNotifications', false);
+            }
 
-        // Mettre à jour "All notifications" selon l'état des notifications individuelles
-        const allActive = newMorningEvening && newJummah && newDailyGoals;
-        setAllNotifications(allActive);
+            setPreferences(updatedPreferences);
 
-        // Sauvegarder les préférences
-        await savePreferences({
-            allNotifications: allActive,
-            morningEvening: newMorningEvening,
-            jummah: newJummah,
-            dailyGoals: newDailyGoals,
-        });
+            // Gérer les notifications planifiées
+            if (value) {
+                await NotificationService.scheduleNotificationsForType(key as any);
+            } else {
+                await NotificationService.cancelNotificationsByType(key);
+            }
+        } catch (error) {
+            console.error('Error toggling individual notification:', error);
+            Alert.alert('Erreur', 'Impossible de modifier cette préférence de notification.');
+        }
     };
 
-    const handleBack = () => {
-        router.replace('/profile');
+    const handleTestNotification = async () => {
+        try {
+            if (!permissionGranted) {
+                const permission = await NotificationService.requestPermissions();
+                if (!permission) {
+                    Alert.alert(
+                        'Permissions refusées',
+                        'Impossible d\'envoyer une notification de test sans autorisation.'
+                    );
+                    return;
+                }
+                setPermissionGranted(true);
+            }
+
+            await NotificationService.scheduleTestNotification();
+            Alert.alert(
+                'Notification de test programmée',
+                'Vous recevrez une notification de test dans 15 secondes.'
+            );
+        } catch (error) {
+            console.error('Error scheduling test notification:', error);
+            Alert.alert('Erreur', 'Impossible de programmer la notification de test.');
+        }
     };
 
-    // Afficher un indicateur de chargement pendant l'initialisation
     if (isLoading) {
         return (
-            <PageTransitionWrapper animationType="slide" duration={300}>
-                <ScreenBackground>
-                    <View style={[styles.container, styles.loadingContainer]}>
-                        <Text style={[styles.loadingText, { color: theme.colors.text.primary }]}>
-                            Chargement des notifications...
-                        </Text>
-                    </View>
-                </ScreenBackground>
-            </PageTransitionWrapper>
+            <View style={[styles.container, styles.loadingContainer]}>
+                <Text style={[styles.loadingText, { color: theme.colors.text.primary }]}>
+                    Chargement des préférences...
+                </Text>
+            </View>
         );
     }
 
     return (
-        <PageTransitionWrapper animationType="slide" duration={300}>
-            <ScreenBackground>
-                <View style={[styles.container]}>
-                    {/* Header avec bouton retour */}
+        // Remplacez PageTransitionWrapper et ScreenBackground par vos composants ou <View>
+        <View style={styles.container}>
+            <View style={[styles.container]}>
+                {/* Header avec bouton retour */}
+                <View style={styles.headerContainer}>
+                    <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+                        <ChevronLeft size={24} color={isDarkBackground ? '#FFFFFF' : '#181818'} />
+                    </TouchableOpacity>
+                    <Text style={[styles.headerTitle, { color: isDarkBackground ? '#FFFFFF' : '#181818' }]}>
+                        Customise reminders
+                    </Text>
+                    <View style={styles.headerSpacer} />
+                </View>
 
-
-                    {/* Titre principal */}
-                    <View style={styles.headerContainer}>
-                        <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-                            <ChevronLeft size={24} color={isDarkBackground ? '#FFFFFF' : '#181818'} />
-                        </TouchableOpacity>
-                        <Text style={[styles.headerTitle, { color: isDarkBackground ? '#FFFFFF' : '#181818' }]}>
-                            Customise reminders
-                        </Text>
-
-                        <View style={styles.headerSpacer} />
+                <ScrollView
+                    style={styles.content}
+                    showsVerticalScrollIndicator={false}
+                >
+                    {/* All notifications - Séparé */}
+                    <View style={[styles.allNotificationsContainer, { backgroundColor: theme.colors.reminders.background }]}>
+                        <View style={styles.notificationContent}>
+                            <Text style={[styles.notificationTitle, { color: theme.colors.text.secondary }]}>
+                                All notifications
+                            </Text>
+                        </View>
+                        <Switch
+                            value={preferences.allNotifications}
+                            onValueChange={handleAllNotificationsToggle}
+                            trackColor={{ false: '#ffffff', true: isDarkBackground ? '#A92359' : '#7E0F3B' }}
+                            thumbColor={'#ffffff'}
+                            style={styles.switch}
+                        />
                     </View>
 
-
-                    <ScrollView
-                        style={styles.content}
-                        showsVerticalScrollIndicator={false}
-                    >
-                        {/* All notifications - Séparé */}
-                        <View style={[styles.allNotificationsContainer, { backgroundColor: theme.colors.reminders.background }]}>
+                    {/* Bloc des autres notifications */}
+                    <View style={[styles.notificationsBlock, { backgroundColor: theme.colors.reminders.background }]}>
+                        {/* Morning & Evening Adhkar */}
+                        <View style={styles.notificationBlockItem}>
                             <View style={styles.notificationContent}>
-                                <Text style={[styles.notificationTitle, { color: theme.colors.text.secondary }]}>
-                                    All notifications
+                                <View style={styles.notificationHeader}>
+                                    <Text style={styles.emoji}>🌅</Text>
+                                    <Text style={[styles.notificationTitle, { color: theme.colors.text.secondary }]}>
+                                        Morning & Evening Adhkar
+                                    </Text>
+                                </View>
+                                <Text style={[styles.notificationDescription, { color: theme.colors.text.primary }]}>
+                                    Your daily shield of protection. We'll remind you when it's time.
+                                </Text>
+                                <Text style={[styles.notificationTime, { color: theme.colors.text.primary }]}>
+                                    7:20 AM & 6:30 PM daily
                                 </Text>
                             </View>
                             <Switch
-                                value={allNotifications}
-                                onValueChange={handleAllNotificationsToggle}
+                                value={preferences.morningEvening}
+                                onValueChange={(value) => handleIndividualToggle('morningEvening', value)}
                                 trackColor={{ false: '#ffffff', true: isDarkBackground ? '#A92359' : '#7E0F3B' }}
                                 thumbColor={'#ffffff'}
                                 style={styles.switch}
                             />
                         </View>
 
-                        {/* Bloc des autres notifications */}
-                        <View style={[styles.notificationsBlock, { backgroundColor: theme.colors.reminders.background }]}>
-                            {/* Morning & Evening Adhkar */}
-                            <View style={styles.notificationBlockItem}>
-                                <View style={styles.notificationContent}>
-                                    <View style={styles.notificationHeader}>
-                                        <Text style={styles.emoji}>🌅</Text>
-                                        <Text style={[styles.notificationTitle, { color: theme.colors.text.secondary }]}>
-                                            Morning & Evening Adhkar
-                                        </Text>
-                                    </View>
-                                    <Text style={[styles.notificationDescription, { color: theme.colors.text.primary }]}>
-                                        Your daily shield of protection. We'll remind you when it's time.
-                                    </Text>
-                                    <Text style={[styles.notificationTime, { color: theme.colors.text.primary }]}>
-                                        7:00 AM & 6:30 PM daily
+                        {/* Séparateur */}
+                        <View style={[styles.separator, { backgroundColor: theme.colors.border }]} />
+
+                        {/* Jummah */}
+                        <View style={styles.notificationBlockItem}>
+                            <View style={styles.notificationContent}>
+                                <View style={styles.notificationHeader}>
+                                    <Text style={styles.emoji}>🕌</Text>
+                                    <Text style={[styles.notificationTitle, { color: theme.colors.text.secondary }]}>
+                                        Jummah
                                     </Text>
                                 </View>
-                                <Switch
-                                    value={morningEvening}
-                                    onValueChange={(value) => handleIndividualToggle(setMorningEvening, value, 'morningEvening')}
-                                    trackColor={{ false: '#ffffff', true: isDarkBackground ? '#A92359' : '#7E0F3B' }}
-                                    thumbColor={'#ffffff'}
-                                    style={styles.switch}
-                                />
+                                <Text style={[styles.notificationDescription, { color: theme.colors.text.primary }]}>
+                                    A Friday nudge to send salawat and read Surah Al-Kahf.
+                                </Text>
+                                <Text style={[styles.notificationTime, { color: theme.colors.text.primary }]}>
+                                    Fridays at 10:50 AM
+                                </Text>
                             </View>
-
-                            {/* Séparateur */}
-                            <View style={[styles.separator, { backgroundColor: theme.colors.border }]} />
-
-                            {/* Jummah */}
-                            <View style={styles.notificationBlockItem}>
-                                <View style={styles.notificationContent}>
-                                    <View style={styles.notificationHeader}>
-                                        <Text style={styles.emoji}>🕌</Text>
-                                        <Text style={[styles.notificationTitle, { color: theme.colors.text.secondary }]}>
-                                            Jummah
-                                        </Text>
-                                    </View>
-                                    <Text style={[styles.notificationDescription, { color: theme.colors.text.primary }]}>
-                                        A Friday nudge to send salawat and read Surah Al-Kahf.
-                                    </Text>
-                                    <Text style={[styles.notificationTime, { color: theme.colors.text.primary }]}>
-                                        Fridays at 12:00 PM
-                                    </Text>
-                                </View>
-                                <Switch
-                                    value={jummah}
-                                    onValueChange={(value) => handleIndividualToggle(setJummah, value, 'jummah')}
-                                    trackColor={{ false: '#ffffff', true: isDarkBackground ? '#A92359' : '#7E0F3B' }}
-                                    thumbColor={'#ffffff'}
-                                    style={styles.switch}
-                                />
-                            </View>
-
-                            {/* Séparateur */}
-                            <View style={[styles.separator, { backgroundColor: theme.colors.border }]} />
-
-                            {/* Daily Goals */}
-                            <View style={styles.notificationBlockItem}>
-                                <View style={styles.notificationContent}>
-                                    <View style={styles.notificationHeader}>
-                                        <Text style={styles.emoji}>🎯</Text>
-                                        <Text style={[styles.notificationTitle, { color: theme.colors.text.secondary }]}>
-                                            Daily Goals
-                                        </Text>
-                                    </View>
-                                    <Text style={[styles.notificationDescription, { color: theme.colors.text.primary }]}>
-                                        A timely reminder to help you reach your spiritual goals.
-                                    </Text>
-                                    <Text style={[styles.notificationTime, { color: theme.colors.text.primary }]}>
-                                        Daily at 8:00 PM
-                                    </Text>
-                                </View>
-                                <Switch
-                                    value={dailyGoals}
-                                    onValueChange={(value) => handleIndividualToggle(setDailyGoals, value, 'dailyGoals')}
-                                    trackColor={{ false: '#ffffff', true: isDarkBackground ? '#A92359' : '#7E0F3B' }}
-                                    thumbColor={'#ffffff'}
-                                    style={styles.switch}
-                                />
-                            </View>
+                            <Switch
+                                value={preferences.jummah}
+                                onValueChange={(value) => handleIndividualToggle('jummah', value)}
+                                trackColor={{ false: '#ffffff', true: isDarkBackground ? '#A92359' : '#7E0F3B' }}
+                                thumbColor={'#ffffff'}
+                                style={styles.switch}
+                            />
                         </View>
 
-                        {/* Message de contrôle */}
-                        <View style={styles.controlMessage}>
-                            <Text style={[styles.controlText, { color: theme.colors.text.primary }]}>
-                                You're in control. Turn these on or off anytime - no pressure.
-                            </Text>
-                        </View>
+                        {/* Séparateur */}
+                        <View style={[styles.separator, { backgroundColor: theme.colors.border }]} />
 
-                        <View style={styles.bottomSpacing} />
-                    </ScrollView>
-                </View>
-            </ScreenBackground>
-        </PageTransitionWrapper>
+                        {/* Daily Goals */}
+                        <View style={styles.notificationBlockItem}>
+                            <View style={styles.notificationContent}>
+                                <View style={styles.notificationHeader}>
+                                    <Text style={styles.emoji}>🎯</Text>
+                                    <Text style={[styles.notificationTitle, { color: theme.colors.text.secondary }]}>
+                                        Daily Goals
+                                    </Text>
+                                </View>
+                                <Text style={[styles.notificationDescription, { color: theme.colors.text.primary }]}>
+                                    A timely reminder to help you reach your spiritual goals.
+                                </Text>
+                                <Text style={[styles.notificationTime, { color: theme.colors.text.primary }]}>
+                                    Daily at 4:00 PM
+                                </Text>
+                            </View>
+                            <Switch
+                                value={preferences.dailyGoals}
+                                onValueChange={(value) => handleIndividualToggle('dailyGoals', value)}
+                                trackColor={{ false: '#ffffff', true: isDarkBackground ? '#A92359' : '#7E0F3B' }}
+                                thumbColor={'#ffffff'}
+                                style={styles.switch}
+                            />
+                        </View>
+                    </View>
+
+                    {/* Message de contrôle */}
+                    <View style={styles.controlMessage}>
+                        <Text style={[styles.controlText, { color: theme.colors.text.primary }]}>
+                            You're in control. Turn these on or off anytime - no pressure.
+                        </Text>
+                    </View>
+
+                    {/* Bouton de test */}
+                    <TouchableOpacity 
+                        style={[styles.testButton, { backgroundColor: isDarkBackground ? '#A92359' : '#7E0F3B' }]}
+                        onPress={handleTestNotification}
+                    >
+                        <Text style={styles.testButtonText}>
+                            Send Test Notification (15s)
+                        </Text>
+                    </TouchableOpacity>
+
+                    <View style={styles.bottomSpacing} />
+                </ScrollView>
+            </View>
+        </View>
     );
 }
 
@@ -426,6 +464,19 @@ const styles = StyleSheet.create({
         fontSize: 16,
         textAlign: 'center',
         lineHeight: 22,
+    },
+    testButton: {
+        marginHorizontal: 20,
+        paddingVertical: 18,
+        borderRadius: 30,
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    testButtonText: {
+        fontFamily: 'Sofia-Pro',
+        fontSize: 18,
+        color: '#FFFFFF',
+        fontWeight: '600',
     },
     continueButton: {
         marginHorizontal: 20,
