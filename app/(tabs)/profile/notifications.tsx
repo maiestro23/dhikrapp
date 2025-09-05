@@ -325,7 +325,7 @@ export default function NotificationsScreen() {
                             </Text>
                         </View>
 
-                        {/* Bouton de test */}
+                        {/* Bouton de test 
                         <TouchableOpacity
                             style={[styles.testButton, { backgroundColor: isDarkBackground ? '#A92359' : '#7E0F3B' }]}
                             onPress={handleTestNotification}
@@ -334,7 +334,7 @@ export default function NotificationsScreen() {
                                 Send Test Notification (15s)
                             </Text>
                         </TouchableOpacity>
-
+*/}
                         <View style={styles.bottomSpacing} />
                     </ScrollView>
                 </View>
