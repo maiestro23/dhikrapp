@@ -1,34 +1,34 @@
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '@/context/ThemeContext';
-import { ProfileBackground } from '@/components/ProfileBackground';
-import { SwipeBackWrapper } from '@/components/SwipeBackWrapper';
 import { ScreenBackground } from '@/components/ScreenBackground';
+import { ChevronLeft } from 'lucide-react-native';
+import { PageTransitionWrapper } from '@/components/PageTransitionWrapper';
 
 export default function TermsScreen() {
   const router = useRouter();
-  const { theme } = useTheme();
+  const { theme, isDarkBackground } = useTheme();
 
-  const handleSwipeBack = () => {
+  const handleBack = () => {
     router.replace('/profile');
   };
 
   return (
-
-    <SwipeBackWrapper
-      onSwipeBack={handleSwipeBack}
-      backgroundComponent={<ProfileBackground />}
-    >
+    <PageTransitionWrapper animationType="slide" duration={300}>
       <ScreenBackground>
-
+        <View style={styles.headerContainer}>
+          <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+            <ChevronLeft size={24} color={isDarkBackground ? '#FFFFFF' : '#181818'} />
+          </TouchableOpacity>
+          <Text style={[styles.headerTitle, { color: isDarkBackground ? '#FFFFFF' : '#181818' }]}>
+            Terms of Service
+          </Text>
+          <View style={styles.headerSpacer} />
+        </View>
 
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-          <View style={styles.header}>
-            <Text style={[styles.title]}>Terms of Service</Text>
-          </View>
           <View style={styles.section}>
-            <Text style={[styles.date ]}>
+            <Text style={[styles.date]}>
               Effective Date: 19/03/2025
             </Text>
 
@@ -108,7 +108,7 @@ export default function TermsScreen() {
           </View>
         </ScrollView>
       </ScreenBackground>
-    </SwipeBackWrapper>
+    </PageTransitionWrapper>
   );
 }
 
@@ -116,9 +116,32 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
+
+  headerContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 20,
   },
+
+  backButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerTitle: {
+    fontFamily: 'Sofia-Pro-Regular',
+    fontSize: 22,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  headerSpacer: {
+    width: 40,
+  },
+
   title: {
     fontFamily: 'Classico', // EXACT : Font cohérente
     fontSize: 30, // EXACT : Taille du titre

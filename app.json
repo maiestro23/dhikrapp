@@ -2,26 +2,31 @@
   "expo": {
     "name": "Khair",
     "slug": "dhikr-app",
-    "version": "3.0.0",
+    "version": "3.0.2",
     "orientation": "portrait",
     "icon": "./assets/images/khairlogo.jpg",
     "scheme": "dhikrapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "backgroundColor": "#FFF8F0",
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.maiestro23.dhikrapp",
+      "backgroundColor": "#FFF8F0",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "UIViewControllerBasedStatusBarAppearance": false
       }
     },
     "web": {
       "bundler": "metro",
-      "output": "single"
+      "output": "single",
+      "backgroundColor": "#FFF8F0"
     },
     "plugins": [
       "expo-router",
-      "expo-font"
+      "expo-font",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true,

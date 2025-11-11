@@ -1,29 +1,40 @@
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/context/ThemeContext';
 import { ScreenBackground } from '@/components/ScreenBackground';
-import { SwipeBackWrapper } from '@/components/SwipeBackWrapper';
-import { ProfileBackground } from '@/components/ProfileBackground';
+import { ChevronLeft } from 'lucide-react-native';
+import { PageTransitionWrapper } from '@/components/PageTransitionWrapper';
 
 export default function PrivacyScreen() {
   const router = useRouter();
-  const { theme } = useTheme();
+  const { theme, isDarkBackground } = useTheme();
 
 
-  const handleSwipeBack = () => {
+
+  const handleBack = () => {
     router.replace('/profile');
   };
 
   return (
-    <SwipeBackWrapper
-      onSwipeBack={handleSwipeBack}
-      backgroundComponent={<ProfileBackground />}
-    >
+
+    <PageTransitionWrapper animationType="slide" duration={300}>
       <ScreenBackground>
+
+        <View style={styles.headerContainer}>
+          <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+            <ChevronLeft size={24} color={isDarkBackground ? '#FFFFFF' : '#181818'} />
+          </TouchableOpacity>
+          <Text style={[styles.headerTitle, { color: isDarkBackground ? '#FFFFFF' : '#181818' }]}>
+            Privacy Policy
+          </Text>
+          <View style={styles.headerSpacer} />
+        </View>
+
+
+
+
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-          <View style={styles.header}>
-            <Text style={[styles.title]}>Privacy Policy</Text>
-          </View>
+
 
           <View style={styles.section}>
             <Text style={[styles.date, { color: theme.colors.text.primary }]}>
@@ -96,7 +107,7 @@ export default function PrivacyScreen() {
           </View>
         </ScrollView>
       </ScreenBackground>
-    </SwipeBackWrapper>
+    </PageTransitionWrapper>
   );
 }
 
@@ -104,8 +115,30 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
+
+  headerContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 20,
+  },
+
+  backButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerTitle: {
+    fontFamily: 'Sofia-Pro-Regular',
+    fontSize: 22,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  headerSpacer: {
+    width: 40,
   },
   title: {
     fontFamily: 'Classico', // EXACT : Font cohérente
@@ -115,7 +148,7 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: 20, // EXACT : 20px de chaque côté
-    paddingTop:20,
+    paddingTop: 20,
     flex: 1,
   },
   section: {

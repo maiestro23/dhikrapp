@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,9 @@ import { Search } from 'lucide-react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { ScreenBackground } from '../../components/ScreenBackground';
 import { router } from 'expo-router';
+import { PageTransitionWrapper } from '@/components/PageTransitionWrapper';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useFocusEffect } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
@@ -39,7 +42,7 @@ const categories = [
     title: 'After\nSalah',
     subtitle: 'Seek forgiveness and purification',
     // Image spirituelle/mosque ou montagne
-    backgroundImage: require('../../assets/images/Istighfar_bg.png'), // Remplacez par votre chemin d'image
+    backgroundImage: require('../../assets/images/After_salah_bg.png'), // Remplacez par votre chemin d'image
     icon: '🤲'
   },
   {
@@ -47,9 +50,82 @@ const categories = [
     title: 'Istighfar',
     subtitle: 'Protection through the night',
     // Image de nuit étoilée
-    backgroundImage: require('../../assets/images/Night_bg.png'), // Remplacez par votre chemin d'image
+    backgroundImage: require('../../assets/images/Istighfar_bg.png'), // Remplacez par votre chemin d'image
     icon: '🌙'
-  }
+  },
+
+  // NEW Categories
+  {
+    id: 'upon',
+    title: 'Upon\nWaking',
+    subtitle: 'Seek forgiveness and purification',
+    // Image spirituelle/mosque ou montagne
+    backgroundImage: require('../../assets/images/Upon_waking_bg.png'), // Remplacez par votre chemin d'image
+    icon: '🤲'
+  },
+
+  {
+    id: 'before',
+    title: 'Before\nSleeping',
+    subtitle: 'Seek forgiveness and purification',
+    // Image spirituelle/mosque ou montagne
+    backgroundImage: require('../../assets/images/Before_sleeping_bg.png'), // Remplacez par votre chemin d'image
+    icon: '🤲'
+  },
+
+  {
+    id: 'surahs',
+    title: 'Surahs of\nProtection',
+    subtitle: 'Seek forgiveness and purification',
+    // Image spirituelle/mosque ou montagne
+    backgroundImage: require('../../assets/images/Surahs_protection_bg.png'), // Remplacez par votre chemin d'image
+    icon: '🤲'
+  },
+
+  {
+    id: 'salawat',
+    title: 'Salawat',
+    subtitle: 'Seek forgiveness and purification',
+    // Image spirituelle/mosque ou montagne
+    backgroundImage: require('../../assets/images/Salawat_bg.png'), // Remplacez par votre chemin d'image
+    icon: '🤲'
+  },
+
+  {
+    id: 'travel',
+    title: 'Travel',
+    subtitle: 'Seek forgiveness and purification',
+    // Image spirituelle/mosque ou montagne
+    backgroundImage: require('../../assets/images/Travel_bg.png'), // Remplacez par votre chemin d'image
+    icon: '🤲'
+  },
+
+  {
+    id: 'anxiety',
+    title: 'Anxiety\nRelief',
+    subtitle: 'Seek forgiveness and purification',
+    // Image spirituelle/mosque ou montagne
+    backgroundImage: require('../../assets/images/Anxiety_bg.png'), // Remplacez par votre chemin d'image
+    icon: '🤲'
+  },
+
+    {
+    id: 'rizq',
+    title: 'Increase\nRizq',
+    subtitle: 'Seek forgiveness and purification',
+    // Image spirituelle/mosque ou montagne
+    backgroundImage: require('../../assets/images/Rizq_bg.png'), // Remplacez par votre chemin d'image
+    icon: '🤲'
+  },
+
+  {
+    id: 'evilEye',
+    title: 'Evil Eye',
+    subtitle: 'Seek forgiveness and purification',
+    // Image spirituelle/mosque ou montagne
+    backgroundImage: require('../../assets/images/Evil_eye_bg.png'), // Remplacez par votre chemin d'image
+    icon: '🤲'
+  },
 ];
 
 // Données pour la section Tasbih
@@ -67,23 +143,8 @@ const countOptions = [
   { id: '500x', label: '500x' },
   { id: 'custom', label: 'Custom' }
 ];
+//const { theme } = useTheme();
 
-// Composant pour les onglets General/Favourites - EXACT du design
-const TabButton = ({ title, onPress }: any) => (
-  <TouchableOpacity
-    style={[
-      styles.tabButton,
-    ]}
-    onPress={onPress}
-    activeOpacity={0.8}
-  >
-    <Text style={[
-      styles.tabButtonText,
-    ]}>
-      {title}
-    </Text>
-  </TouchableOpacity>
-);
 
 // Composant pour une carte de catégorie - MODIFIÉ avec ImageBackground
 const CategoryCard = ({ category, onPress }: any) => (
@@ -121,44 +182,35 @@ const TasbihButton = ({ item, onPress }: any) => (
   </TouchableOpacity>
 );
 
-// Nouveau composant pour les boutons de comptage
-const CountButton = ({ option, isSelected, onPress, customCount }: any) => {
-  // Afficher le nombre custom au lieu de "Custom" si un nombre est entré
-  const displayText = option.id === 'custom' && customCount && parseInt(customCount) > 0
-    ? customCount
-    : option.label;
-
-  return (
-    <TouchableOpacity
-      style={[
-        styles.countButton,
-        isSelected && styles.countButtonSelected
-      ]}
-      onPress={() => onPress(option)}
-      activeOpacity={0.8}
-    >
-      <Text style={[
-        styles.countButtonText,
-        isSelected && styles.countButtonTextSelected
-      ]}>
-        {displayText}
-      </Text>
-    </TouchableOpacity>
-  );
-};
-
 export default function DiscoverScreen() {
-  const { theme } = useTheme();
+  const { theme, isDarkBackground } = useTheme();
   const [activeTab, setActiveTab] = useState('General');
   const [searchQuery, setSearchQuery] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
 
   // Nouveaux états pour la section Tasbih
   const [selectedCount, setSelectedCount] = useState('33x');
   const [customCount, setCustomCount] = useState('');
   const hiddenInputRef = useRef<TextInput>(null);
 
+  // Réinitialiser l'état quand on revient sur l'écran
+  useFocusEffect(
+    React.useCallback(() => {
+      setSearchQuery('');
+      setIsSearching(false);
+      setSelectedCount('33x');
+      setCustomCount('');
+    }, [])
+  );
+
   // ✅ FONCTION NAVIGATION CORRIGÉE - Navigation vers DhikrScreen avec paramètres
   const handleCategoryPress = (category: any) => {
+    // Réinitialiser l'état de recherche avant la navigation
+    if (isSearching) {
+      setSearchQuery('');
+      setIsSearching(false);
+    }
+    
     router.push({
       pathname: '/(tabs)',
       params: {
@@ -211,121 +263,249 @@ export default function DiscoverScreen() {
     });
   };
 
-  // Filtrer les catégories selon la recherche - FONCTIONNALITÉ EXACTE
+  // Fonction pour gérer les changements dans la recherche
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+    setIsSearching(value.length > 0);
+  };
+
+  // Fonction pour annuler la recherche
+  const handleCancelSearch = () => {
+    setSearchQuery('');
+    setIsSearching(false);
+  };
+
+  // Filtrer les catÃ©gories selon la recherche - FONCTIONNALITÃ‰ EXACTE
   const filteredCategories = categories.filter(category =>
     category.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  return (
-    <ScreenBackground>
-      <View style={styles.container}>
-        {/* ===== HEADER - EXACT du design ===== */}
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>Discover</Text>
-          <Text style={styles.headerSubtitle}>
-            Your personal adhkar library
-          </Text>
-        </View>
-
-        {/* ===== BARRE DE RECHERCHE - EXACT du design ===== */}
-        <View style={styles.searchContainer}>
-          <View style={styles.searchInputContainer}>
-            <Search size={20} color="#8C8F7B" style={styles.searchIcon} />
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Search"
-              placeholderTextColor="#8C8F7B"
-              value={searchQuery}
-              onChangeText={setSearchQuery}
-            />
-          </View>
-        </View>
-
-        {/* ===== SECTION CATEGORIES - EXACT du design ===== */}
-        <View style={styles.categoriesSection}>
-          <ScrollView
-            style={styles.categoriesContainer}
-            showsVerticalScrollIndicator={false}
+  // Composant pour les onglets General/Favourites - MODIFIÉ pour différencier les boutons
+  const TabButton = ({ title, onPress }: any) => {
+    const isGeneral = title === 'General';
+    
+    if (isGeneral) {
+      // Bouton General avec background uni
+      return (
+        <TouchableOpacity
+          onPress={onPress}
+          activeOpacity={0.8}
+          style={styles.tabButton}
+        >
+          <View
+            style={[
+              styles.tabButtonSolid,
+              { 
+                backgroundColor: theme.colors.discover.tabButton.generalBackground,
+                borderColor: theme.colors.discover.tabButton.borderColor 
+              }
+            ]}
           >
-            {/* ===== ONGLETS General/Favourites - EXACT du design ===== */}
-            <View style={styles.tabsContainer}>
-              <TabButton
-                title="General"
-                onPress={() => handleCategoryPress({ id: 'General', title: 'General' })}
-              />
-              <TabButton
-                title="Favourites"
-                onPress={() => handleCategoryPress({ id: 'favourites', title: 'Favourites' })}
+            <Text style={[
+              styles.tabButtonText,
+              { color: theme.colors.discover.tabButton.textColor }
+            ]}>
+              {title}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      );
+    } else {
+      // Bouton Favourites avec gradient (code existant)
+      return (
+        <TouchableOpacity
+          onPress={onPress}
+          activeOpacity={0.8}
+          style={styles.tabButton}
+        >
+          <LinearGradient
+            colors={isDarkBackground ?
+              [theme.colors.discover.tabButton.gradientStart, theme.colors.discover.tabButton.gradientEnd] :
+              [theme.colors.discover.tabButton.gradientStart, theme.colors.discover.tabButton.gradientEnd]
+            }
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={[
+              styles.tabButtonGradient,
+              { borderColor: theme.colors.discover.tabButton.borderColor }
+            ]}
+          >
+            <Text style={[
+              styles.tabButtonText,
+              { color: theme.colors.discover.tabButton.textColor }
+            ]}>
+              {title}
+            </Text>
+          </LinearGradient>
+        </TouchableOpacity>
+      );
+    }
+  };
+
+
+
+  // Nouveau composant pour les boutons de comptage
+  const CountButton = ({ option, isSelected, onPress, customCount }: any) => {
+    // Afficher le nombre custom au lieu de "Custom" si un nombre est entrÃ©
+    const displayText = option.id === 'custom' && customCount && parseInt(customCount) > 0
+      ? customCount
+      : option.label;
+
+    return (
+      <TouchableOpacity
+        style={[
+          styles.countButton,
+          {
+            backgroundColor: theme.colors.discover.tasbishButton.backgroundColor,
+            borderColor: theme.colors.discover.tasbishButton.borderColor,
+            //color: theme.colors.discover.tasbishButton.textColor
+          },
+          isSelected && styles.countButtonSelected
+        ]}
+        onPress={() => onPress(option)}
+        activeOpacity={0.8}
+      >
+        <Text style={[
+          styles.countButtonText,
+          { color: theme.colors.discover.tasbishButton.textColor },
+
+          isSelected && styles.countButtonTextSelected,
+        ]}>
+          {displayText}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+
+
+
+  return (
+    <PageTransitionWrapper duration={1000}>
+      <ScreenBackground>
+        <View style={styles.container}>
+          {/* ===== HEADER - Toujours visible ===== */}
+          <View style={styles.header}>
+            <Text style={[styles.headerTitle, { color: theme.colors.discover.hearderTitle }]}>Discover</Text>
+            <Text style={[styles.headerSubtitle, { color: theme.colors.discover.hearderSubTitle }]}>
+              Your personal adhkar library
+            </Text>
+          </View>
+
+          {/* ===== BARRE DE RECHERCHE - Modifiée pour inclure le bouton Cancel ===== */}
+          <View style={styles.searchContainer}>
+            <View style={styles.searchInputContainer}>
+              <Search size={20} color="#8C8F7B" style={styles.searchIcon} />
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Search"
+                placeholderTextColor="#8C8F7B"
+                value={searchQuery}
+                onChangeText={handleSearchChange}
               />
             </View>
+            {isSearching && (
+              <TouchableOpacity 
+                style={styles.cancelButton} 
+                onPress={handleCancelSearch}
+                activeOpacity={0.7}
+              >
+                <Text style={[styles.cancelButtonText, { color: theme.colors.discover.cancel }]}>
+                  Cancel
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
 
-            {/* ===== SECTION TASBIH - MISE À JOUR ===== */}
-            <View style={styles.tasbihSection}>
-              <Text style={styles.sectionTitle}>Tasbih</Text>
-              <Text style={styles.sectionSubtitle}>Custom dhikr sessions</Text>
+          {/* ===== SECTION CATEGORIES - EXACT du design ===== */}
+          <View style={styles.categoriesSection}>
+            <ScrollView
+              style={styles.categoriesContainer}
+              showsVerticalScrollIndicator={false}
+            >
+              {/* ===== ONGLETS General/Favourites - Masqués pendant la recherche ===== */}
+              {!isSearching && (
+                <View style={styles.tabsContainer}>
+                  <TabButton
+                    title="General"
+                    onPress={() => handleCategoryPress({ id: 'General', title: 'General' })}
+                  />
+                  <TabButton
+                    title="Favourites"
+                    onPress={() => handleCategoryPress({ id: 'favourites', title: 'Favourites' })}
+                  />
+                </View>
+              )}
 
-              {/* Section de sélection du nombre - MODIFIÉE */}
-              <View style={styles.countSection}>
-                <View style={styles.countRow}>
+              {/* ===== SECTION TASBIH - Masquée pendant la recherche ===== */}
+              {!isSearching && (
+                <View style={styles.tasbihSection}>
+                  <Text style={[styles.sectionTitle, { color: theme.colors.text.secondary }]}>Tasbih</Text>
+                  {/* Section de sélection du nombre - MODIFIÉE */}
+                  <View style={styles.countSection}>
+                    <View style={styles.countRow}>
 
-                  <View style={styles.countOptionsContainer}>
+                      <View style={styles.countOptionsContainer}>
+                        <Text style={[styles.countLabelText, { color: theme.colors.discover.countLabel }]}>Count: </Text>
+                        {countOptions.map((option) => (
+                          <CountButton
+                            key={option.id}
+                            option={option}
+                            isSelected={selectedCount === option.id}
+                            onPress={handleCountSelection}
+                            customCount={customCount}
+                          />
+                        ))}
+                      </View>
+                    </View>
 
-                    {countOptions.map((option) => (
-                      <CountButton
-                        key={option.id}
-                        option={option}
-                        isSelected={selectedCount === option.id}
-                        onPress={handleCountSelection}
-                        customCount={customCount}
+                    {/* Input caché pour capturer la saisie */}
+                    <TextInput
+                      ref={hiddenInputRef}
+                      style={styles.hiddenInput}
+                      value={customCount}
+                      onChangeText={handleCustomCountChange}
+                      returnKeyType="done"
+                      autoFocus={false}
+                      keyboardType="number-pad"
+                      maxLength={3}
+                    />
+                  </View>
+
+                  {/* Boutons Tasbih */}
+                  <View style={styles.tasbihGrid}>
+                    {tasbihItems.map((item, index) => (
+                      <TasbihButton
+                        key={item.id}
+                        item={item}
+                        onPress={handleTasbihPress}
                       />
                     ))}
                   </View>
                 </View>
+              )}
 
-                {/* Input caché pour capturer la saisie */}
-                <TextInput
-                  ref={hiddenInputRef}
-                  style={styles.hiddenInput}
-                  value={customCount}
-                  onChangeText={handleCustomCountChange}
-                  returnKeyType="done"
-                  autoFocus={false}
-                  keyboardType="number-pad"
-                  maxLength={3}
-                />
-              </View>
-
-              {/* Boutons Tasbih */}
-              <View style={styles.tasbihGrid}>
-                {tasbihItems.map((item, index) => (
-                  <TasbihButton
-                    key={item.id}
-                    item={item}
-                    onPress={handleTasbihPress}
+              {!isSearching && (
+                <Text style={[styles.sectionTitle, { color: theme.colors.text.secondary }]}>Categories</Text>
+              )}
+              
+              {/* Grille de catégories 2x2 - Toujours visible mais filtrée */}
+              <View style={styles.categoriesGrid}>
+                {filteredCategories.map((category, index) => (
+                  <CategoryCard
+                    key={category.id}
+                    category={category}
+                    onPress={handleCategoryPress}
                   />
                 ))}
               </View>
-            </View>
 
-            <Text style={styles.sectionTitle}>Categories</Text>
-            <Text style={styles.sectionSubtitle}>Curated adhkar for every occasion</Text>
-            {/* Grille de catégories 2x2 - EXACT du design */}
-            <View style={styles.categoriesGrid}>
-              {filteredCategories.map((category, index) => (
-                <CategoryCard
-                  key={category.id}
-                  category={category}
-                  onPress={handleCategoryPress}
-                />
-              ))}
-            </View>
-
-            {/* Espacement en bas pour éviter la collision avec la navigation */}
-            <View style={styles.bottomSpacing} />
-          </ScrollView>
+              {/* Espacement en bas pour éviter la collision avec la navigation */}
+              <View style={styles.bottomSpacing} />
+            </ScrollView>
+          </View>
         </View>
-      </View>
-    </ScreenBackground>
+      </ScreenBackground>
+    </PageTransitionWrapper>
   );
 }
 
@@ -354,17 +534,20 @@ const styles = StyleSheet.create({
     opacity: 0.8, // EXACT : Légère transparence
   },
 
-  // ===== SEARCH BAR STYLES - EXACT du design =====
+  // ===== SEARCH BAR STYLES - Modifiés pour le bouton Cancel =====
   searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 14, // EXACT : Espacement sous la barre de recherche
   },
   searchInputContainer: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.9)', // EXACT : Background blanc semi-transparent
-    borderRadius: 12, // EXACT : Coins arrondis
+    borderRadius: 22, // EXACT : Coins arrondis
     paddingHorizontal: 16, // EXACT : Padding horizontal
-    paddingVertical: 12, // EXACT : Padding vertical
+    paddingVertical: 14, // EXACT : Padding vertical
     shadowColor: '#000', // EXACT : Couleur de l'ombre
     shadowOffset: {
       width: 0,
@@ -383,6 +566,17 @@ const styles = StyleSheet.create({
     fontSize: 16, // EXACT : Taille du texte
     color: '#181818', // EXACT : Couleur du texte
   },
+  // Nouveaux styles pour le bouton Cancel
+  cancelButton: {
+    marginLeft: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  cancelButtonText: {
+    fontFamily: 'Sofia-Pro-Light',
+    fontSize: 16,
+    color: '#181818',
+  },
 
   // ===== TABS STYLES - MODIFIÉS SELON LE DESIGN =====
   tabsContainer: {
@@ -393,24 +587,33 @@ const styles = StyleSheet.create({
   tabButton: {
     flex: 1,
     marginTop: 12,
+    borderRadius: 10, // Plus arrondi
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  tabButtonGradient: {
     paddingVertical: 26, // Plus de padding vertical
     paddingHorizontal: 24,
     borderRadius: 10, // Plus arrondi
-    backgroundColor: '#7E0F3B', // Background plus opaque pour l'état inactif
-    borderWidth: 2, // Bordure de 2px
-    borderColor: '#FFFFFF', // Bordure blanche
+    borderWidth: 1, // Bordure de 2px
     alignItems: 'center',
-    shadowRadius: 4,
-    elevation: 3,
+  },
+  // NOUVEAU : Style pour le bouton avec background uni
+  tabButtonSolid: {
+    paddingVertical: 26,
+    paddingHorizontal: 24,
+    borderRadius: 10,
+    borderWidth: 1,
+    alignItems: 'center',
   },
   tabButtonText: {
     fontFamily: 'Sofia-Pro',
     fontSize: 16,
-    color: '#fff', // Couleur pour l'état inactif
+    color: '#fff', // Couleur pour l'Ã©tat inactif
     fontWeight: '500',
   },
 
-  // ===== TASBIH SECTION STYLES - MODIFIÉS =====
+  // ===== TASBIH SECTION STYLES - MODIFIÃ‰S =====
   tasbihSection: {
     marginBottom: 22,
   },
@@ -418,19 +621,19 @@ const styles = StyleSheet.create({
     fontFamily: 'Classico', // EXACT : Font du titre de section
     fontSize: 26, // EXACT : Taille du titre
     color: '#181818', // EXACT : Couleur du titre
-    marginBottom: 8,
+    paddingBottom: 10,
   },
   sectionSubtitle: {
     fontFamily: 'Sofia-Pro-Light',
     fontSize: 16,
-    color: '#8C8F7B', // EXACT : Gris-vert du design
-    //    color: '#8C8F7B',
+    color: '#8C8F7B',
     marginBottom: 20,
+    marginLeft: 8
   },
 
-  // ===== STYLES MODIFIÉS POUR LA SÉLECTION DE COMPTAGE =====
+  // ===== STYLES MODIFIÃ‰S POUR LA SÃ‰LECTION DE COMPTAGE =====
   countSection: {
-    marginBottom: 20,
+    marginBottom: 8,
   },
   countRow: {
     flexDirection: 'row',
@@ -452,29 +655,44 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     fontFamily: 'Sofia-Pro',
   },
-  countButton: {
-    flex: 1,
-    marginHorizontal: 4,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+  countLabelText: {
+    paddingVertical: 6,
     borderRadius: 28,
     alignItems: 'center',
-    borderWidth: 1,
+    fontSize: 16,
+    fontFamily: 'Sofia-Pro-Light',
+    marginRight: 10
+  },
+
+  countButton: {
+    flex: 1,
+    marginHorizontal: 8,
+    //paddingVertical: 10,
+    //backgroundColor: 'rgba(255, 255, 255, 0.9)',
+
+    backgroundColor: '#340317',
+
+
+    borderRadius: 28,
+    alignItems: 'center',
+    //borderWidth: 0.5,
     borderColor: '#E0E0E0',
+    height: 30,
+    justifyContent: "center"
   },
   countButtonSelected: {
-    backgroundColor: '#8C8F7B',
-    //borderColor: '#7E0F3B',
+    backgroundColor: '#931748',
+    borderWidth: 0.5,
   },
   countButtonText: {
-    fontFamily: 'Sofia-Pro',
+    fontFamily: 'Sofia-Pro-ExtraLight',
     fontSize: 14,
-    color: '#8C8F7B',
-    //    fontWeight: '500',
+    //    color: '#8C8F7B',
+    color: '#FFF',
   },
   countButtonTextSelected: {
     color: '#FFFFFF',
+    fontFamily: 'Sofia-Pro'
   },
   customInputContainer: {
     marginTop: 8,
@@ -504,10 +722,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    //gap: 4,
+    //gap: 2,
   },
   tasbihButton: {
-    width: (width - 56) / 2, // Ajusté pour le gap et padding
+    width: (width - 56) / 2, // AjustÃ© pour le gap et padding
     paddingVertical: 12,
     paddingHorizontal: 20,
     backgroundColor: '#7E0F3B',
@@ -544,7 +762,7 @@ const styles = StyleSheet.create({
     gap: 16, // EXACT : Espace entre les cartes
   },
 
-  // ===== CATEGORY CARD STYLES - MODIFIÉS POUR LES IMAGES =====
+  // ===== CATEGORY CARD STYLES - MODIFIÃ‰S POUR LES IMAGES =====
   categoryCard: {
     width: (width - 56) / 2, // EXACT : 56 = 20*2 (padding) + 16 (gap)
     height: (width - 56) / 2, // EXACT : Hauteur des cartes
@@ -552,18 +770,18 @@ const styles = StyleSheet.create({
     borderRadius: 16, // EXACT : Coins arrondis des cartes
     overflow: 'hidden',
     shadowColor: '#000', // EXACT : Couleur de l'ombre
-    elevation: 8, // EXACT : Élévation Android
+    elevation: 8, // EXACT : Ã‰lÃ©vation Android
   },
   // NOUVEAU : Style pour ImageBackground
   categoryCardBackground: {
     flex: 1,
     position: 'relative',
   },
-  // NOUVEAU : Style pour l'image elle-même
+  // NOUVEAU : Style pour l'image elle-mÃªme
   categoryCardImage: {
     borderRadius: 16, // Assure que l'image respecte les coins arrondis
   },
-  // MODIFIÉ : Overlay plus sombre pour améliorer la lisibilité
+  // MODIFIÃ‰ : Overlay plus sombre pour amÃ©liorer la lisibilitÃ©
   categoryCardOverlay: {
     position: 'absolute',
     top: 0,
@@ -595,7 +813,7 @@ const styles = StyleSheet.create({
   categorySubtitle: {
     fontFamily: 'Sofia-Pro-Light', // EXACT : Font des sous-titres
     fontSize: 12, // EXACT : Taille des sous-titres
-    color: 'rgba(255, 255, 255, 0.95)', // LÉGÈREMENT MODIFIÉ : Plus opaque pour meilleure lisibilité
+    color: 'rgba(255, 255, 255, 0.95)', // LÃ‰GÃˆREMENT MODIFIÃ‰ : Plus opaque pour meilleure lisibilitÃ©
     textAlign: 'center',
   },
 

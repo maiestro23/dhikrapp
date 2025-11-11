@@ -1,4 +1,4 @@
-import {
+ import {
   View,
   Text,
   StyleSheet,
@@ -14,14 +14,15 @@ import { useProgressStore } from '@/stores/progressStore';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '@/context/ThemeContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { SwipeBackWrapper } from '@/components/SwipeBackWrapper';
-import { ProfileBackground } from '@/components/ProfileBackground'; // Nouveau composant
+import { ScreenBackground } from '@/components/ScreenBackground';
+import { ChevronLeft } from 'lucide-react-native';
+import { PageTransitionWrapper } from '@/components/PageTransitionWrapper';
 
 const goalOptions = [
-  { count: 100, time: '2 mins a day' },
-  { count: 500, time: '10 mins a day' },
-  { count: 1000, time: '20 mins a day' },
-  { count: 3000, time: '60 mins a day' },
+  { count: 100, time: '3 mins a day' },
+  { count: 300, time: '10 mins a day' },
+  { count: 1000, time: '30 mins a day' },
+  { count: 3000, time: '90 mins a day' },
 ];
 
 export default function GoalSelectionScreen() {
@@ -29,7 +30,7 @@ export default function GoalSelectionScreen() {
   const [selectedGoal, setSelectedGoal] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { setDailyGoal, dailyGoal } = useProgressStore();
-  const { theme } = useTheme();
+  const { theme, isDarkBackground } = useTheme();
   const insets = useSafeAreaInsets();
 
   const handleBack = () => {
@@ -40,7 +41,11 @@ export default function GoalSelectionScreen() {
     setSelectedGoal(count);
     setCustomGoal('');
     setError(null);
+
+    // Mettre à jour immédiatement le goal
+    setDailyGoal(count);
   };
+
 
   const handleCustomGoalChange = (text: string) => {
     if (text === '' || /^\d+$/.test(text)) {
@@ -50,42 +55,46 @@ export default function GoalSelectionScreen() {
     }
   };
 
-  const validateAndStart = () => {
-    const goal = selectedGoal || (customGoal ? parseInt(customGoal, 10) : null);
+  const handleCustomGoalSubmit = () => {
+    if (customGoal && customGoal.trim() !== '') {
+      const goal = parseInt(customGoal, 10);
 
-    if (!goal) {
-      setError('Please select or enter a goal');
-      return;
+      if (goal <= 0) {
+        setError('Goal must be greater than 0');
+        return;
+      }
+
+      if (goal > 10000) {
+        setError('Goal cannot exceed 10,000');
+        return;
+      }
+
+      // Mettre à jour le goal custom
+      setDailyGoal(goal);
+      setSelectedGoal(null);
+      setError(null);
     }
-
-    if (goal <= 0) {
-      setError('Goal must be greater than 0');
-      return;
-    }
-
-    if (goal > 10000) {
-      setError('Goal cannot exceed 10,000');
-      return;
-    }
-
-    setDailyGoal(goal);
-    router.replace('/profile');
   };
 
   return (
-    <SwipeBackWrapper
-      onSwipeBack={handleBack}
-      backgroundComponent={<ProfileBackground />}
-    >
-      <LinearGradient
-        colors={['rgb(240,244,234)', 'rgb(251,248,244)', 'rgb(251,240,238)']}
-        locations={[0.158, 0.5112, 0.8644]}
-        style={styles.container}
-      >
+    <PageTransitionWrapper animationType="slide" duration={300}>
+      <ScreenBackground>
         <KeyboardAvoidingView
           style={styles.container}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
+          {/* Header avec bouton retour */}
+
+          <View style={styles.headerContainer}>
+            <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+              <ChevronLeft size={24} color={isDarkBackground ? '#FFFFFF' : '#181818'} />
+            </TouchableOpacity>
+            <Text style={[styles.headerTitle, { color: isDarkBackground ? '#FFFFFF' : '#181818' }]}>
+              Daily Goal
+            </Text>
+            <View style={styles.headerSpacer} />
+          </View>
+
           <ScrollView
             style={styles.scrollView}
             contentContainerStyle={[
@@ -94,98 +103,143 @@ export default function GoalSelectionScreen() {
             ]}
             keyboardShouldPersistTaps="handled"
           >
+
             <View style={styles.content}>
-              <View style={styles.header}>
-                <Text style={styles.title}>
-                  Daily Goal
-                </Text>
+              {/* Current Goal Badge */}
+              <LinearGradient
+                colors={isDarkBackground ?
+                  ['#F5F4E4', '#FFD7DF'] :
+                  ['#F5F4E4', '#FFD7DF']
+                }
+                locations={[0.1541, 0.829]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 0.8, y: 1 }}
+                style={styles.currentGoalContainer}
+              >
+                <Text style={styles.currentGoalLabel}>Your Current Goal:</Text>
+                <View style={styles.currentGoalBadge}>
+                  <Text style={styles.currentGoalValue}>{dailyGoal}</Text>
+                </View>
+              </LinearGradient>
 
-                <Text style={styles.currentDailyGoal}>
-                  Current Goal: {dailyGoal}
-                </Text>
-              </View>
-
+              {/* Goals Grid */}
               <View style={styles.goalsGrid}>
-                {goalOptions.map((option) => (
-                  <TouchableOpacity
-                    key={option.count}
-                    style={[
-                      styles.goalCard,
-                      selectedGoal === option.count && styles.selectedGoal,
-                    ]}
-                    onPress={() => handleGoalSelect(option.count)}
-                  >
-                    <Text
+                {goalOptions.map((option) => {
+                  const isSelected = selectedGoal === option.count;
+
+                  return (
+                    <TouchableOpacity
+                      key={option.count}
                       style={[
-                        styles.goalCount,
-                        selectedGoal === option.count && styles.selectedText,
+                        styles.goalCard,
+                        {
+                          backgroundColor: isDarkBackground ? '#7E0F3B' : '#FFFFFF',
+                          borderColor: isSelected ? (isDarkBackground ? '#FFFFFF' : '#8B1538') : (isDarkBackground ? '#8B1538' : '#E8EBD8'),
+                          borderWidth: isSelected ? 2 : 2
+                        }
                       ]}
+                      onPress={() => handleGoalSelect(option.count)}
                     >
-                      {option.count}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.goalLabel,
-                        selectedGoal === option.count && styles.selectedText,
-                      ]}
-                    >
-                      adhkar
-                    </Text>
-                    <Text
-                      style={[
-                        styles.goalTime,
-                        selectedGoal === option.count && styles.selectedText,
-                      ]}
-                    >
-                      ({option.time})
-                    </Text>
-                  </TouchableOpacity>
-                ))}
+                      <Text
+                        style={[
+                          styles.goalCount,
+                          {
+                            color: isDarkBackground ? '#FFFFFF' : '#8B1538'
+                          }
+                        ]}
+                      >
+                        {option.count}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.goalLabel,
+                          {
+                            color: isDarkBackground ? 'rgba(255, 255, 255, 0.8)' : '#8C8F7B'
+                          }
+                        ]}
+                      >
+                        adhkar
+                      </Text>
+                      <Text
+                        style={[
+                          styles.goalTime,
+                          {
+                            color: isDarkBackground ? 'rgba(255, 255, 255, 0.6)' : '#8C8F7B'
+                          }
+                        ]}
+                      >
+                        ({option.time})
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
               </View>
 
+              {/* Custom Goal Section */}
               <View style={styles.customInputContainer}>
-                <Text style={styles.customInputLabel}>Enter Custom Goal</Text>
+                <Text style={[
+                  styles.customInputLabel,
+                  { color: isDarkBackground ? 'rgba(255, 255, 255, 0.8)' : '#8C8F7B' }
+                ]}>
+                  Enter Custom Goal:
+                </Text>
                 <View style={styles.inputWrapper}>
                   <TextInput
                     style={[
                       styles.customInput,
-                      customGoal.length > 0 && styles.customInputActive,
+                      {
+                        backgroundColor: isDarkBackground ? '#FBF0EE' : '#FFFFFF',
+                        borderColor: customGoal.length > 0 ? '#8B1538' : '#FFFFFF',
+                        color: isDarkBackground ? '#7E0F3B' : '#8B1538'
+                      }
                     ]}
                     value={customGoal}
                     onChangeText={handleCustomGoalChange}
                     placeholder="|5000"
-                    placeholderTextColor="rgba(142, 26, 59, 0.3)"
+                    placeholderTextColor={isDarkBackground ? '#F0E2E5' : '#F0E2E5'}
                     keyboardType="number-pad"
                     maxLength={5}
                     returnKeyType="done"
-                    onSubmitEditing={validateAndStart}
+                    onSubmitEditing={handleCustomGoalSubmit}
+                    onBlur={handleCustomGoalSubmit}
                   />
                 </View>
                 {error && <Text style={styles.errorText}>{error}</Text>}
               </View>
-
-              <TouchableOpacity
-                style={[
-                  styles.button,
-                  !selectedGoal && !customGoal && styles.buttonDisabled,
-                ]}
-                onPress={validateAndStart}
-                disabled={!selectedGoal && !customGoal}
-              >
-                <Text style={styles.buttonText}>Update Goal</Text>
-              </TouchableOpacity>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
-      </LinearGradient>
-    </SwipeBackWrapper>
+      </ScreenBackground>
+    </PageTransitionWrapper>
   );
 }
 
-// Styles identiques au fichier original
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 20,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerTitle: {
+    fontFamily: 'Sofia-Pro-Regular',
+    fontSize: 22,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  headerSpacer: {
+    width: 40,
   },
   scrollView: {
     flex: 1,
@@ -195,84 +249,78 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    alignSelf: 'center',
     paddingHorizontal: 24,
-    paddingTop: 68,
-    paddingBottom: 34,
-  },
-  header: {
-    //   alignItems: "left",
-    marginBottom: 10,
-    //marginTop: 20,
-  },
-  title: {
-    fontFamily: 'Classico', // EXACT : Font cohérente
-    fontSize: 30, // EXACT : Taille du titre
-    color: '#181818', // EXACT : Noir foncé
-    marginBottom: 8, // EXACT : Espacement sous le titre
-  },
+    paddingTop: 20,
 
-  currentDailyGoal: {
+  },
+  currentGoalContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 16,
+    marginBottom: 40,
+    borderWidth: 1,
+    borderColor: "#fff"
 
-        fontFamily: 'Sofia-Pro-Light', // EXACT : Font cohérente
-    fontSize: 16, // EXACT : Taille du sous-titre
-    color: '#8C8F7B', // EXACT : Gris-vert du design
-    opacity: 0.8, // EXACT : Légère transparence
-    marginBottom: 8,
-    paddingBottom: 20,
+  },
+  currentGoalLabel: {
+    fontFamily: 'Sofia-Pro-ExtraLight',
+    fontSize: 20,
+    color: '#8B1538',
+  },
+  currentGoalBadge: {
+    backgroundColor: '#8B1538',
+    paddingHorizontal: 16,
+    //paddingVertical: 8,
+    borderRadius: 12,
+
+  },
+  currentGoalValue: {
+    fontFamily: 'Sofia-Pro-Regular',
+    fontSize: 26,
+    color: '#FFFFFF',
+    paddingVertical: 6,
+    //fontWeight: '600',
   },
   goalsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 16,
-    marginBottom: 20
+    justifyContent: 'space-between',
   },
   goalCard: {
     width: '47%',
     aspectRatio: 1,
-    backgroundColor: '#FFFFFF',
     borderRadius: 24,
     padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: '#EEEEEE',
-  },
-  selectedGoal: {
-    borderColor: '#8E1A3B',
-    borderWidth: 2,
-    aspectRatio: 1,
-    padding: 20,
+
   },
   goalCount: {
     fontFamily: 'Sofia-Pro-Regular',
-    fontSize: 42,
-    color: '#8E1A3B',
+    fontSize: 48,
+    fontWeight: '700',
     marginBottom: 4,
   },
   goalLabel: {
     fontFamily: 'Sofia-Pro-ExtraLight',
-    fontSize: 16,
-    color: '#8C8F7B',
+    fontSize: 18,
     marginBottom: 2,
   },
   goalTime: {
     fontFamily: 'Sofia-Pro-ExtraLight',
-    fontSize: 12,
-    color: '#999999',
-    paddingBottom: 15
-  },
-  selectedText: {
-    color: '#8E1A3B',
+    fontSize: 14,
   },
   customInputContainer: {
-    marginBottom: 24,
+    marginBottom: 40,
   },
   customInputLabel: {
     fontFamily: 'Sofia-Pro-ExtraLight',
-    fontSize: 16,
-    color: '#8C8F7B',
-    marginBottom: 8,
+    fontSize: 18,
+    marginBottom: 16,
     textAlign: 'center',
   },
   inputWrapper: {
@@ -282,48 +330,19 @@ const styles = StyleSheet.create({
   customInput: {
     flex: 1,
     height: 70,
-    backgroundColor: '#FFFFFF',
     borderRadius: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(142, 26, 59, 0.1)',
+    borderWidth: 2,
     paddingHorizontal: 20,
     fontFamily: 'Sofia-Pro-Regular',
-    fontSize: 32,
-    color: '#8E1A3B',
+    fontSize: 50,
     textAlign: 'center',
-  },
-  customInputActive: {
-    borderColor: '#8E1A3B',
+    fontWeight: '600',
   },
   errorText: {
-    fontFamily: 'Sans',
+    fontFamily: 'Sofia-Pro-Regular',
     fontSize: 14,
     color: '#FF3B30',
     textAlign: 'center',
     marginTop: 8,
-  },
-  button: {
-    maxWidth: 182,
-    minWidth: 182,
-    height: 59,
-    backgroundColor: '#7E0F3B',
-    borderRadius: 52,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 0,
-    marginBottom: 0,
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginHorizontal: 'auto'
-  },
-  buttonText: {
-    fontFamily: 'Sofia-Pro-Regular',
-    fontSize: 18,
-    lineHeight: 26,
-    color: '#FFFFFF',
-    textAlign: 'center',
-  },
-  buttonDisabled: {
-    backgroundColor: '#CCCCCC',
   },
 });

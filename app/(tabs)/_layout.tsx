@@ -1,122 +1,194 @@
-import { Tabs } from 'expo-router';
+import { Tabs, usePathname } from 'expo-router';
 import { StyleSheet, Platform, View, Dimensions } from 'react-native';
 import { Quote as QuoteIcon, Search, User } from 'lucide-react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Route } from 'expo-router/build/Route';
 import CustomQuotesIcon from '@/assets/icons/customQuotesIcon';
 import CustomDiscoverIcon from '@/assets/icons/customDiscoverIcon';
 import CustomProfileIcon from '@/assets/icons/customProfileIcon';
 import CustomProfileFilledIcon from '@/assets/icons/customProfileFilledIcon';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+  interpolate,
+} from 'react-native-reanimated';
+import { useEffect, useState } from 'react';
 
-//const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth } = Dimensions.get('window');
+
+// Configuration d'animation ultra-douce
+const ICON_SPRING = {
+  damping: 30,
+  stiffness: 250,
+  mass: 0.5,
+};
+
+// Composant d'icône avec animation ultra-douce
+const SmoothTabIcon = ({
+  children,
+  focused,
+}: {
+  children: React.ReactNode;
+  focused: boolean;
+}) => {
+  const scale = useSharedValue(focused ? 1 : 1);
+  const opacity = useSharedValue(focused ? 1 : 0.6);
+
+  useEffect(() => {
+    // Animation très subtile et douce
+    scale.value = withSpring(focused ? 1.08 : 1, ICON_SPRING);
+    opacity.value = withTiming(focused ? 1 : 0.6, { 
+      duration: 250,
+    });
+  }, [focused]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+    opacity: opacity.value,
+  }));
+
+  return (
+    <Animated.View style={animatedStyle}>
+      {children}
+    </Animated.View>
+  );
+};
 
 export default function TabLayout() {
-  const { theme } = useTheme();
+  const { theme, isDarkBackground } = useTheme();
   const insets = useSafeAreaInsets();
 
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarStyle: [
-          styles.tabBar,
-          {
-            height: 71,
-            paddingBottom: 0,
-            backgroundColor: 'rgba(255, 255, 255, 0.95)',
-          }
-        ],
-        tabBarActiveTintColor: theme.colors.accent,
-        tabBarInactiveTintColor: theme.colors.text.secondary,
-        tabBarLabelStyle: styles.tabBarLabel,
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Dhikr',
-          tabBarIcon: ({ color, size, focused }) => (
-            <CustomQuotesIcon color={'#5A5D4D'} size={24} fill={focused ? '#5A5D4D' : '#fff'} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="discover"
-        options={{
-          title: 'Discover',
-          tabBarIcon: ({ color, size, focused }) => (
-            <CustomDiscoverIcon color={'#5A5D4D'} size={24} fill={focused ? '#5A5D4D' : '#fff'} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{
-          title: 'Profile',
-          tabBarIcon: ({ color, size, focused }) => (
+    <View style={{ flex: 1, backgroundColor: 'rgb(251,244,238)' }}>
+      <Tabs
+        screenOptions={{
+          headerShown: false,
+          
+          // PAS d'animation de page - instantané
+          animation: 'none',
+          
+          // Précharger toutes les pages
+          lazy: false,
+          
+          // Fond de secours partout
+          sceneStyle: {
+            backgroundColor: 'rgb(251,244,238)',
+          },
+          
+          contentStyle: {
+            backgroundColor: 'rgb(251,244,238)',
+          },
+          
+          tabBarStyle: [
+            styles.tabBar,
+            {
+              height: 71,
+              paddingBottom: 0,
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            }
+          ],
+          tabBarActiveTintColor: theme.colors.accent,
+          tabBarInactiveTintColor: theme.colors.text.secondary,
+          tabBarLabelStyle: styles.tabBarLabel,
+        }}>
 
-            focused ? <CustomProfileFilledIcon /> : <CustomProfileIcon />
-            //<CustomProfileIcon color={'#5A5D4D'} size={24} fill={focused ? '#5A5D4D' : '#fff'}/>
-          ),
-        }}
-      />
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: 'Dhikr',
+            tabBarIcon: ({ color, size, focused }) => (
+              <SmoothTabIcon focused={focused}>
+                <CustomQuotesIcon
+                  color={focused ? '#560A27' : '#560A27'}
+                  size={24}
+                  fill={focused ? '#560A27' : 'rgba(255, 255, 255, 0.1)'}
+                />
+              </SmoothTabIcon>
+            ),
+          }}
+        />
 
-      <Tabs.Screen
-        // Hidden tabs
-        name="search"
-        options={{
-          tabBarItemStyle: { display: 'none' },
-          title: 'Search',
-          tabBarIcon: ({ color, size, focused }) => (
-            <CustomDiscoverIcon color={'#5A5D4D'} size={24} fill={focused ? '#5A5D4D' : '#fff'} />
-          ),
-        }}
-      />
+        <Tabs.Screen
+          name="discover"
+          options={{
+            title: 'Discover',
+            tabBarIcon: ({ color, size, focused }) => (
+              <SmoothTabIcon focused={focused}>
+                <CustomDiscoverIcon
+                  color={focused ? '#560A27' : '#560A27'}
+                  size={24}
+                  fill={focused ? '#560A27' : 'rgba(255, 255, 255, 0.1)'}
+                />
+              </SmoothTabIcon>
+            ),
+          }}
+        />
 
-      <Tabs.Screen
-        name="profile/favorites"
-        options={{
-          tabBarItemStyle: { display: 'none' },
-          title: 'Profile',
-          tabBarIcon: ({ color, size }) => (
-            <User color={color} size={24} />
-          ),
-        }}
-      />
+        <Tabs.Screen
+          name="profile"
+          options={{
+            title: 'Profile',
+            tabBarIcon: ({ color, size, focused }) => (
+              <SmoothTabIcon focused={focused}>
+                {focused ? <CustomProfileFilledIcon /> : <CustomProfileIcon />}
+              </SmoothTabIcon>
+            ),
+          }}
+        />
 
-      <Tabs.Screen
-        name="profile/goal"
-        options={{
-          tabBarItemStyle: { display: 'none' },
-          title: 'Profile',
-          tabBarIcon: ({ color, size }) => (
-            <User color={color} size={24} />
-          ),
-        }}
-      />
+        {/* Tabs cachés */}
+        <Tabs.Screen
+          name="search"
+          options={{
+            tabBarItemStyle: { display: 'none' },
+            title: 'Search',
+          }}
+        />
 
-      <Tabs.Screen
-        name="profile/privacy"
-        options={{
-          tabBarItemStyle: { display: 'none' },
-          title: 'Privacy',
-          tabBarIcon: ({ color, size }) => (
-            <User color={color} size={24} />
-          ),
-        }}
-      />
+        <Tabs.Screen
+          name="profile/favorites"
+          options={{
+            tabBarItemStyle: { display: 'none' },
+            title: 'Favorites',
+          }}
+        />
 
-      <Tabs.Screen
-        name="profile/terms"
-        options={{
-          tabBarItemStyle: { display: 'none' },
-          title: 'Terms',
-          tabBarIcon: ({ color, size }) => (
-            <User color={color} size={24} />
-          ),
-        }}
-      />
-    </Tabs>
+        <Tabs.Screen
+          name="profile/goal"
+          options={{
+            tabBarItemStyle: { display: 'none' },
+            title: 'Goal',
+          }}
+        />
+
+        <Tabs.Screen
+          name="profile/privacy"
+          options={{
+            tabBarItemStyle: { display: 'none' },
+            title: 'Privacy',
+          }}
+        />
+
+        <Tabs.Screen
+          name="profile/terms"
+          options={{
+            tabBarItemStyle: { display: 'none' },
+            title: 'Terms',
+          }}
+        />
+
+        <Tabs.Screen
+          name="profile/notifications"
+          options={{
+            tabBarItemStyle: { display: 'none' },
+            title: 'Notifications',
+          }}
+        />
+
+      </Tabs>
+    </View>
   );
 }
 
@@ -142,10 +214,11 @@ const styles = StyleSheet.create({
     borderTopWidth: 0,
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     paddingTop: 6,
+    backdropFilter: 'blur(10px)',
   },
   tabBarLabel: {
     fontFamily: 'Sofia-Pro-Light',
-    color: '#5A5D4D',
+    color: '#560A27',
     fontSize: 12,
     marginTop: 4,
   },

@@ -7,14 +7,15 @@ import { useSearchStore } from '../../../stores/searchStore';
 import { useDhikrStore } from '../../../stores/dhikrStore';
 import { useFavoritesStore } from '../../../stores/favoritesStore';
 import { ScreenBackground } from '../../../components/ScreenBackground';
-import { SwipeBackWrapper } from '../../../components/SwipeBackWrapper'; // Ajustez le chemin selon votre structure
 import { router } from 'expo-router';
-import { ProfileBackground } from '@/components/ProfileBackground';
+import { ChevronLeft } from 'lucide-react-native';
+import { PageTransitionWrapper } from '@/components/PageTransitionWrapper';
+
 
 export default function SearchScreen() {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const { theme } = useTheme();
+  const { theme, isDarkBackground } = useTheme();
 
   const [query, setQuery] = useState('');
   const { recentSearches, addRecentSearch, clearRecentSearches } = useSearchStore();
@@ -45,7 +46,7 @@ export default function SearchScreen() {
     }
   };
 
-  const handleSwipeBack = () => {
+  const handleBack = () => {
     router.replace('/profile');
   };
 
@@ -111,19 +112,17 @@ export default function SearchScreen() {
   );
 
   return (
-    <SwipeBackWrapper
-      onSwipeBack={handleSwipeBack}
-      backgroundComponent={<ProfileBackground />}
-    >
+    <PageTransitionWrapper animationType="slide" duration={300}>
       <ScreenBackground>
-        <View style={styles.sectionHeader}>
-          <Text style={[styles.sectionTitle]}>
+        <View style={styles.headerContainer}>
+          <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+            <ChevronLeft size={24} color={isDarkBackground ? '#FFFFFF' : '#181818'} />
+          </TouchableOpacity>
+          <Text style={[styles.headerTitle, { color: isDarkBackground ? '#FFFFFF' : '#181818' }]}>
             Favourites
           </Text>
+          <View style={styles.headerSpacer} />
         </View>
-        <Text style={styles.headerSubtitle}>
-          View, add or remove favourites
-        </Text>
 
         <View style={styles.searchContainer}>
           <View style={styles.XsearchInputContainer}>
@@ -163,13 +162,13 @@ export default function SearchScreen() {
                       {favorites.map((item, index) => (
                         <View key={`favorite-${index}`} style={[styles.resultItem, { backgroundColor: theme.colors.card }]}>
                           <View style={styles.resultContent}>
-                            <Text style={[styles.arabicText, { color: theme.colors.text.primary }]}>
+                            <Text style={[styles.arabicText, { color: theme.colors.favourites.arabicText }]}>
                               {item.arabicText}
                             </Text>
-                            <Text style={[styles.transliteration]}>
+                            <Text style={[styles.transliteration, { color: theme.colors.favourites.transliteration }]}>
                               {item.transliteration}
                             </Text>
-                            <Text style={[styles.translation]}>
+                            <Text style={[styles.translation, { color: theme.colors.favourites.translation }]}>
                               {item.translation}
                             </Text>
                           </View>
@@ -199,7 +198,7 @@ export default function SearchScreen() {
           />
         )}
       </ScreenBackground>
-    </SwipeBackWrapper>
+    </PageTransitionWrapper>
   );
 }
 
@@ -236,6 +235,33 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#181818',
   },
+
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 20,
+  },
+
+  backButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerTitle: {
+    fontFamily: 'Sofia-Pro-Regular',
+    fontSize: 22,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  headerSpacer: {
+    width: 40,
+  },
+
+
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
