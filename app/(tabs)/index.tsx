@@ -352,7 +352,8 @@ export default function DhikrScreen() {
   }
 
   return (
-    <PageTransitionWrapper animationType="fade" duration={350}>
+    <PageTransitionWrapper animationType="none">
+      
       <ScreenBackground>
         <View style={styles.container}>
           <View style={styles.header}>

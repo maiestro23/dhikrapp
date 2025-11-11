@@ -8,16 +8,20 @@
     "scheme": "dhikrapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "backgroundColor": "#FFF8F0",
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.maiestro23.dhikrapp",
+      "backgroundColor": "#FFF8F0",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "UIViewControllerBasedStatusBarAppearance": false
       }
     },
     "web": {
       "bundler": "metro",
-      "output": "single"
+      "output": "single",
+      "backgroundColor": "#FFF8F0"
     },
     "plugins": [
       "expo-router",

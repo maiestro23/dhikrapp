@@ -121,10 +121,24 @@ export default function TabLayout() {
   const currentTabIndex = useCurrentTabIndex();
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: 'rgb(251,244,238)' }}>
       <Tabs
         screenOptions={{
           headerShown: false,
+          // CRUCIAL: Désactiver TOUTES les animations
+          animation: 'none',
+          
+          // CRUCIAL: Forcer la couleur de fond partout
+          lazy: false,
+          
+          sceneStyle: {
+            backgroundColor: 'rgb(251,244,238)',
+          },
+          
+          contentStyle: {
+            backgroundColor: 'rgb(251,244,238)',
+          },
+          
           tabBarStyle: [
             styles.tabBar,
             {
@@ -136,9 +150,6 @@ export default function TabLayout() {
           tabBarActiveTintColor: theme.colors.accent,
           tabBarInactiveTintColor: theme.colors.text.secondary,
           tabBarLabelStyle: styles.tabBarLabel,
-          // Animation personnalisée pour les transitions
-          animation: 'shift',
-          animationDuration: 300,
         }}>
 
         <Tabs.Screen
@@ -295,6 +306,14 @@ const styles = StyleSheet.create({
     color: '#560A27',
     fontSize: 12,
     marginTop: 4,
+  },
+  tabIndicator: {
+    position: 'absolute',
+    bottom: 35,
+    width: 40,
+    height: 4,
+    backgroundColor: '#560A27',
+    borderRadius: 2,
   },
 });
 

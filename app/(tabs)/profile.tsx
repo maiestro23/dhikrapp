@@ -98,7 +98,7 @@ export default function ProfileScreen() {
     : 180 + insets.bottom;
 
   return (
-    <PageTransitionWrapper animationType="fade" duration={350} >
+    <PageTransitionWrapper animationType="none" >
       <ScreenBackground>
         <ScrollView
           style={styles.content}

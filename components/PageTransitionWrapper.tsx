@@ -15,7 +15,7 @@ import { useIsFocused } from '@react-navigation/native';
 
 interface PageTransitionWrapperProps {
   children: React.ReactNode;
-  animationType?: 'fade' | 'slide' | 'scale';
+  animationType?: 'fade' | 'slide' | 'scale' | 'none';
   duration?: number;
 }
 
@@ -27,27 +27,36 @@ const SPRING_CONFIG = {
 
 export const PageTransitionWrapper: React.FC<PageTransitionWrapperProps> = ({ 
   children, 
-  animationType = 'fade',
-  duration = 300 
+  animationType = 'none', // CHANGÉ: 'fade' -> 'none' par défaut
+  duration = 200  // RÉDUIT: 300 -> 200
 }) => {
   const isFocused = useIsFocused();
-  const opacity = useSharedValue(0);
-  const translateX = useSharedValue(50);
-  const scale = useSharedValue(0.95);
+  const opacity = useSharedValue(1); // CHANGÉ: Commence à 1 au lieu de 0
+  const translateX = useSharedValue(0); // CHANGÉ: Commence à 0 au lieu de 50
+  const scale = useSharedValue(1); // CHANGÉ: Commence à 1 au lieu de 0.95
 
   useEffect(() => {
     if (isFocused) {
-      opacity.value = withTiming(1, { duration });
+      // Animation d'entrée beaucoup plus subtile
+      opacity.value = withTiming(1, { duration: duration / 2 });
       translateX.value = withSpring(0, SPRING_CONFIG);
       scale.value = withSpring(1, SPRING_CONFIG);
     } else {
-      opacity.value = withTiming(0, { duration: duration / 2 });
-      translateX.value = withSpring(-50, SPRING_CONFIG);
-      scale.value = withSpring(0.95, SPRING_CONFIG);
+      // Pas d'animation de sortie pour éviter les flashs
+      opacity.value = 1;
+      translateX.value = 0;
+      scale.value = 1;
     }
   }, [isFocused, duration]);
 
   const animatedStyle = useAnimatedStyle(() => {
+    // Si animationType est 'none', pas d'animation du tout
+    if (animationType === 'none') {
+      return {
+        opacity: 1,
+      };
+    }
+
     switch (animationType) {
       case 'slide':
         return {
@@ -60,15 +69,18 @@ export const PageTransitionWrapper: React.FC<PageTransitionWrapperProps> = ({
           transform: [{ scale: scale.value }],
         };
       case 'fade':
-      default:
         return {
           opacity: opacity.value,
+        };
+      default:
+        return {
+          opacity: 1,
         };
     }
   });
 
   return (
-    <Animated.View style={[{ flex: 1 }, animatedStyle]}>
+    <Animated.View style={[{ flex: 1, backgroundColor: '#FFF8F0' }, animatedStyle]}>
       {children}
     </Animated.View>
   );

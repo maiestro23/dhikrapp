@@ -91,9 +91,9 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1, backgroundColor: '#FFF8F0' }}>
       <ThemeProvider>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, backgroundColor: '#FFF8F0' }}>
           <Slot />
           <StatusBar style="auto" />
         </View>

@@ -380,7 +380,7 @@ export default function DiscoverScreen() {
 
 
   return (
-    <PageTransitionWrapper animationType="fade" duration={350}>
+    <PageTransitionWrapper animationType="none">
       <ScreenBackground>
         <View style={styles.container}>
           {/* ===== HEADER - Toujours visible ===== */}
