@@ -1,86 +1,63 @@
 // components/PageTransitionWrapper.tsx
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
-  withSpring,
   withTiming,
-  interpolate,
-  FadeIn,
-  FadeOut,
-  SlideInRight,
-  SlideOutLeft,
+  Easing,
 } from 'react-native-reanimated';
 import { useIsFocused } from '@react-navigation/native';
 
 interface PageTransitionWrapperProps {
   children: React.ReactNode;
-  animationType?: 'fade' | 'slide' | 'scale' | 'none';
   duration?: number;
 }
 
-const SPRING_CONFIG = {
-  damping: 15,
-  stiffness: 150,
-  mass: 1,
-};
-
 export const PageTransitionWrapper: React.FC<PageTransitionWrapperProps> = ({ 
   children, 
-  animationType = 'none', // CHANGÉ: 'fade' -> 'none' par défaut
-  duration = 200  // RÉDUIT: 300 -> 200
+  duration = 250
 }) => {
   const isFocused = useIsFocused();
-  const opacity = useSharedValue(1); // CHANGÉ: Commence à 1 au lieu de 0
-  const translateX = useSharedValue(0); // CHANGÉ: Commence à 0 au lieu de 50
-  const scale = useSharedValue(1); // CHANGÉ: Commence à 1 au lieu de 0.95
+  const isInitialMount = useRef(true);
+  
+  // Fade pur - juste l'opacity
+  const opacity = useSharedValue(1);
 
   useEffect(() => {
-    if (isFocused) {
-      // Animation d'entrée beaucoup plus subtile
-      opacity.value = withTiming(1, { duration: duration / 2 });
-      translateX.value = withSpring(0, SPRING_CONFIG);
-      scale.value = withSpring(1, SPRING_CONFIG);
-    } else {
-      // Pas d'animation de sortie pour éviter les flashs
+    // Pas d'animation au premier mount
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
       opacity.value = 1;
-      translateX.value = 0;
-      scale.value = 1;
+      return;
+    }
+
+    if (isFocused) {
+      // L'astuce: commence à 0.88 au lieu de 0 pour éviter le flash blanc
+      opacity.value = 0.8;
+      
+      // Puis fade vers 1
+      opacity.value = withTiming(1, {
+        duration: duration,
+        easing: Easing.bezier(0.25, 0.1, 0.25, 1), // Easing standard iOS
+      });
+    } else {
+      // Reset pour la prochaine fois
+      opacity.value = 1;
     }
   }, [isFocused, duration]);
 
-  const animatedStyle = useAnimatedStyle(() => {
-    // Si animationType est 'none', pas d'animation du tout
-    if (animationType === 'none') {
-      return {
-        opacity: 1,
-      };
-    }
-
-    switch (animationType) {
-      case 'slide':
-        return {
-          opacity: opacity.value,
-          transform: [{ translateX: translateX.value }],
-        };
-      case 'scale':
-        return {
-          opacity: opacity.value,
-          transform: [{ scale: scale.value }],
-        };
-      case 'fade':
-        return {
-          opacity: opacity.value,
-        };
-      default:
-        return {
-          opacity: 1,
-        };
-    }
-  });
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+  }));
 
   return (
-    <Animated.View style={[{ flex: 1, backgroundColor: '#FFF8F0' }, animatedStyle]}>
+    <Animated.View style={[
+      { 
+        flex: 1, 
+        backgroundColor: 'rgb(251,244,238)',
+      }, 
+      animatedStyle
+    ]}>
       {children}
     </Animated.View>
   );
@@ -94,8 +71,8 @@ export const usePremiumTransition = (isActive: boolean) => {
 
   useEffect(() => {
     opacity.value = withTiming(isActive ? 1 : 0, { duration: 300 });
-    translateY.value = withSpring(isActive ? 0 : 20, SPRING_CONFIG);
-    scale.value = withSpring(isActive ? 1 : 0.98, SPRING_CONFIG);
+    translateY.value = withTiming(isActive ? 0 : 20, { duration: 300 });
+    scale.value = withTiming(isActive ? 1 : 0.98, { duration: 300 });
   }, [isActive]);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -123,12 +100,12 @@ export const InteractiveTabElement = ({
   const opacity = useSharedValue(1);
 
   const handlePressIn = () => {
-    scale.value = withSpring(0.95, { damping: 10, stiffness: 400 });
+    scale.value = withTiming(0.95, { duration: 100 });
     opacity.value = withTiming(0.8, { duration: 100 });
   };
 
   const handlePressOut = () => {
-    scale.value = withSpring(1, SPRING_CONFIG);
+    scale.value = withTiming(1, { duration: 100 });
     opacity.value = withTiming(1, { duration: 100 });
   };
 
